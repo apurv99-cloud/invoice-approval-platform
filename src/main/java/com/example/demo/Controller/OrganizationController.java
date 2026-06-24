@@ -1,9 +1,6 @@
 package com.example.demo.Controller;
 
-import com.example.demo.DTO.Organization.CreateOrgAdminRequest;
-import com.example.demo.DTO.Organization.CreateOrganizationRequest;
-import com.example.demo.DTO.Organization.OrganizationResponse;
-import com.example.demo.DTO.Organization.UpdateOrganizationRequest;
+import com.example.demo.DTO.Organization.*;
 import com.example.demo.DTO.User.UserResponse;
 import com.example.demo.Services.OrganizationService;
 
@@ -83,15 +80,35 @@ public class OrganizationController {
                 .deactivateOrganization(organizationId);
     }
 
-    @PostMapping("/{organizationId}/admin")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public UserResponse createOrganizationAdmin(
-            @PathVariable Long organizationId,
-            @RequestBody CreateOrgAdminRequest request) {
+//    @PostMapping("/{organizationId}/admin")
+//    @PreAuthorize("hasRole('SUPER_ADMIN')")
+//    public UserResponse createOrganizationAdmin(
+//            @PathVariable Long organizationId,
+//            @RequestBody CreateOrgAdminRequest request) {
+//
+//        return organizationService
+//                .createOrganizationAdmin(
+//                        organizationId,
+//                        request);
+//    }
 
-        return organizationService
-                .createOrganizationAdmin(
-                        organizationId,
+    @PostMapping("/{organizationId}/send-onboarding")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public void sendOnboarding(
+            @PathVariable Long organizationId) {
+
+        organizationService
+                .sendOrganizationOnboarding(
+                        organizationId);
+    }
+
+    @PostMapping("/complete-onboarding")
+    public void completeOnboarding(
+            @RequestBody
+            CompleteOnboardingRequest request) {
+
+        organizationService
+                .completeOnboarding(
                         request);
     }
 

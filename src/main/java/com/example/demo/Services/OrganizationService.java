@@ -1,9 +1,6 @@
 package com.example.demo.Services;
 
-import com.example.demo.DTO.Organization.CreateOrgAdminRequest;
-import com.example.demo.DTO.Organization.CreateOrganizationRequest;
-import com.example.demo.DTO.Organization.OrganizationResponse;
-import com.example.demo.DTO.Organization.UpdateOrganizationRequest;
+import com.example.demo.DTO.Organization.*;
 import com.example.demo.DTO.User.CreateOrganizationUserRequest;
 import com.example.demo.DTO.User.UserResponse;
 
@@ -35,4 +32,10 @@ public interface OrganizationService {
     List<UserResponse> getMyOrganizationUsers();
     void deactivateOrganizationUser(Long userId);
     void activateOrganizationUser(Long userId);
+
+    void sendOrganizationOnboarding(
+            Long organizationId);
+
+    void completeOnboarding(
+            CompleteOnboardingRequest request);
 }

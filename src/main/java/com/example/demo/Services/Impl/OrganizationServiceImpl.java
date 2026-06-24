@@ -1,28 +1,23 @@
 package com.example.demo.Services.Impl;
 
-import com.example.demo.DTO.Organization.CreateOrgAdminRequest;
-import com.example.demo.DTO.Organization.CreateOrganizationRequest;
-import com.example.demo.DTO.Organization.OrganizationResponse;
-import com.example.demo.DTO.Organization.UpdateOrganizationRequest;
+import com.example.demo.DTO.Organization.*;
 import com.example.demo.DTO.User.CreateOrganizationUserRequest;
 import com.example.demo.DTO.User.UserResponse;
-import com.example.demo.Entity.Organization;
-import com.example.demo.Entity.Role;
-import com.example.demo.Entity.Users;
-import com.example.demo.Entity.Users_Role;
-import com.example.demo.Repository.OrganizationRepository;
-import com.example.demo.Repository.RoleRepository;
-import com.example.demo.Repository.UserRepository;
-import com.example.demo.Repository.UserRoleRepository;
+import com.example.demo.Entity.*;
+import com.example.demo.Repository.*;
+import com.example.demo.Services.EmailService;
 import com.example.demo.Services.OrganizationService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +29,10 @@ public class OrganizationServiceImpl
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final OrganizationOnboardingTokenRepository
+            organizationOnboardingTokenRepository;
+
+    private final EmailService emailService;
 //    private Organization organization;
 
 
@@ -49,15 +48,54 @@ public class OrganizationServiceImpl
                             "Organization already exists");
                 });
 
-        Organization organization = new Organization();
+        Organization organization =
+                Organization.builder()
+                        .organizationName(
+                                request.getOrganizationName())
+                        .legalBusinessName(
+                                request.getLegalBusinessName())
+                        .businessType(
+                                request.getBusinessType())
+                        .industryType(
+                                request.getIndustryType())
+                        .gstNumber(
+                                request.getGstNumber())
+                        .registrationNumber(
+                                request.getRegistrationNumber())
+                        .email(
+                                request.getEmail())
+                        .phoneNumber(
+                                request.getPhoneNumber())
+                        .website(
+                                request.getWebsite())
+                        .addressLine1(
+                                request.getAddressLine1())
+                        .addressLine2(
+                                request.getAddressLine2())
+                        .contactPersonName(
+                                request.getContactPersonName()
+                        )
+                        .contactPersonEmail(
+                                request.getContactPersonEmail()
+                        )
+                        .onboardingCompleted(false)
+                        .city(
+                                request.getCity())
+                        .state(
+                                request.getState())
+                        .country(
+                                request.getCountry())
+                        .pincode(
+                                request.getPincode())
 
-        organization.setOrganizationName(
-                request.getOrganizationName());
+                        .active(true)
 
-        organization.setActive(true);
+
+                        .build();
 
         Organization saved =
-                organizationRepository.save(organization);
+                organizationRepository.save(
+                        organization);
 
         return mapToResponse(saved);
     }
@@ -68,7 +106,8 @@ public class OrganizationServiceImpl
             UpdateOrganizationRequest request) {
 
         Organization organization =
-                organizationRepository.findById(organizationId)
+                organizationRepository.findById(
+                                organizationId)
                         .orElseThrow(() ->
                                 new RuntimeException(
                                         "Organization not found"));
@@ -76,8 +115,59 @@ public class OrganizationServiceImpl
         organization.setOrganizationName(
                 request.getOrganizationName());
 
+        organization.setLegalBusinessName(
+                request.getLegalBusinessName());
+
+        organization.setBusinessType(
+                request.getBusinessType());
+
+        organization.setIndustryType(
+                request.getIndustryType());
+
+        organization.setGstNumber(
+                request.getGstNumber());
+
+        organization.setRegistrationNumber(
+                request.getRegistrationNumber());
+
+        organization.setEmail(
+                request.getEmail());
+
+        organization.setPhoneNumber(
+                request.getPhoneNumber());
+
+        organization.setWebsite(
+                request.getWebsite());
+
+        organization.setAddressLine1(
+                request.getAddressLine1());
+
+        organization.setAddressLine2(
+                request.getAddressLine2());
+        organization.setContactPersonName(
+                request.getContactPersonName());
+
+        organization.setContactPersonEmail(
+                request.getContactPersonEmail());
+
+        organization.setOnboardingCompleted(false);
+
+        organization.setCity(
+                request.getCity());
+
+        organization.setState(
+                request.getState());
+
+        organization.setCountry(
+                request.getCountry());
+
+        organization.setPincode(
+                request.getPincode());
+
+
         return mapToResponse(
-                organizationRepository.save(organization));
+                organizationRepository.save(
+                        organization));
     }
 
     @Override
@@ -246,6 +336,58 @@ public class OrganizationServiceImpl
 
         response.setOrganizationName(
                 organization.getOrganizationName());
+
+        response.setLegalBusinessName(
+                organization.getLegalBusinessName());
+
+        response.setBusinessType(
+                organization.getBusinessType());
+
+        response.setIndustryType(
+                organization.getIndustryType());
+
+        response.setGstNumber(
+                organization.getGstNumber());
+
+        response.setRegistrationNumber(
+                organization.getRegistrationNumber());
+
+        response.setEmail(
+                organization.getEmail());
+
+        response.setPhoneNumber(
+                organization.getPhoneNumber());
+
+        response.setWebsite(
+                organization.getWebsite());
+
+        response.setAddressLine1(
+                organization.getAddressLine1());
+
+        response.setAddressLine2(
+                organization.getAddressLine2());
+        response.setContactPersonName(
+                organization.getContactPersonName()
+        );
+        response.setContactPersonEmail(
+                organization.getContactPersonEmail()
+        );
+        response.setOnboardingCompleted(
+                organization.getOnboardingCompleted()
+        );
+
+        response.setCity(
+                organization.getCity());
+
+        response.setState(
+                organization.getState());
+
+        response.setCountry(
+                organization.getCountry());
+
+        response.setPincode(
+                organization.getPincode());
+
 
         response.setActive(
                 organization.getActive());
@@ -440,5 +582,123 @@ public class OrganizationServiceImpl
         user.setActive(true);
 
         userRepository.save(user);
+    }
+
+    @Override
+    public void sendOrganizationOnboarding(
+            Long organizationId) {
+
+        Organization organization =
+                organizationRepository.findById(
+                                organizationId)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Organization not found"));
+
+        String token =
+                UUID.randomUUID().toString();
+
+        OrganizationOnboardingToken onboardingToken =
+                OrganizationOnboardingToken.builder()
+                        .token(token)
+                        .email(
+                                organization
+                                        .getContactPersonEmail())
+                        .used(false)
+                        .expiryTime(
+                                LocalDateTime.now()
+                                        .plusDays(1))
+                        .organization(
+                                organization)
+                        .build();
+
+        organizationOnboardingTokenRepository
+                .save(onboardingToken);
+
+        emailService.sendOnboardingEmail(
+                organization
+                        .getContactPersonEmail(),
+                organization
+                        .getOrganizationName(),
+                token);
+    }
+
+    @Override
+    @Transactional
+    public void completeOnboarding(
+            CompleteOnboardingRequest request) {
+
+        OrganizationOnboardingToken organizationOnboardingToken =
+                organizationOnboardingTokenRepository
+                        .findByToken(
+                                request.getToken())
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Invalid Token"));
+
+        if (Boolean.TRUE.equals(
+                organizationOnboardingToken.getUsed())) {
+
+            throw new RuntimeException(
+                    "Token already used");
+        }
+
+        if (organizationOnboardingToken.getExpiryTime()
+                .isBefore(
+                        LocalDateTime.now())) {
+
+            throw new RuntimeException(
+                    "Token expired");
+        }
+
+        Organization organization =
+                organizationOnboardingToken.getOrganization();
+
+        Users orgAdmin =
+                Users.builder()
+                        .fullName(
+                                organization
+                                        .getContactPersonName())
+                        .email(
+                                organization
+                                        .getContactPersonEmail())
+                        .password(
+                                passwordEncoder.encode(
+                                        request.getPassword()))
+                        .organization(
+                                organization)
+                        .active(true)
+                        .deleted(false)
+                        .build();
+
+        Users savedUser =
+                userRepository.save(
+                        orgAdmin);
+
+        Role role =
+                roleRepository
+                        .findByRoleName(
+                                "ROLE_ORG_ADMIN")
+                        .orElseThrow();
+
+        Users_Role userRole =
+                Users_Role.builder()
+                        .users(savedUser)
+                        .role(role)
+                        .build();
+
+        userRoleRepository.save(
+                userRole);
+
+        organizationOnboardingToken.setUsed(true);
+
+        organizationOnboardingTokenRepository
+                .save(organizationOnboardingToken);
+
+        organization.setOnboardingCompleted(
+                true);
+
+        organizationRepository.save(
+                organization);
     }
 }

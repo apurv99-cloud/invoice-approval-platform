@@ -14,4 +14,5 @@ public class CreateOrganizationUserRequest {
     private String email;
     private String password;
     private String roleName;
+
 }
