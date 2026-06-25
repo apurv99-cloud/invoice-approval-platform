@@ -20,8 +20,7 @@ public class EmailServiceImpl
             String token) {
 
         String onboardingLink =
-                "http://localhost:3000/onboarding/"
-                        + token;
+                "http://localhost:5173/onboard?token=" + token;
 
         SimpleMailMessage message =
                 new SimpleMailMessage();

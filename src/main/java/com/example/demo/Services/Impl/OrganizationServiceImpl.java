@@ -96,6 +96,7 @@ public class OrganizationServiceImpl
         Organization saved =
                 organizationRepository.save(
                         organization);
+        sendOrganizationOnboarding(saved.getOrganizationId());
 
         return mapToResponse(saved);
     }

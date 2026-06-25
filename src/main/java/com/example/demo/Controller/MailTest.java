@@ -17,7 +17,7 @@ public class MailTest {
     public String testMail() {
 
         emailService.sendOnboardingEmail(
-                "yourpersonalmail@gmail.com",
+                "sinhaapurv99@gmail.com",
                 "Infosys",
                 "123456");
 

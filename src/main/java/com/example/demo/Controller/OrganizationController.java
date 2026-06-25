@@ -54,7 +54,8 @@ public class OrganizationController {
 
 
     @GetMapping
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_SUPER_ADMIN')")
     public List<OrganizationResponse>
     getAllOrganizations() {
 

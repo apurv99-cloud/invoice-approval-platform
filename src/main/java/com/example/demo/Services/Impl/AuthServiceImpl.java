@@ -79,33 +79,36 @@ public class AuthServiceImpl implements AuthService {
         Users user = userRepository
                 .findByEmail(email)
                 .orElseThrow(() ->
-                        new RuntimeException(
-                                "User not found"));
+                        new RuntimeException("User not found"));
 
-        UserResponse response =
-                new UserResponse();
+        Users_Role userRole = userRoleRepository
+                .findByUsers(user)
+                .stream()
+                .findFirst()
+                .orElseThrow(() ->
+                        new RuntimeException("Role not assigned"));
 
-        response.setUserId(
-                user.getUser_id());
+        UserResponse response = new UserResponse();
 
-        response.setFullName(
-                user.getFullName());
+        response.setUserId(user.getUser_id());
 
-        response.setEmail(
-                user.getEmail());
+        response.setFullName(user.getFullName());
 
-        response.setActive(
-                user.getActive());
+        response.setEmail(user.getEmail());
+
+        response.setActive(user.getActive());
+
+        response.setRoleName(
+                userRole.getRole().getRoleName()
+        );
 
         if (user.getOrganization() != null) {
 
             response.setOrganizationId(
-                    user.getOrganization()
-                            .getOrganizationId());
+                    user.getOrganization().getOrganizationId());
 
             response.setOrganizationName(
-                    user.getOrganization()
-                            .getOrganizationName());
+                    user.getOrganization().getOrganizationName());
         }
 
         response.setCreatedAt(

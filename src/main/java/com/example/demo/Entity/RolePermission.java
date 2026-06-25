@@ -21,6 +21,6 @@ public class RolePermission {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "permissionId")
+    @JoinColumn(name = "permission_id")
     private Permission permission;
 }

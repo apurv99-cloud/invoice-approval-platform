@@ -23,6 +23,8 @@ public class Permission {
 
     @Column(nullable = false, unique = true)
     private String permissionName;
+    @Column(nullable = false)
+    private String module;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
