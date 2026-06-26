@@ -33,3 +33,12 @@ export const getOrganizationById = async (organizationId) => {
 
   return response.data;
 };
+export const updateOrganization = async (organizationId, organizationData) => {
+  const response = await api.put(
+    `/api/organizations/${organizationId}`,  
+  
+    organizationData,
+  );
+
+  return response.data;
+};

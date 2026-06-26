@@ -11,13 +11,16 @@ export default function LoginCard() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
     try {
-      if (!email || !password) {
-        alert("Please enter email and password");
+      setError("");
+
+      if (!email.trim() || !password.trim()) {
+        setError("Please enter email and password.");
         return;
       }
 
@@ -29,21 +32,26 @@ export default function LoginCard() {
 
       const currentUser = await getCurrentUser();
 
-      setUser(currentUser);
-
       localStorage.setItem("user", JSON.stringify(currentUser));
 
-      if (currentUser.roleName === "SUPER_ADMIN") {
-        navigate("/organizations");
-      } else if (currentUser.roleName === "ORG_ADMIN") {
-        navigate("/dashboard");
-      } else {
-        navigate("/");
-      }
-    } catch (error) {
-      console.error(error);
+      setUser(currentUser);
 
-      alert("Invalid Email or Password");
+      switch (currentUser.roleName) {
+        case "ROLE_SUPER_ADMIN":
+          navigate("/dashboard");
+          break;
+
+        case "ROLE_ORG_ADMIN":
+          navigate("/organization/dashboard");
+          break;
+
+        default:
+          navigate("/");
+      }
+    } catch (err) {
+      console.error(err);
+
+      setError("Invalid email or password.");
     } finally {
       setLoading(false);
     }
@@ -105,6 +113,11 @@ export default function LoginCard() {
             placeholder="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleLogin();
+              }
+            }}
             className="
             w-full
 
@@ -148,6 +161,11 @@ export default function LoginCard() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleLogin();
+              }
+            }}
             className="
             w-full
 
@@ -192,6 +210,28 @@ export default function LoginCard() {
           Forgot password?
         </button>
       </div>
+      {error && (
+        <div
+          className="
+    mt-4
+
+    rounded-xl
+
+    border
+    border-red-500/20
+
+    bg-red-500/10
+
+    px-4
+    py-3
+
+    text-sm
+    text-red-300
+    "
+        >
+          {error}
+        </div>
+      )}
 
       <button
         onClick={handleLogin}
