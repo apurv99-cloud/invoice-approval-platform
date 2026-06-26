@@ -1,5 +1,6 @@
 package com.example.demo.Entity;
 
+import com.example.demo.Authorization.PermissionAction;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,8 +12,8 @@ import java.time.LocalDateTime;
 @Table(name = "permissions")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Permission {
 
@@ -20,11 +21,21 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long permissionId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "module_id")
+    private Module module;
 
-    @Column(nullable = false, unique = true)
-    private String permissionName;
+    //    @Column(nullable = false)
+//    private String action;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String module;
+    private PermissionAction action;
+
+    @Column(length = 500)
+    private String description;
+
+    @Column(nullable = false)
+    private Boolean active = true;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

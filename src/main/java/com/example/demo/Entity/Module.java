@@ -8,19 +8,24 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "modules")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Role {
+public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleId;
-    @Column(nullable = false, unique = true)
-    private String roleName;
+    private Long moduleId;
 
+    @Column(nullable = false, unique = true)
+    private String moduleName;
+
+    @Column(length = 500)
+    private String description;
+
+    @Column(nullable = false)
     private Boolean active = true;
 
     @CreationTimestamp
@@ -28,6 +33,4 @@ public class Role {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    private Boolean deleted = false;
 }

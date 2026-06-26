@@ -151,7 +151,7 @@ public class OrganizationServiceImpl
         organization.setContactPersonEmail(
                 request.getContactPersonEmail());
 
-        organization.setOnboardingCompleted(false);
+//        organization.setOnboardingCompleted(false);
 
         organization.setCity(
                 request.getCity());

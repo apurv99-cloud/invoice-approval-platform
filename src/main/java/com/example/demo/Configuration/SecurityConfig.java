@@ -1,5 +1,6 @@
 package com.example.demo.Configuration;
 
+import com.example.demo.Authorization.PermissionAuthorizationFilter;
 import com.example.demo.Security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,8 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
 
+    private final PermissionAuthorizationFilter permissionAuthorizationFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http
@@ -41,18 +44,28 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(
-                                "/api/auth/**",
-                                "/api/organizations/complete-onboarding"
-                        ).permitAll()
+                                .requestMatchers(
+                                        "/api/auth/**",
+                                        "/api/organizations/complete-onboarding",
 
-                        .anyRequest()
-                        .authenticated()
+                                        "/api/organizations/validate-token"
+
+//
+                                )
+                                .permitAll()
+
+                                .anyRequest()
+                                .authenticated()
                 )
 
                 .addFilterBefore(
                         jwtFilter,
                         UsernamePasswordAuthenticationFilter.class
+                )
+
+                .addFilterAfter(
+                        permissionAuthorizationFilter,
+                        JwtAuthenticationFilter.class
                 );
 
         return http.build();
@@ -65,9 +78,7 @@ public class SecurityConfig {
                 new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-                List.of(
-                        "http://localhost:5173"
-                )
+                List.of("http://localhost:5173")
         );
 
         configuration.setAllowedMethods(

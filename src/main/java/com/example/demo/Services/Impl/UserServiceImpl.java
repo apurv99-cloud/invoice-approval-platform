@@ -60,16 +60,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse updateUser(Long userId,
-                                   UpdateUserRequest request) {
+    public UserResponse updateUser(
+            Long userId,
+            UpdateUserRequest request
+    ) {
 
-        Users users = userRepository.findById(userId)
+        Users user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new RuntimeException("User not found"));
 
-        users.setFullName(request.getFullName());
+        // Update User Details
+        user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail());
 
-        return mapToResponse(userRepository.save(users));
+        userRepository.save(user);
+
+        // Update Role (if provided)
+        if (request.getRoleName() != null &&
+                !request.getRoleName().isBlank()) {
+
+            Users_Role userRole = userRoleRepository
+                    .findByUsers(user)
+                    .stream()
+                    .findFirst()
+                    .orElseThrow(() ->
+                            new RuntimeException("Role not assigned"));
+
+            Role role = roleRepository
+                    .findByRoleName(request.getRoleName())
+                    .orElseThrow(() ->
+                            new RuntimeException("Role not found"));
+
+            userRole.setRole(role);
+
+            userRoleRepository.save(userRole);
+        }
+
+        return mapToResponse(user);
     }
 
     @Override
@@ -194,7 +221,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse createOrganizationAdmin(
             Long organizationId,
-            CreateOrgAdminRequest request){
+            CreateOrgAdminRequest request) {
 
         Organization organization =
                 organizationRepository.findById(organizationId)
