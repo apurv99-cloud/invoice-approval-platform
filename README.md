@@ -1,4 +1,4 @@
-#   Enterprise Invoice Management System
+#   Enterprise Invoice Management System.
 
 A Full Stack Multi-Tenant SaaS-Based Invoice Management Platform built using **Spring Boot, PostgreSQL, JWT Authentication, React, Vite, and Role-Based Access Control (RBAC).**
 
