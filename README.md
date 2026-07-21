@@ -238,7 +238,7 @@ src
 ### Backend
 
 ```bash
-git clone https://github.com/apurv99-cloud/Rbac-Invoice-Managment-System.git
+git clone https://github.com/apurv99-cloud/invoice-approval-platform.git
 
 cd backend
 
