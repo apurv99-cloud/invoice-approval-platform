@@ -304,10 +304,11 @@ VITE_API_BASE_URL=http://localhost:8080/api
 - Reviewer Dashboard
   <img width="1600" height="805" alt="image" src="https://github.com/user-attachments/assets/dd0615f1-c5fb-4436-911b-31f5869504e3" />
   <img width="1600" height="810" alt="image" src="https://github.com/user-attachments/assets/b79b5c61-790f-458e-8f9a-9a78614b3d18" />
-  <img width="1600" height="810" alt="image" src="https://github.com/user-attachments/assets/4027ecff-eafe-4c22-8c00-7ca9ac4f6498" />
+
 
 
 - Finance Dashboard
+  <img width="1600" height="810" alt="image" src="https://github.com/user-attachments/assets/4027ecff-eafe-4c22-8c00-7ca9ac4f6498" />
   <img width="1600" height="825" alt="image" src="https://github.com/user-attachments/assets/809903b6-f8d0-4840-81bd-b5c6acea27d1" />
 
 - Payment Processing
