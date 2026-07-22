@@ -76,10 +76,10 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-8">
-      <DashboardHeader
+      {/* <DashboardHeader
         title="Reviewer Dashboard"
         subtitle="Review invoice submissions, approve or reject them, and track your review queue."
-      />
+      /> */}
 
       <StatsGrid stats={stats} />
 

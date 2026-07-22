@@ -22,7 +22,11 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
         email: initialData.email || "",
         phoneNumber: initialData.phoneNumber || "",
         roleName: initialData.roleName || "REVIEWER",
-        active: initialData.active ?? initialData.isActive ?? initialData.enabled ?? false,
+        active:
+          initialData.active ??
+          initialData.isActive ??
+          initialData.enabled ??
+          false,
         password: "",
       });
     } else {
@@ -59,14 +63,17 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-5">
-      <div className="w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-xl">
-        <div className="sticky top-0 flex items-center justify-between border-b border-slate-200 bg-white px-8 py-5">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-sm p-4 sm:p-6">
+      <div className="mx-auto my-6 flex max-h-[95vh] w-full max-w-3xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+        {/* Header */}
+
+        <div className="sticky top-0 z-10 flex items-start justify-between border-b border-slate-200 bg-white px-5 py-5 sm:px-8">
           <div>
-            <h2 className="text-2xl font-bold text-slate-800">
+            <h2 className="text-xl font-bold text-slate-800 sm:text-2xl">
               {initialData ? "Edit User" : "Create User"}
             </h2>
-            <p className="mt-1 text-slate-500">
+
+            <p className="mt-1 text-sm text-slate-500">
               {initialData
                 ? "Update account details and role access."
                 : "Create a new team member for your organization."}
@@ -81,73 +88,95 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 p-8">
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        {/* Form */}
+
+        <form
+          onSubmit={handleSubmit}
+          className="flex-1 overflow-y-auto space-y-6 p-5 sm:p-8"
+        >
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            {/* Full Name */}
+
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">
                 Full Name *
               </label>
+
               <input
                 required
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="John Doe"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
               />
             </div>
+
+            {/* Email */}
 
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">
                 Email *
               </label>
+
               <input
                 required
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="john@example.com"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
               />
             </div>
+
+            {/* Phone */}
 
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">
                 Phone Number
               </label>
+
               <input
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
                 placeholder="+91 9876543210"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
               />
             </div>
+
+            {/* Role */}
 
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">
                 Role *
               </label>
+
               <select
                 required
                 name="roleName"
                 value={formData.roleName}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
               >
                 <option value="REVIEWER">Reviewer</option>
+
                 <option value="FINANCE">Finance</option>
-                {/* <option value="CFO">CFO</option> */}
+
                 <option value="VENDOR">Vendor</option>
+
                 <option value="ORG_ADMIN">Organization Admin</option>
               </select>
             </div>
+
+            {/* Status */}
 
             <div>
               <label className="mb-2 block text-sm font-medium text-slate-700">
                 Account Status *
               </label>
+
               <select
                 required
                 name="active"
@@ -158,42 +187,48 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, initialData = null }) => {
                     active: e.target.value === "true",
                   }))
                 }
-                className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
               >
                 <option value="false">Inactive</option>
+
                 <option value="true">Active</option>
               </select>
             </div>
+            {/* Password */}
 
             {!initialData && (
-              <div className="md:col-span-2">
+              <div className="lg:col-span-2">
                 <label className="mb-2 block text-sm font-medium text-slate-700">
                   Temporary Password *
                 </label>
+
                 <input
                   required
                   type="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500"
                   placeholder="Create a temporary password"
+                  className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                 />
               </div>
             )}
           </div>
 
-          <div className="flex justify-end gap-3 border-t border-slate-200 pt-6">
+          {/* Footer */}
+
+          <div className="sticky bottom-0 flex flex-col-reverse gap-3 border-t border-slate-200 bg-white p-5 sm:flex-row sm:justify-end sm:px-8">
             <button
               type="button"
               onClick={handleClose}
-              className="rounded-xl border border-slate-300 px-5 py-3 font-medium text-slate-700 transition hover:bg-slate-100"
+              className="w-full rounded-xl border border-slate-300 px-5 py-3 font-medium text-slate-700 transition-all duration-200 hover:bg-slate-100 sm:w-auto"
             >
               Cancel
             </button>
+
             <button
               type="submit"
-              className="rounded-xl bg-indigo-600 px-5 py-3 font-medium text-white transition hover:bg-indigo-700"
+              className="w-full rounded-xl bg-indigo-600 px-5 py-3 font-medium text-white transition-all duration-200 hover:bg-indigo-700 hover:shadow-lg sm:w-auto"
             >
               {initialData ? "Save Changes" : "Create User"}
             </button>

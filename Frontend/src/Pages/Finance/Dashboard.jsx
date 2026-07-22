@@ -111,10 +111,10 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-8">
-      <DashboardHeader
+      {/* <DashboardHeader
         title="Finance Dashboard"
         subtitle="Monitor approved invoices, completed payments, and payment activity across the organization."
-      />
+      /> */}
 
       <StatsGrid stats={stats} />
 

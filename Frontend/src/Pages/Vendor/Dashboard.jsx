@@ -84,10 +84,10 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-8">
-      <DashboardHeader
+      {/* <DashboardHeader
         title="Vendor Dashboard"
         subtitle="Track invoice submissions, review statuses, and manage your billing workflow."
-      />
+      /> */}
 
       <StatsGrid stats={stats} />
 

@@ -216,10 +216,10 @@ const Dashboard = () => {
     <div className="space-y-8">
       {/* Header */}
 
-      <DashboardHeader
+      {/* <DashboardHeader
         title="Organization Admin Dashboard"
         subtitle="Manage your organization's users and monitor account activity."
-      />
+      /> */}
 
       {/* Statistics */}
 
