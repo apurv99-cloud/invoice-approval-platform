@@ -320,7 +320,9 @@ VITE_API_BASE_URL=http://localhost:8080/api
 
 
 - Reports
-  <img width="1600" height="810" alt="image" src="https://github.com/user-attachments/assets/b55e947e-0d3f-4cda-895a-1ad5071c01b2" />
+- <img width="1917" height="975" alt="image" src="https://github.com/user-attachments/assets/b176df31-c291-4410-b3e0-d3e71fe1c377" />
+- <img width="1917" height="967" alt="image" src="https://github.com/user-attachments/assets/2167a59c-f2da-4c25-b0d8-4eeebc8cd048" />
+
 
 
 ---
