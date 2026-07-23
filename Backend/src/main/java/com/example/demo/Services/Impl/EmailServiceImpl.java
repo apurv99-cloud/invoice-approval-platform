@@ -41,6 +41,7 @@ public class EmailServiceImpl
             );
 
             System.out.println("Before sending mail...");
+                System.out.println("Mail Host: " + environment.getProperty("spring.mail.host"));
             mailSender.send(message);
             System.out.println("Mail sent successfully.");
 
