@@ -1,11 +1,13 @@
 package com.example.demo.Configuration;
 
-import com.example.demo.Entity.Module;
-import com.example.demo.Repository.ModuleRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.example.demo.Entity.Module;
+import com.example.demo.Repository.ModuleRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
@@ -64,17 +66,13 @@ public class ModuleSeeder implements CommandLineRunner {
 
         moduleRepository
                 .findByModuleName(moduleName)
-                .orElseGet(() ->
-
-                        moduleRepository.save(
-
-                                Module.builder()
-                                        .moduleName(moduleName)
-                                        .description(description)
-                                        .active(true)
-                                        .build()
-
-                        ));
+                .orElseGet(()
+                        -> moduleRepository.save(
+                        Module.builder()
+                                .moduleName(moduleName)
+                                .description(description)
+                                .active(true)
+                                .build()
+                ));
     }
-
 }

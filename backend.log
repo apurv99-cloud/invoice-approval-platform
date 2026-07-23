@@ -1,0 +1,434 @@
+invoice-backend  | 
+invoice-backend  |   .   ____          _            __ _ _
+invoice-backend  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+invoice-backend  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+invoice-backend  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+invoice-backend  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+invoice-backend  |  =========|_|==============|___/=/_/_/_/
+invoice-backend  | 
+invoice-backend  |  :: Spring Boot ::                (v4.1.0)
+invoice-backend  | 
+invoice-backend  | 2026-07-23T04:55:15.547Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/app.jar started by root in /app)
+invoice-backend  | 2026-07-23T04:55:15.558Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+invoice-backend  | 2026-07-23T04:55:16.781Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+invoice-backend  | 2026-07-23T04:55:16.906Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 115 ms. Found 20 JPA repository interfaces.
+invoice-backend  | 2026-07-23T04:55:18.040Z  INFO 1 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+invoice-backend  | 2026-07-23T04:55:18.062Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:18.062Z  INFO 1 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+invoice-backend  | 2026-07-23T04:55:18.108Z  INFO 1 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2434 ms
+invoice-backend  | 2026-07-23T04:55:18.329Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+invoice-backend  | 2026-07-23T04:55:18.621Z  INFO 1 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@32ab408e
+invoice-backend  | 2026-07-23T04:55:18.624Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+invoice-backend  | 2026-07-23T04:55:18.678Z  INFO 1 --- [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+invoice-backend  | 2026-07-23T04:55:18.792Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+invoice-backend  | 2026-07-23T04:55:19.459Z  INFO 1 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+invoice-backend  | 2026-07-23T04:55:19.584Z  INFO 1 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+invoice-backend  | 	Database JDBC URL [jdbc:postgresql://postgres:5432/TF]
+invoice-backend  | 	Database driver: PostgreSQL JDBC Driver
+invoice-backend  | 	Database dialect: PostgreSQLDialect
+invoice-backend  | 	Database version: 17.10
+invoice-backend  | 	Default catalog/schema: TF/public
+invoice-backend  | 	Autocommit mode: undefined/unknown
+invoice-backend  | 	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+invoice-backend  | 	JDBC fetch size: none
+invoice-backend  | 	Pool: DataSourceConnectionProvider
+invoice-backend  | 	Minimum pool size: undefined/unknown
+invoice-backend  | 	Maximum pool size: undefined/unknown
+invoice-backend  | 2026-07-23T04:55:20.948Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+invoice-backend  | 2026-07-23T04:55:20.955Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:55:21.038Z  INFO 1 --- [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+invoice-backend  | 2026-07-23T04:55:22.066Z  WARN 1 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mailTest' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Controller/MailTest.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'emailServiceImpl' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Services/Impl/EmailServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.mail.javamail.JavaMailSender' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+invoice-backend  | 2026-07-23T04:55:22.068Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:55:22.072Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+invoice-backend  | 2026-07-23T04:55:22.079Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+invoice-backend  | 2026-07-23T04:55:22.085Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:22.106Z  INFO 1 --- [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+invoice-backend  | 
+invoice-backend  | Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+invoice-backend  | 2026-07-23T04:55:22.166Z ERROR 1 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+invoice-backend  | 
+invoice-backend  | ***************************
+invoice-backend  | APPLICATION FAILED TO START
+invoice-backend  | ***************************
+invoice-backend  | 
+invoice-backend  | Description:
+invoice-backend  | 
+invoice-backend  | Parameter 0 of constructor in com.example.demo.Services.Impl.EmailServiceImpl required a bean of type 'org.springframework.mail.javamail.JavaMailSender' that could not be found.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  | Action:
+invoice-backend  | 
+invoice-backend  | Consider defining a bean of type 'org.springframework.mail.javamail.JavaMailSender' in your configuration.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  |   .   ____          _            __ _ _
+invoice-backend  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+invoice-backend  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+invoice-backend  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+invoice-backend  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+invoice-backend  |  =========|_|==============|___/=/_/_/_/
+invoice-backend  | 
+invoice-backend  |  :: Spring Boot ::                (v4.1.0)
+invoice-backend  | 
+invoice-backend  | 2026-07-23T04:55:23.801Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/app.jar started by root in /app)
+invoice-backend  | 2026-07-23T04:55:23.806Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+invoice-backend  | 2026-07-23T04:55:24.905Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+invoice-backend  | 2026-07-23T04:55:25.009Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 94 ms. Found 20 JPA repository interfaces.
+invoice-backend  | 2026-07-23T04:55:25.782Z  INFO 1 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+invoice-backend  | 2026-07-23T04:55:25.805Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:25.806Z  INFO 1 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+invoice-backend  | 2026-07-23T04:55:25.858Z  INFO 1 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1969 ms
+invoice-backend  | 2026-07-23T04:55:26.119Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+invoice-backend  | 2026-07-23T04:55:26.468Z  INFO 1 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2c48cede
+invoice-backend  | 2026-07-23T04:55:26.472Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+invoice-backend  | 2026-07-23T04:55:26.530Z  INFO 1 --- [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+invoice-backend  | 2026-07-23T04:55:26.623Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+invoice-backend  | 2026-07-23T04:55:27.224Z  INFO 1 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+invoice-backend  | 2026-07-23T04:55:27.328Z  INFO 1 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+invoice-backend  | 	Database JDBC URL [jdbc:postgresql://postgres:5432/TF]
+invoice-backend  | 	Database driver: PostgreSQL JDBC Driver
+invoice-backend  | 	Database dialect: PostgreSQLDialect
+invoice-backend  | 	Database version: 17.10
+invoice-backend  | 	Default catalog/schema: TF/public
+invoice-backend  | 	Autocommit mode: undefined/unknown
+invoice-backend  | 	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+invoice-backend  | 	JDBC fetch size: none
+invoice-backend  | 	Pool: DataSourceConnectionProvider
+invoice-backend  | 	Minimum pool size: undefined/unknown
+invoice-backend  | 	Maximum pool size: undefined/unknown
+invoice-backend  | 2026-07-23T04:55:28.593Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+invoice-backend  | 2026-07-23T04:55:28.600Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:55:28.673Z  INFO 1 --- [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+invoice-backend  | 2026-07-23T04:55:29.759Z  WARN 1 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mailTest' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Controller/MailTest.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'emailServiceImpl' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Services/Impl/EmailServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.mail.javamail.JavaMailSender' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+invoice-backend  | 2026-07-23T04:55:29.760Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:55:29.764Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+invoice-backend  | 2026-07-23T04:55:29.768Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+invoice-backend  | 2026-07-23T04:55:29.773Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:29.793Z  INFO 1 --- [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+invoice-backend  | 
+invoice-backend  | Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+invoice-backend  | 2026-07-23T04:55:29.837Z ERROR 1 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+invoice-backend  | 
+invoice-backend  | ***************************
+invoice-backend  | APPLICATION FAILED TO START
+invoice-backend  | ***************************
+invoice-backend  | 
+invoice-backend  | Description:
+invoice-backend  | 
+invoice-backend  | Parameter 0 of constructor in com.example.demo.Services.Impl.EmailServiceImpl required a bean of type 'org.springframework.mail.javamail.JavaMailSender' that could not be found.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  | Action:
+invoice-backend  | 
+invoice-backend  | Consider defining a bean of type 'org.springframework.mail.javamail.JavaMailSender' in your configuration.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  |   .   ____          _            __ _ _
+invoice-backend  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+invoice-backend  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+invoice-backend  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+invoice-backend  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+invoice-backend  |  =========|_|==============|___/=/_/_/_/
+invoice-backend  | 
+invoice-backend  |  :: Spring Boot ::                (v4.1.0)
+invoice-backend  | 
+invoice-backend  | 2026-07-23T04:55:31.322Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/app.jar started by root in /app)
+invoice-backend  | 2026-07-23T04:55:31.327Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+invoice-backend  | 2026-07-23T04:55:32.390Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+invoice-backend  | 2026-07-23T04:55:32.499Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 102 ms. Found 20 JPA repository interfaces.
+invoice-backend  | 2026-07-23T04:55:33.239Z  INFO 1 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+invoice-backend  | 2026-07-23T04:55:33.256Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:33.257Z  INFO 1 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+invoice-backend  | 2026-07-23T04:55:33.323Z  INFO 1 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1908 ms
+invoice-backend  | 2026-07-23T04:55:33.545Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+invoice-backend  | 2026-07-23T04:55:33.853Z  INFO 1 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@32ab408e
+invoice-backend  | 2026-07-23T04:55:33.857Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+invoice-backend  | 2026-07-23T04:55:33.933Z  INFO 1 --- [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+invoice-backend  | 2026-07-23T04:55:34.065Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+invoice-backend  | 2026-07-23T04:55:34.755Z  INFO 1 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+invoice-backend  | 2026-07-23T04:55:34.857Z  INFO 1 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+invoice-backend  | 	Database JDBC URL [jdbc:postgresql://postgres:5432/TF]
+invoice-backend  | 	Database driver: PostgreSQL JDBC Driver
+invoice-backend  | 	Database dialect: PostgreSQLDialect
+invoice-backend  | 	Database version: 17.10
+invoice-backend  | 	Default catalog/schema: TF/public
+invoice-backend  | 	Autocommit mode: undefined/unknown
+invoice-backend  | 	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+invoice-backend  | 	JDBC fetch size: none
+invoice-backend  | 	Pool: DataSourceConnectionProvider
+invoice-backend  | 	Minimum pool size: undefined/unknown
+invoice-backend  | 	Maximum pool size: undefined/unknown
+invoice-backend  | 2026-07-23T04:55:36.209Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+invoice-backend  | 2026-07-23T04:55:36.216Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:55:36.294Z  INFO 1 --- [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+invoice-backend  | 2026-07-23T04:55:37.394Z  WARN 1 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mailTest' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Controller/MailTest.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'emailServiceImpl' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Services/Impl/EmailServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.mail.javamail.JavaMailSender' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+invoice-backend  | 2026-07-23T04:55:37.396Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:55:37.402Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+invoice-backend  | 2026-07-23T04:55:37.411Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+invoice-backend  | 2026-07-23T04:55:37.415Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:37.435Z  INFO 1 --- [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+invoice-backend  | 
+invoice-backend  | Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+invoice-backend  | 2026-07-23T04:55:37.478Z ERROR 1 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+invoice-backend  | 
+invoice-backend  | ***************************
+invoice-backend  | APPLICATION FAILED TO START
+invoice-backend  | ***************************
+invoice-backend  | 
+invoice-backend  | Description:
+invoice-backend  | 
+invoice-backend  | Parameter 0 of constructor in com.example.demo.Services.Impl.EmailServiceImpl required a bean of type 'org.springframework.mail.javamail.JavaMailSender' that could not be found.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  | Action:
+invoice-backend  | 
+invoice-backend  | Consider defining a bean of type 'org.springframework.mail.javamail.JavaMailSender' in your configuration.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  |   .   ____          _            __ _ _
+invoice-backend  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+invoice-backend  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+invoice-backend  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+invoice-backend  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+invoice-backend  |  =========|_|==============|___/=/_/_/_/
+invoice-backend  | 
+invoice-backend  |  :: Spring Boot ::                (v4.1.0)
+invoice-backend  | 
+invoice-backend  | 2026-07-23T04:55:39.152Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/app.jar started by root in /app)
+invoice-backend  | 2026-07-23T04:55:39.158Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+invoice-backend  | 2026-07-23T04:55:40.319Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+invoice-backend  | 2026-07-23T04:55:40.429Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 103 ms. Found 20 JPA repository interfaces.
+invoice-backend  | 2026-07-23T04:55:41.215Z  INFO 1 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+invoice-backend  | 2026-07-23T04:55:41.232Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:41.233Z  INFO 1 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+invoice-backend  | 2026-07-23T04:55:41.287Z  INFO 1 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2039 ms
+invoice-backend  | 2026-07-23T04:55:41.514Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+invoice-backend  | 2026-07-23T04:55:41.833Z  INFO 1 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2c48cede
+invoice-backend  | 2026-07-23T04:55:41.837Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+invoice-backend  | 2026-07-23T04:55:41.906Z  INFO 1 --- [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+invoice-backend  | 2026-07-23T04:55:42.036Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+invoice-backend  | 2026-07-23T04:55:42.620Z  INFO 1 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+invoice-backend  | 2026-07-23T04:55:42.703Z  INFO 1 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+invoice-backend  | 	Database JDBC URL [jdbc:postgresql://postgres:5432/TF]
+invoice-backend  | 	Database driver: PostgreSQL JDBC Driver
+invoice-backend  | 	Database dialect: PostgreSQLDialect
+invoice-backend  | 	Database version: 17.10
+invoice-backend  | 	Default catalog/schema: TF/public
+invoice-backend  | 	Autocommit mode: undefined/unknown
+invoice-backend  | 	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+invoice-backend  | 	JDBC fetch size: none
+invoice-backend  | 	Pool: DataSourceConnectionProvider
+invoice-backend  | 	Minimum pool size: undefined/unknown
+invoice-backend  | 	Maximum pool size: undefined/unknown
+invoice-backend  | 2026-07-23T04:55:44.849Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+invoice-backend  | 2026-07-23T04:55:44.863Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:55:44.945Z  INFO 1 --- [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+invoice-backend  | 2026-07-23T04:55:46.104Z  WARN 1 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mailTest' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Controller/MailTest.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'emailServiceImpl' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Services/Impl/EmailServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.mail.javamail.JavaMailSender' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+invoice-backend  | 2026-07-23T04:55:46.107Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:55:46.111Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+invoice-backend  | 2026-07-23T04:55:46.118Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+invoice-backend  | 2026-07-23T04:55:46.122Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:46.140Z  INFO 1 --- [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+invoice-backend  | 
+invoice-backend  | Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+invoice-backend  | 2026-07-23T04:55:46.184Z ERROR 1 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+invoice-backend  | 
+invoice-backend  | ***************************
+invoice-backend  | APPLICATION FAILED TO START
+invoice-backend  | ***************************
+invoice-backend  | 
+invoice-backend  | Description:
+invoice-backend  | 
+invoice-backend  | Parameter 0 of constructor in com.example.demo.Services.Impl.EmailServiceImpl required a bean of type 'org.springframework.mail.javamail.JavaMailSender' that could not be found.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  | Action:
+invoice-backend  | 
+invoice-backend  | Consider defining a bean of type 'org.springframework.mail.javamail.JavaMailSender' in your configuration.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  |   .   ____          _            __ _ _
+invoice-backend  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+invoice-backend  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+invoice-backend  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+invoice-backend  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+invoice-backend  |  =========|_|==============|___/=/_/_/_/
+invoice-backend  | 
+invoice-backend  |  :: Spring Boot ::                (v4.1.0)
+invoice-backend  | 
+invoice-backend  | 2026-07-23T04:55:48.284Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/app.jar started by root in /app)
+invoice-backend  | 2026-07-23T04:55:48.289Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+invoice-backend  | 2026-07-23T04:55:49.346Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+invoice-backend  | 2026-07-23T04:55:49.460Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 107 ms. Found 20 JPA repository interfaces.
+invoice-backend  | 2026-07-23T04:55:50.238Z  INFO 1 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+invoice-backend  | 2026-07-23T04:55:50.254Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:50.254Z  INFO 1 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+invoice-backend  | 2026-07-23T04:55:50.288Z  INFO 1 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1906 ms
+invoice-backend  | 2026-07-23T04:55:50.483Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+invoice-backend  | 2026-07-23T04:55:50.774Z  INFO 1 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2c48cede
+invoice-backend  | 2026-07-23T04:55:50.777Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+invoice-backend  | 2026-07-23T04:55:50.820Z  INFO 1 --- [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+invoice-backend  | 2026-07-23T04:55:50.918Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+invoice-backend  | 2026-07-23T04:55:51.452Z  INFO 1 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+invoice-backend  | 2026-07-23T04:55:51.547Z  INFO 1 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+invoice-backend  | 	Database JDBC URL [jdbc:postgresql://postgres:5432/TF]
+invoice-backend  | 	Database driver: PostgreSQL JDBC Driver
+invoice-backend  | 	Database dialect: PostgreSQLDialect
+invoice-backend  | 	Database version: 17.10
+invoice-backend  | 	Default catalog/schema: TF/public
+invoice-backend  | 	Autocommit mode: undefined/unknown
+invoice-backend  | 	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+invoice-backend  | 	JDBC fetch size: none
+invoice-backend  | 	Pool: DataSourceConnectionProvider
+invoice-backend  | 	Minimum pool size: undefined/unknown
+invoice-backend  | 	Maximum pool size: undefined/unknown
+invoice-backend  | 2026-07-23T04:55:53.055Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+invoice-backend  | 2026-07-23T04:55:53.067Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:55:53.142Z  INFO 1 --- [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+invoice-backend  | 2026-07-23T04:55:54.415Z  WARN 1 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mailTest' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Controller/MailTest.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'emailServiceImpl' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Services/Impl/EmailServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.mail.javamail.JavaMailSender' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+invoice-backend  | 2026-07-23T04:55:54.417Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:55:54.421Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+invoice-backend  | 2026-07-23T04:55:54.430Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+invoice-backend  | 2026-07-23T04:55:54.436Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:54.452Z  INFO 1 --- [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+invoice-backend  | 
+invoice-backend  | Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+invoice-backend  | 2026-07-23T04:55:54.493Z ERROR 1 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+invoice-backend  | 
+invoice-backend  | ***************************
+invoice-backend  | APPLICATION FAILED TO START
+invoice-backend  | ***************************
+invoice-backend  | 
+invoice-backend  | Description:
+invoice-backend  | 
+invoice-backend  | Parameter 0 of constructor in com.example.demo.Services.Impl.EmailServiceImpl required a bean of type 'org.springframework.mail.javamail.JavaMailSender' that could not be found.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  | Action:
+invoice-backend  | 
+invoice-backend  | Consider defining a bean of type 'org.springframework.mail.javamail.JavaMailSender' in your configuration.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  |   .   ____          _            __ _ _
+invoice-backend  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+invoice-backend  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+invoice-backend  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+invoice-backend  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+invoice-backend  |  =========|_|==============|___/=/_/_/_/
+invoice-backend  | 
+invoice-backend  |  :: Spring Boot ::                (v4.1.0)
+invoice-backend  | 
+invoice-backend  | 2026-07-23T04:55:57.538Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/app.jar started by root in /app)
+invoice-backend  | 2026-07-23T04:55:57.543Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+invoice-backend  | 2026-07-23T04:55:58.608Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+invoice-backend  | 2026-07-23T04:55:58.728Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 111 ms. Found 20 JPA repository interfaces.
+invoice-backend  | 2026-07-23T04:55:59.532Z  INFO 1 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+invoice-backend  | 2026-07-23T04:55:59.562Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+invoice-backend  | 2026-07-23T04:55:59.563Z  INFO 1 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+invoice-backend  | 2026-07-23T04:55:59.610Z  INFO 1 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1973 ms
+invoice-backend  | 2026-07-23T04:55:59.870Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+invoice-backend  | 2026-07-23T04:56:00.156Z  INFO 1 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2c48cede
+invoice-backend  | 2026-07-23T04:56:00.160Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+invoice-backend  | 2026-07-23T04:56:00.208Z  INFO 1 --- [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+invoice-backend  | 2026-07-23T04:56:00.298Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+invoice-backend  | 2026-07-23T04:56:00.816Z  INFO 1 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+invoice-backend  | 2026-07-23T04:56:00.890Z  INFO 1 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+invoice-backend  | 	Database JDBC URL [jdbc:postgresql://postgres:5432/TF]
+invoice-backend  | 	Database driver: PostgreSQL JDBC Driver
+invoice-backend  | 	Database dialect: PostgreSQLDialect
+invoice-backend  | 	Database version: 17.10
+invoice-backend  | 	Default catalog/schema: TF/public
+invoice-backend  | 	Autocommit mode: undefined/unknown
+invoice-backend  | 	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+invoice-backend  | 	JDBC fetch size: none
+invoice-backend  | 	Pool: DataSourceConnectionProvider
+invoice-backend  | 	Minimum pool size: undefined/unknown
+invoice-backend  | 	Maximum pool size: undefined/unknown
+invoice-backend  | 2026-07-23T04:56:02.324Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+invoice-backend  | 2026-07-23T04:56:02.334Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:56:02.415Z  INFO 1 --- [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+invoice-backend  | 2026-07-23T04:56:03.409Z  WARN 1 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mailTest' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Controller/MailTest.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'emailServiceImpl' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Services/Impl/EmailServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.mail.javamail.JavaMailSender' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+invoice-backend  | 2026-07-23T04:56:03.410Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:56:03.414Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+invoice-backend  | 2026-07-23T04:56:03.421Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+invoice-backend  | 2026-07-23T04:56:03.425Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+invoice-backend  | 2026-07-23T04:56:03.436Z  INFO 1 --- [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+invoice-backend  | 
+invoice-backend  | Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+invoice-backend  | 2026-07-23T04:56:03.466Z ERROR 1 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+invoice-backend  | 
+invoice-backend  | ***************************
+invoice-backend  | APPLICATION FAILED TO START
+invoice-backend  | ***************************
+invoice-backend  | 
+invoice-backend  | Description:
+invoice-backend  | 
+invoice-backend  | Parameter 0 of constructor in com.example.demo.Services.Impl.EmailServiceImpl required a bean of type 'org.springframework.mail.javamail.JavaMailSender' that could not be found.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  | Action:
+invoice-backend  | 
+invoice-backend  | Consider defining a bean of type 'org.springframework.mail.javamail.JavaMailSender' in your configuration.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  |   .   ____          _            __ _ _
+invoice-backend  |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+invoice-backend  | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+invoice-backend  |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+invoice-backend  |   '  |____| .__|_| |_|_| |_\__, | / / / /
+invoice-backend  |  =========|_|==============|___/=/_/_/_/
+invoice-backend  | 
+invoice-backend  |  :: Spring Boot ::                (v4.1.0)
+invoice-backend  | 
+invoice-backend  | 2026-07-23T04:56:07.932Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : Starting DemoApplication v0.0.1-SNAPSHOT using Java 21.0.11 with PID 1 (/app/app.jar started by root in /app)
+invoice-backend  | 2026-07-23T04:56:07.937Z  INFO 1 --- [           main] com.example.demo.DemoApplication         : No active profile set, falling back to 1 default profile: "default"
+invoice-backend  | 2026-07-23T04:56:08.917Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+invoice-backend  | 2026-07-23T04:56:09.056Z  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 131 ms. Found 20 JPA repository interfaces.
+invoice-backend  | 2026-07-23T04:56:09.776Z  INFO 1 --- [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+invoice-backend  | 2026-07-23T04:56:09.799Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+invoice-backend  | 2026-07-23T04:56:09.800Z  INFO 1 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+invoice-backend  | 2026-07-23T04:56:09.847Z  INFO 1 --- [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1830 ms
+invoice-backend  | 2026-07-23T04:56:10.030Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+invoice-backend  | 2026-07-23T04:56:10.333Z  INFO 1 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2c48cede
+invoice-backend  | 2026-07-23T04:56:10.336Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+invoice-backend  | 2026-07-23T04:56:10.387Z  INFO 1 --- [           main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+invoice-backend  | 2026-07-23T04:56:10.475Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+invoice-backend  | 2026-07-23T04:56:11.004Z  INFO 1 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+invoice-backend  | 2026-07-23T04:56:11.092Z  INFO 1 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+invoice-backend  | 	Database JDBC URL [jdbc:postgresql://postgres:5432/TF]
+invoice-backend  | 	Database driver: PostgreSQL JDBC Driver
+invoice-backend  | 	Database dialect: PostgreSQLDialect
+invoice-backend  | 	Database version: 17.10
+invoice-backend  | 	Default catalog/schema: TF/public
+invoice-backend  | 	Autocommit mode: undefined/unknown
+invoice-backend  | 	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+invoice-backend  | 	JDBC fetch size: none
+invoice-backend  | 	Pool: DataSourceConnectionProvider
+invoice-backend  | 	Minimum pool size: undefined/unknown
+invoice-backend  | 	Maximum pool size: undefined/unknown
+invoice-backend  | 2026-07-23T04:56:12.285Z  INFO 1 --- [           main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+invoice-backend  | 2026-07-23T04:56:12.294Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:56:12.357Z  INFO 1 --- [           main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+invoice-backend  | 2026-07-23T04:56:13.543Z  WARN 1 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mailTest' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Controller/MailTest.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'emailServiceImpl' defined in URL [jar:nested:/app/app.jar/!BOOT-INF/classes/!/com/example/demo/Services/Impl/EmailServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'org.springframework.mail.javamail.JavaMailSender' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+invoice-backend  | 2026-07-23T04:56:13.545Z  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+invoice-backend  | 2026-07-23T04:56:13.549Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+invoice-backend  | 2026-07-23T04:56:13.557Z  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+invoice-backend  | 2026-07-23T04:56:13.562Z  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+invoice-backend  | 2026-07-23T04:56:13.578Z  INFO 1 --- [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+invoice-backend  | 
+invoice-backend  | Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+invoice-backend  | 2026-07-23T04:56:13.619Z ERROR 1 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+invoice-backend  | 
+invoice-backend  | ***************************
+invoice-backend  | APPLICATION FAILED TO START
+invoice-backend  | ***************************
+invoice-backend  | 
+invoice-backend  | Description:
+invoice-backend  | 
+invoice-backend  | Parameter 0 of constructor in com.example.demo.Services.Impl.EmailServiceImpl required a bean of type 'org.springframework.mail.javamail.JavaMailSender' that could not be found.
+invoice-backend  | 
+invoice-backend  | 
+invoice-backend  | Action:
+invoice-backend  | 
+invoice-backend  | Consider defining a bean of type 'org.springframework.mail.javamail.JavaMailSender' in your configuration.
+invoice-backend  | 

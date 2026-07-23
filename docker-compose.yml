@@ -1,0 +1,109 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:17
+    container_name: invoice-postgres
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    networks:
+      - invoice-network
+
+
+  backend:
+
+    build:
+      context: ./Backend
+
+    container_name: invoice-backend
+
+    restart: unless-stopped
+
+    depends_on:
+      - postgres
+
+    environment:
+      # ==========================
+      # Database Configuration
+      # ==========================
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+
+      # ==========================
+      # Mail Configuration
+      # ==========================
+      SPRING_MAIL_HOST: ${MAIL_HOST}
+      SPRING_MAIL_PORT: ${MAIL_PORT}
+      SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
+
+    ports:
+      - "8080:8080"
+
+    networks:
+      - invoice-network
+
+
+  frontend:
+
+    build:
+      context: ./Frontend
+
+    container_name: invoice-frontend
+
+    restart: unless-stopped
+
+    depends_on:
+      - backend
+
+    ports:
+      - "3000:80"
+
+    networks:
+      - invoice-network
+
+
+  pgadmin:
+
+    image: dpage/pgadmin4
+
+    container_name: invoice-pgadmin
+
+    restart: unless-stopped
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+
+    ports:
+      - "5050:80"
+
+    depends_on:
+      - postgres
+
+    networks:
+      - invoice-network
+
+
+volumes:
+  postgres_data:
+
+
+networks:
+  invoice-network:

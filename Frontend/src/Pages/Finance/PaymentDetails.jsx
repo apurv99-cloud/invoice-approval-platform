@@ -7,7 +7,7 @@ import invoiceService from "../../Services/invoiceService";
 import DashboardHeader from "../../Components/dashboard/DashboardHeader";
 import InvoiceStatusBadge from "../../Components/invoice/InvoiceStatusBadge";
 import InvoiceTimeline from "../../Components/invoice/InvoiceTimeline";
-import PaymentModal from "../../Components/payment/PaymentModal";
+import PaymentModal from "../../Components/Payment/PaymentModal";
 import paymentService from "../../Services/paymentService";
 
 const PaymentDetails = () => {
