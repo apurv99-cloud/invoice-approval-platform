@@ -1,23 +1,22 @@
 package com.example.demo.Configuration;
 
-import com.example.demo.Authorization.PermissionAuthorizationFilter;
-import com.example.demo.Security.JwtAuthenticationFilter;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
+import com.example.demo.Authorization.PermissionAuthorizationFilter;
+import com.example.demo.Security.JwtAuthenticationFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -80,7 +79,8 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(
                 List.of("http://localhost:5173",
                         "http://localhost:3000",
-                        "http://localhost:3001")
+                        "http://localhost:3001",
+                "https://invoice-approval-platform.vercel.app")
         );
 
         configuration.setAllowedMethods(
