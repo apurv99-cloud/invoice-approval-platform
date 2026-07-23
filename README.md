@@ -21,6 +21,18 @@ The application follows enterprise software architecture principles, making it s
 
 ---
 
+##  Live Demo
+
+| Service | URL |
+|----------|-----|
+|   Frontend | https://invoice-approval-platform.vercel.app |
+|   Backend API | https://invoice-approval-platform-1.onrender.com |
+|   Swagger API | Coming Soon |
+
+---
+
+---
+
 # Project Highlights
 
 - Enterprise Role-Based Access Control (RBAC)
