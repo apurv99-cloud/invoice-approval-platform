@@ -21,28 +21,32 @@ public class EmailServiceImpl
             String organizationName,
             String token) {
 
-        String onboardingLink
-                = // "http://localhost:5173/complete-onboarding?token=" + token;
-                "https://invoice-approval-platform.vercel.app/complete-onboarding?token=" + token;
+        try {
 
-        SimpleMailMessage message
-                = new SimpleMailMessage();
+            String onboardingLink
+                    = "https://invoice-approval-platform.vercel.app/complete-onboarding?token=" + token;
 
-        message.setFrom(
-                "sinhaapurv@gmail.com");
-        message.setTo(email);
+            SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setSubject(
-                "Organization Onboarding");
+            message.setFrom("sinhaapurv99@gmail.com");
+            message.setTo(email);
+            message.setSubject("Organization Onboarding");
 
-        message.setText(
-                "Hello,\n\n"
-                + "Your organization "
-                + organizationName
-                + " has been registered.\n\n"
-                + "Complete onboarding:\n"
-                + onboardingLink);
+            message.setText(
+                    "Hello,\n\n"
+                    + "Your organization " + organizationName
+                    + " has been registered.\n\n"
+                    + "Complete onboarding:\n"
+                    + onboardingLink
+            );
 
-        mailSender.send(message);
+            System.out.println("Before sending mail...");
+            mailSender.send(message);
+            System.out.println("Mail sent successfully.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Mail Error", e);
+        }
     }
 }
