@@ -7,7 +7,8 @@
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-<img width="1902" height="965" alt="Landing Page" src="https://github.com/user-attachments/assets/5754e5a5-0ca9-4302-8351-7839bd334e0f" />
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/9b8c8ec3-65cd-40c7-ae56-c18c635dbfe0" />
+
 
 ---
 
@@ -426,7 +427,10 @@ The following screenshots demonstrate the core modules and workflows of the Ente
 
 Modern and responsive landing page with authentication options for organizations and users.
 
-<img width="1902" height="965" alt="Landing Page" src="https://github.com/user-attachments/assets/4efc05fa-7bb1-4ed8-98d1-f53f4a7b9752" />
+<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/04649aee-5016-4ce3-8b07-e99cf4e75a52" />
+<img width="1915" height="968" alt="image" src="https://github.com/user-attachments/assets/667a16b3-0703-402b-b7d2-954a03cce58d" />
+<img width="1916" height="971" alt="image" src="https://github.com/user-attachments/assets/c4bbc9d0-d62e-4c58-bc6b-6adb00422463" />
+<img width="1912" height="825" alt="image" src="https://github.com/user-attachments/assets/fb7e4362-b9e5-4918-b826-531f767be831" />
 
 ---
 
