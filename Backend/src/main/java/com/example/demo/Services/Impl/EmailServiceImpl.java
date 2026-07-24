@@ -1,9 +1,12 @@
 package com.example.demo.Services.Impl;
 
-import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import com.example.demo.Services.EmailService;
 
@@ -11,11 +14,18 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class EmailServiceImpl
-        implements EmailService {
+public class EmailServiceImpl implements EmailService {
 
-    private final JavaMailSender mailSender;
-      private final Environment environment;
+    private final RestClient restClient;
+
+    @Value("${brevo.api.key}")
+    private String apiKey;
+
+    @Value("${brevo.from.email}")
+    private String fromEmail;
+
+    @Value("${brevo.from.name}")
+    private String fromName;
 
     @Override
     public void sendOnboardingEmail(
@@ -23,33 +33,44 @@ public class EmailServiceImpl
             String organizationName,
             String token) {
 
+        String onboardingLink
+                = "https://invoice-approval-platform.vercel.app/complete-onboarding?token=" + token;
+
+        Map<String, Object> body = Map.of(
+                "sender", Map.of(
+                        "name", fromName,
+                        "email", fromEmail
+                ),
+                "to", List.of(
+                        Map.of("email", email)
+                ),
+                "subject", "Organization Onboarding",
+                "textContent",
+                "Hello,\n\n"
+                + "Your organization "
+                + organizationName
+                + " has been registered.\n\n"
+                + "Complete onboarding using the link below:\n\n"
+                + onboardingLink
+        );
+
         try {
 
-            String onboardingLink
-                    = "https://invoice-approval-platform.vercel.app/complete-onboarding?token=" + token;
+            restClient.post()
+                    .uri("https://api.brevo.com/v3/smtp/email")
+                    .header("api-key", apiKey)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(body)
+                    .retrieve()
+                    .toBodilessEntity();
 
-            SimpleMailMessage message = new SimpleMailMessage();
+            System.out.println("Mail sent successfully using Brevo.");
 
-            message.setFrom("sinhaapurv99@gmail.com");
-            message.setTo(email);
-            message.setSubject("Organization Onboarding");
+        } catch (Exception ex) {
 
-            message.setText(
-                    "Hello,\n\n"
-                    + "Your organization " + organizationName
-                    + " has been registered.\n\n"
-                    + "Complete onboarding:\n"
-                    + onboardingLink
-            );
+            ex.printStackTrace();
+            throw new RuntimeException("Unable to send email using Brevo.", ex);
 
-            System.out.println("Before sending mail...");
-             System.out.println("Mail Host: " + environment.getProperty("spring.mail.host"));
-            mailSender.send(message);
-            System.out.println("Mail sent successfully.");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Mail Error", e);
         }
     }
 }

@@ -1,109 +1,97 @@
-  version: "3.9"
+version: "3.9"
 
-  services:
+services:
+  postgres:
+    image: postgres:17
+    container_name: invoice-postgres
 
-    postgres:
-      image: postgres:17
-      container_name: invoice-postgres
+    restart: unless-stopped
 
-      restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
-      environment:
-        POSTGRES_DB: ${POSTGRES_DB}
-        POSTGRES_USER: ${POSTGRES_USER}
-        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
 
-      ports:
-        - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
+    networks:
+      - invoice-network
 
-      networks:
-        - invoice-network
+  backend:
+    build:
+      context: ./Backend
 
+    container_name: invoice-backend
 
-    backend:
+    restart: unless-stopped
 
-      build:
-        context: ./Backend
+    depends_on:
+      - postgres
 
-      container_name: invoice-backend
+    environment:
+      # ==========================
+      # Database Configuration
+      # ==========================
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
 
-      restart: unless-stopped
+      # ==========================
+      # Brevo Configuration
+      # ==========================
+      BREVO_API_KEY: ${BREVO_API_KEY}
+      BREVO_FROM_EMAIL: ${BREVO_FROM_EMAIL}
+      BREVO_FROM_NAME: ${BREVO_FROM_NAME}
 
-      depends_on:
-        - postgres
+    ports:
+      - "8080:8080"
 
-      environment:
-        # ==========================
-        # Database Configuration
-        # ==========================
-        SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
-        SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
-        SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - invoice-network
 
-        # ==========================
-        # Mail Configuration
-        # ==========================
-        SPRING_MAIL_HOST: ${MAIL_HOST}
-        SPRING_MAIL_PORT: ${MAIL_PORT}
-        SPRING_MAIL_USERNAME: ${MAIL_USERNAME}
-        SPRING_MAIL_PASSWORD: ${MAIL_PASSWORD}
-        SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
-        SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
+  frontend:
+    build:
+      context: ./Frontend
 
-      ports:
-        - "8080:8080"
+    container_name: invoice-frontend
 
-      networks:
-        - invoice-network
+    restart: unless-stopped
 
+    depends_on:
+      - backend
 
-    frontend:
+    ports:
+      - "3000:80"
 
-      build:
-        context: ./Frontend
+    networks:
+      - invoice-network
 
-      container_name: invoice-frontend
+  pgadmin:
+    image: dpage/pgadmin4
 
-      restart: unless-stopped
+    container_name: invoice-pgadmin
 
-      depends_on:
-        - backend
+    restart: unless-stopped
 
-      ports:
-        - "3000:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
 
-      networks:
-        - invoice-network
+    ports:
+      - "5050:80"
 
+    depends_on:
+      - postgres
 
-    pgadmin:
+    networks:
+      - invoice-network
 
-      image: dpage/pgadmin4
+volumes:
+  postgres_data:
 
-      container_name: invoice-pgadmin
-
-      restart: unless-stopped
-
-      environment:
-        PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-        PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-
-      ports:
-        - "5050:80"
-
-      depends_on:
-        - postgres
-
-      networks:
-        - invoice-network
-
-
-  volumes:
-    postgres_data:
-
-
-  networks:
-    invoice-network:
+networks:
+  invoice-network:
