@@ -561,7 +561,7 @@ Generate business reports and monitor invoice/payment statistics.
 - Dockerized Full-Stack Deployment
 
 ---
-# 🎓 Learning Outcomes
+#  Learning Outcomes
 
 This project provided hands-on experience in building an enterprise-grade full-stack application and strengthened my understanding of modern software development practices.
 
