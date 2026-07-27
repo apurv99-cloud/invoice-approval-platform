@@ -1,4 +1,4 @@
-# Enterprise Invoice Approval System
+# Enterprise Invoice Approval System.
 
 ![Java](https://img.shields.io/badge/Java-21-red)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-green)
