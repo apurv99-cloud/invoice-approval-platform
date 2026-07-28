@@ -1,32 +1,42 @@
 package com.example.demo.Services;
 
-import com.example.demo.DTO.Invoice.*;
-
 import java.util.List;
+
+import com.example.demo.DTO.Invoice.CreateInvoiceRequest;
+import com.example.demo.DTO.Invoice.InvoiceListResponse;
+import com.example.demo.DTO.Invoice.InvoiceResponse;
+import com.example.demo.DTO.Invoice.UpdateInvoiceRequest;
 
 public interface InvoiceService {
 
-    InvoiceResponse createInvoice(
-            CreateInvoiceRequest request);
+    // ==========================================================
+    // CRUD Operations
+    // ==========================================================
+    InvoiceResponse createInvoice(CreateInvoiceRequest request);
 
     InvoiceResponse updateInvoice(
             Long invoiceId,
-            UpdateInvoiceRequest request);
+            UpdateInvoiceRequest request
+    );
 
-    InvoiceResponse getInvoice(
-            Long invoiceId);
+    InvoiceResponse getInvoice(Long invoiceId);
 
+    void deleteInvoice(Long invoiceId);
+
+    // ==========================================================
+    // Query Operations
+    // ==========================================================
     List<InvoiceListResponse> getOrganizationInvoices();
+
+    List<InvoiceListResponse> getDraftInvoices();
+
+    List<InvoiceListResponse> getMySubmittedInvoices();
 
     List<InvoiceListResponse> getMyPendingInvoices();
 
-    com.example.demo.DTO.Invoice.InvoiceResponse approveInvoice(
-            Long invoiceId,
-            ApproveInvoiceRequest request);
- 
-    com.example.demo.DTO.Invoice.InvoiceResponse rejectInvoice(
-            Long invoiceId,
-            RejectInvoiceRequest request);
+    List<InvoiceListResponse> getApprovedInvoices();
 
-    InvoiceResponse submitInvoice(Long invoiceId);
+    List<InvoiceListResponse> getRejectedInvoices();
+
+    List<InvoiceListResponse> getPaidInvoices();
 }

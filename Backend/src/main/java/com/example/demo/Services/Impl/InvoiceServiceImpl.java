@@ -1,28 +1,23 @@
 package com.example.demo.Services.Impl;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.DTO.Invoice.ApproveInvoiceRequest;
 import com.example.demo.DTO.Invoice.CreateInvoiceRequest;
 import com.example.demo.DTO.Invoice.InvoiceListResponse;
 import com.example.demo.DTO.Invoice.InvoiceResponse;
-import com.example.demo.DTO.Invoice.RejectInvoiceRequest;
 import com.example.demo.DTO.Invoice.UpdateInvoiceRequest;
 import com.example.demo.Entity.ApprovalStatus;
 import com.example.demo.Entity.Invoice;
 import com.example.demo.Entity.InvoiceApproval;
 import com.example.demo.Entity.InvoiceStatus;
 import com.example.demo.Entity.Organization;
-import com.example.demo.Entity.Role;
 import com.example.demo.Entity.Users;
 import com.example.demo.Entity.WorkflowMaster;
-import com.example.demo.Entity.WorkflowRule;
-import com.example.demo.Entity.WorkflowStep;
 import com.example.demo.Repository.InvoiceApprovalRepository;
 import com.example.demo.Repository.InvoiceRepository;
 import com.example.demo.Repository.OrganizationRepository;
@@ -33,72 +28,58 @@ import com.example.demo.Repository.WorkflowRuleRepository;
 import com.example.demo.Repository.WorkflowStepRepository;
 import com.example.demo.Services.InvoiceService;
 
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class InvoiceServiceImpl
-        implements InvoiceService {
+@Transactional
+public class InvoiceServiceImpl implements InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
-
     private final InvoiceApprovalRepository invoiceApprovalRepository;
-
     private final WorkflowMasterRepository workflowMasterRepository;
-
     private final WorkflowRuleRepository workflowRuleRepository;
-
     private final WorkflowStepRepository workflowStepRepository;
-
     private final UserRepository userRepository;
-
     private final UserRoleRepository userRoleRepository;
-
     private final OrganizationRepository organizationRepository;
 
+    // ==========================================================
+    // Helper Methods
+    // ==========================================================
+    @Transactional(readOnly = true)
     private Users getCurrentUser() {
 
-        String email
-                = SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getName();
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
 
-        return userRepository
-                .findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(()
-                        -> new RuntimeException(
-                        "User not found"));
+                        -> new EntityNotFoundException("Authenticated user not found."));
     }
 
+    @Transactional(readOnly = true)
     private Organization getCurrentOrganization() {
-
-        Users currentUser
-                = getCurrentUser();
-
-        return currentUser.getOrganization();
+        return getCurrentUser().getOrganization();
     }
 
     private String generateInvoiceNumber() {
-
-        long count
-                = invoiceRepository.count() + 1;
-
-        return String.format(
-                "INV-%06d",
-                count
-        );
+        long count = invoiceRepository.count() + 1;
+        return String.format("INV-%06d", count);
     }
 
-    private InvoiceResponse mapToResponse(
-            Invoice invoice
-    ) {
+    // ==========================================================
+    // DTO Mappers
+    // ==========================================================
+    private InvoiceResponse mapToResponse(Invoice invoice) {
 
         return InvoiceResponse.builder()
                 .invoiceId(invoice.getInvoiceId())
                 .invoiceNumber(invoice.getInvoiceNumber())
-                //                .invoiceTitle(invoice.getInvoiceTitle())
+                .invoiceTitle(invoice.getInvoiceTitle())
                 .description(invoice.getDescription())
                 .amount(invoice.getAmount())
                 .invoiceDate(invoice.getInvoiceDate())
@@ -106,28 +87,27 @@ public class InvoiceServiceImpl
                 .status(invoice.getStatus())
                 .vendorName(invoice.getVendor().getFullName())
                 .organizationName(invoice.getOrganization().getOrganizationName())
-                .workflowName(invoice.getWorkflow() != null ? invoice.getWorkflow().getWorkflowName() : null)
+                .workflowName(
+                        Optional.ofNullable(invoice.getWorkflow())
+                                .map(WorkflowMaster::getWorkflowName)
+                                .orElse(null)
+                )
                 .createdAt(invoice.getCreatedAt())
                 .build();
     }
 
-    private InvoiceListResponse mapToListResponse(
-            Invoice invoice
-    ) {
+    private InvoiceListResponse mapToListResponse(Invoice invoice) {
 
-        InvoiceApproval currentApproval
-                = invoiceApprovalRepository
-                        .findByApproverAndStatus(
-                                getCurrentUser(),
-                                ApprovalStatus.PENDING
-                        )
-                        .stream()
-                        .filter(a
-                                -> a.getInvoice()
-                                .getInvoiceId()
-                                .equals(invoice.getInvoiceId()))
-                        .findFirst()
-                        .orElse(null);
+        Users currentUser = getCurrentUser();
+
+        String currentApprover = invoiceApprovalRepository
+                .findByInvoiceAndApproverAndStatus(
+                        invoice,
+                        currentUser,
+                        ApprovalStatus.PENDING
+                )
+                .map(approval -> approval.getApprover().getFullName())
+                .orElse(null);
 
         return InvoiceListResponse.builder()
                 .invoiceId(invoice.getInvoiceId())
@@ -136,199 +116,59 @@ public class InvoiceServiceImpl
                 .amount(invoice.getAmount())
                 .status(invoice.getStatus())
                 .vendorName(invoice.getVendor().getFullName())
-                .currentApprover(
-                        currentApproval != null
-                                ? currentApproval
-                                        .getApprover()
-                                        .getFullName()
-                                : null)
+                .currentApprover(currentApprover)
                 .createdAt(invoice.getCreatedAt())
                 .build();
     }
 
     @Override
     @Transactional
-    public InvoiceResponse createInvoice(
-            CreateInvoiceRequest request
-    ) {
+    public InvoiceResponse createInvoice(CreateInvoiceRequest request) {
 
-        // Current User
-        Users vendor = getCurrentUser();
+        Users currentUser = getCurrentUser();
+        Organization organization = currentUser.getOrganization();
 
-        // Organization
-        Organization organization
-                = vendor.getOrganization();
-
-        // Due Date Validation
-        if (request.getDueDate()
-                .isBefore(request.getInvoiceDate())) {
-
-            throw new RuntimeException(
-                    "Due Date cannot be before Invoice Date");
+        // ==========================
+        // Validations
+        // ==========================
+        if (request.getInvoiceDate() == null || request.getDueDate() == null) {
+            throw new IllegalArgumentException(
+                    "Invoice date and due date are required."
+            );
         }
 
+        if (request.getDueDate().isBefore(request.getInvoiceDate())) {
+            throw new IllegalArgumentException(
+                    "Due date cannot be before invoice date."
+            );
+        }
+
+        if (request.getAmount() == null || request.getAmount().signum() <= 0) {
+            throw new IllegalArgumentException(
+                    "Invoice amount must be greater than zero."
+            );
+        }
+
+        // ==========================
         // Create Draft Invoice
-        Invoice invoice
-                = Invoice.builder()
-                        .invoiceNumber(
-                                generateInvoiceNumber())
-                        .invoiceTitle(
-                                request.getInvoiceTitle())
-                        .description(
-                                request.getDescription())
-                        .amount(
-                                request.getAmount())
-                        .invoiceDate(
-                                request.getInvoiceDate())
-                        .dueDate(
-                                request.getDueDate())
-                        .status(
-                                InvoiceStatus.DRAFT)
-                        .vendor(
-                                vendor)
-                        .organization(
-                                organization)
-                        .workflow(null)
-                        .deleted(false)
-                        .build();
-
-        Invoice savedInvoice
-                = invoiceRepository.save(invoice);
-
-        return mapToResponse(savedInvoice);
-    }
-
-    @Override
-    @Transactional
-    public InvoiceResponse submitInvoice(
-            Long invoiceId
-    ) {
-
-        // Current Vendor
-        Users vendor
-                = getCurrentUser();
-
-        // Find Invoice
-        Invoice invoice
-                = invoiceRepository
-                        .findById(invoiceId)
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "Invoice not found"));
-
-        // Only owner can submit
-        if (!invoice.getVendor()
-                .getUserId()
-                .equals(vendor.getUserId())) {
-
-            throw new RuntimeException(
-                    "Only invoice owner can submit invoice");
-        }
-
-        // Same Organization Validation
-        if (!invoice.getOrganization()
-                .getOrganizationId()
-                .equals(vendor.getOrganization()
-                        .getOrganizationId())) {
-
-            throw new RuntimeException(
-                    "Access Denied");
-        }
-
-        // Only Draft can be submitted
-        if (invoice.getStatus()
-                != InvoiceStatus.DRAFT) {
-
-            throw new RuntimeException(
-                    "Only Draft invoices can be submitted");
-        }
-
-        // Due Date Validation
-        if (invoice.getDueDate()
-                .isBefore(invoice.getInvoiceDate())) {
-
-            throw new RuntimeException(
-                    "Due Date cannot be before Invoice Date");
-        }
-
-        // Find Workflow Rule
-        WorkflowRule workflowRule
-                = workflowRuleRepository
-                        .findByWorkflow_OrganizationAndMinAmountLessThanEqualAndMaxAmountGreaterThanEqual(
-                                vendor.getOrganization(),
-                                invoice.getAmount(),
-                                invoice.getAmount()
-                        )
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "No Workflow Rule Found"));
-
-        // Get Workflow
-        WorkflowMaster workflow
-                = workflowRule.getWorkflow();
-
-        if (!Boolean.TRUE.equals(
-                workflow.getActive())) {
-
-            throw new RuntimeException(
-                    "Workflow is inactive");
-        }
-
-        // First Workflow Step
-        WorkflowStep firstStep
-                = workflowStepRepository
-                        .findByWorkflowAndStepOrder(
-                                workflow,
-                                1
-                        )
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "First Workflow Step not found"));
-
-        // First Approver Role
-        Role approverRole
-                = firstStep.getRole();
-
-        // Find Approver
-        Users approver
-                = userRoleRepository
-                        .findFirstByRoleAndUsers_Organization(
-                                approverRole,
-                                vendor.getOrganization()
-                        )
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "Approver not found"))
-                        .getUsers();
-
-        // Assign Workflow
-        invoice.setWorkflow(workflow);
-
-        // Move to Review
-        invoice.setStatus(
-                InvoiceStatus.IN_REVIEW);
+        // ==========================
+        Invoice invoice = Invoice.builder()
+                .invoiceNumber(generateInvoiceNumber())
+                .invoiceTitle(request.getInvoiceTitle())
+                .description(request.getDescription())
+                .amount(request.getAmount())
+                .invoiceDate(request.getInvoiceDate())
+                .dueDate(request.getDueDate())
+                .status(InvoiceStatus.DRAFT)
+                .vendor(currentUser)
+                .organization(organization)
+                .workflow(null)
+                .deleted(false)
+                .build();
 
         invoiceRepository.save(invoice);
 
-        // Create First Approval
-        InvoiceApproval approval
-                = InvoiceApproval.builder()
-                        .invoice(invoice)
-                        .workflowStep(firstStep)
-                        .approver(approver)
-                        .status(
-                                ApprovalStatus.PENDING)
-                        .comments(null)
-                        .build();
-
-        InvoiceApproval savedApproval = invoiceApprovalRepository.save(approval);
-        // Ensure approval persisted before returning (flush to DB)
-        invoiceApprovalRepository.flush();
-
-        Invoice updatedInvoice
-                = invoiceRepository.save(invoice);
-
-        return mapToResponse(updatedInvoice);
+        return mapToResponse(invoice);
     }
 
     @Override
@@ -338,124 +178,152 @@ public class InvoiceServiceImpl
             UpdateInvoiceRequest request
     ) {
 
-        Users currentUser
-                = getCurrentUser();
+        // ==========================================================
+        // Current User & Organization
+        // ==========================================================
+        Users currentUser = getCurrentUser();
+        Organization organization = currentUser.getOrganization();
 
-        Invoice invoice
-                = invoiceRepository
-                        .findById(invoiceId)
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "Invoice not found"));
+        // ==========================================================
+        // Fetch Invoice
+        // ==========================================================
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(()
+                        -> new EntityNotFoundException("Invoice not found."));
 
-        // Organization Validation
-        if (!invoice.getOrganization()
-                .getOrganizationId()
-                .equals(currentUser.getOrganization()
-                        .getOrganizationId())) {
+        // ==========================================================
+        // Validations
+        // ==========================================================
+        if (!invoice.getOrganization().getOrganizationId()
+                .equals(organization.getOrganizationId())) {
 
-            throw new RuntimeException(
-                    "Access Denied");
+            throw new IllegalStateException(
+                    "Access denied. Invoice belongs to another organization."
+            );
         }
 
-        // Vendor Validation
-        if (!invoice.getVendor()
-                .getUserId()
+        if (!invoice.getVendor().getUserId()
                 .equals(currentUser.getUserId())) {
 
-            throw new RuntimeException(
-                    "Only invoice owner can update");
+            throw new IllegalStateException(
+                    "Only the invoice owner can update this invoice."
+            );
         }
 
-        // Status Validation
         if (invoice.getStatus() != InvoiceStatus.DRAFT) {
 
-            throw new RuntimeException(
-                    "Only Draft invoices can be updated");
+            throw new IllegalStateException(
+                    "Only draft invoices can be updated."
+            );
         }
 
-        // Update Fields
-        invoice.setInvoiceTitle(
-                request.getInvoiceTitle());
+        if (request.getInvoiceDate() == null || request.getDueDate() == null) {
 
-        invoice.setDescription(
-                request.getDescription());
-
-        invoice.setAmount(
-                request.getAmount());
-
-        invoice.setInvoiceDate(
-                request.getInvoiceDate());
-
-        invoice.setDueDate(
-                request.getDueDate());
-
-        Invoice updatedInvoice
-                = invoiceRepository.save(invoice);
-
-        return mapToResponse(updatedInvoice);
-    }
-
-    @Override
-    @Transactional()
-    public InvoiceResponse getInvoice(
-            Long invoiceId
-    ) {
-
-        Users currentUser = getCurrentUser();
-
-        Invoice invoice
-                = invoiceRepository
-                        .findById(invoiceId)
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "Invoice not found"));
-
-        // Organization Validation
-        if (!invoice.getOrganization()
-                .getOrganizationId()
-                .equals(
-                        currentUser
-                                .getOrganization()
-                                .getOrganizationId())) {
-
-            throw new RuntimeException(
-                    "Access Denied");
+            throw new IllegalArgumentException(
+                    "Invoice date and due date are required."
+            );
         }
 
+        if (request.getDueDate().isBefore(request.getInvoiceDate())) {
+
+            throw new IllegalArgumentException(
+                    "Due date cannot be before invoice date."
+            );
+        }
+
+        if (request.getAmount() == null || request.getAmount().signum() <= 0) {
+
+            throw new IllegalArgumentException(
+                    "Invoice amount must be greater than zero."
+            );
+        }
+
+        // ==========================================================
+        // Update Invoice
+        // ==========================================================
+        invoice.setInvoiceTitle(request.getInvoiceTitle());
+        invoice.setDescription(request.getDescription());
+        invoice.setAmount(request.getAmount());
+        invoice.setInvoiceDate(request.getInvoiceDate());
+        invoice.setDueDate(request.getDueDate());
+
+        invoiceRepository.save(invoice);
+
+        // ==========================================================
+        // Return Response
+        // ==========================================================
         return mapToResponse(invoice);
     }
 
     @Override
-    @Transactional()
+    @Transactional(readOnly = true)
+    public InvoiceResponse getInvoice(Long invoiceId) {
+
+        // ==========================================================
+        // Current User
+        // ==========================================================
+        Users currentUser = getCurrentUser();
+
+        // ==========================================================
+        // Fetch Invoice
+        // ==========================================================
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(()
+                        -> new EntityNotFoundException("Invoice not found."));
+
+        // ==========================================================
+        // Organization Validation
+        // ==========================================================
+        if (!invoice.getOrganization().getOrganizationId()
+                .equals(currentUser.getOrganization().getOrganizationId())) {
+
+            throw new IllegalStateException(
+                    "Access denied. Invoice belongs to another organization."
+            );
+        }
+
+        // ==========================================================
+        // Return Response
+        // ==========================================================
+        return mapToResponse(invoice);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<InvoiceListResponse> getOrganizationInvoices() {
 
-        Organization organization
-                = getCurrentOrganization();
+        // ==========================================================
+        // Current Organization
+        // ==========================================================
+        Organization organization = getCurrentOrganization();
 
+        // ==========================================================
+        // Fetch Organization Invoices
+        // ==========================================================
         return invoiceRepository
-                .findByOrganizationAndDeletedFalse(
-                        organization
-                )
+                .findByOrganizationAndDeletedFalse(organization)
                 .stream()
                 .map(this::mapToListResponse)
                 .toList();
     }
 
     @Override
-    @Transactional()
+    @Transactional(readOnly = true)
     public List<InvoiceListResponse> getMyPendingInvoices() {
 
-        Users currentUser
-                = getCurrentUser();
+        // ==========================================================
+        // Current User
+        // ==========================================================
+        Users currentUser = getCurrentUser();
 
-        List<InvoiceApproval> approvals
-                = invoiceApprovalRepository
-                        .findByApproverIdAndStatus(
-                                currentUser.getUserId(),
-                                ApprovalStatus.PENDING);
-
-        return approvals
+        // ==========================================================
+        // Fetch Pending Approvals
+        // ==========================================================
+        return invoiceApprovalRepository
+                .findByApproverIdAndStatus(
+                        currentUser.getUserId(),
+                        ApprovalStatus.PENDING
+                )
                 .stream()
                 .map(InvoiceApproval::getInvoice)
                 .map(this::mapToListResponse)
@@ -464,200 +332,140 @@ public class InvoiceServiceImpl
 
     @Override
     @Transactional
-    public com.example.demo.DTO.Invoice.InvoiceResponse approveInvoice(
-            Long invoiceId,
-            ApproveInvoiceRequest request
-    ) {
+    public void deleteInvoice(Long invoiceId) {
 
-        // Current User
+        // ==========================================================
+        // Current User & Organization
+        // ==========================================================
         Users currentUser = getCurrentUser();
+        Organization organization = currentUser.getOrganization();
 
-        // Invoice
-        Invoice invoice
-                = invoiceRepository
-                        .findById(invoiceId)
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "Invoice not found"));
-        if (invoice.getStatus() == InvoiceStatus.APPROVED) {
-            throw new RuntimeException("Invoice already approved");
+        // ==========================================================
+        // Fetch Invoice
+        // ==========================================================
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(()
+                        -> new EntityNotFoundException("Invoice not found."));
+
+        // ==========================================================
+        // Validations
+        // ==========================================================
+        if (!invoice.getOrganization().getOrganizationId()
+                .equals(organization.getOrganizationId())) {
+
+            throw new IllegalStateException(
+                    "Access denied. Invoice belongs to another organization."
+            );
         }
 
-        if (invoice.getStatus() == InvoiceStatus.REJECTED) {
-            throw new RuntimeException("Invoice already rejected");
+        if (!invoice.getVendor().getUserId()
+                .equals(currentUser.getUserId())) {
+
+            throw new IllegalStateException(
+                    "Only the invoice owner can delete this invoice."
+            );
         }
 
-        // Organization Validation
-        if (!invoice.getOrganization()
-                .getOrganizationId()
-                .equals(currentUser
-                        .getOrganization()
-                        .getOrganizationId())) {
+        if (invoice.getStatus() != InvoiceStatus.DRAFT) {
 
-            throw new RuntimeException(
-                    "Access Denied");
+            throw new IllegalStateException(
+                    "Only draft invoices can be deleted."
+            );
         }
 
-        // Current Pending Approval
-        InvoiceApproval currentApproval
-                = invoiceApprovalRepository
-                        .findByInvoiceAndApproverAndStatus(
-                                invoice,
-                                currentUser,
-                                ApprovalStatus.PENDING
-                        )
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "Approval not found"));
+        if (Boolean.TRUE.equals(invoice.getDeleted())) {
 
-        // Mark Approved
-        currentApproval.setStatus(
-                ApprovalStatus.APPROVED);
-        currentApproval.setActionAt(LocalDateTime.now());
-
-        currentApproval.setComments(
-                request.getComments());
-
-        invoiceApprovalRepository.save(
-                currentApproval);
-
-        // Current Step
-        WorkflowStep currentStep
-                = currentApproval.getWorkflowStep();
-
-        Integer nextOrder
-                = currentStep.getStepOrder() + 1;
-
-        // Next Workflow Step
-        Optional<WorkflowStep> nextStepOptional
-                = workflowStepRepository
-                        .findByWorkflowAndStepOrder(
-                                invoice.getWorkflow(),
-                                nextOrder);
-
-        // Last Step
-        if (nextStepOptional.isEmpty()) {
-
-            invoice.setStatus(
-                    InvoiceStatus.APPROVED);
-
-            invoiceRepository.save(invoice);
-
-            return mapToResponse(invoice);
+            throw new IllegalStateException(
+                    "Invoice has already been deleted."
+            );
         }
 
-        WorkflowStep nextStep
-                = nextStepOptional.get();
-
-        Role nextRole
-                = nextStep.getRole();
-
-        Users nextApprover
-                = userRoleRepository
-                        .findFirstByRoleAndUsers_Organization(
-                                nextRole,
-                                invoice.getOrganization()
-                        )
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "Next Approver not found"))
-                        .getUsers();
-
-        InvoiceApproval nextApproval
-                = InvoiceApproval.builder()
-                        .invoice(invoice)
-                        .workflowStep(nextStep)
-                        .approver(nextApprover)
-                        .status(
-                                ApprovalStatus.PENDING)
-                        .build();
-
-        invoiceApprovalRepository.save(
-                nextApproval);
-
-        invoice.setStatus(
-                InvoiceStatus.IN_REVIEW);
+        // ==========================================================
+        // Soft Delete
+        // ==========================================================
+        invoice.setDeleted(true);
 
         invoiceRepository.save(invoice);
-
-        return mapToResponse(invoice);
     }
 
     @Override
-    @Transactional
-    public com.example.demo.DTO.Invoice.InvoiceResponse rejectInvoice(
-            Long invoiceId,
-            RejectInvoiceRequest request
-    ) {
+    @Transactional(readOnly = true)
+    public List<InvoiceListResponse> getDraftInvoices() {
 
-        // Current User
-        Users currentUser
-                = getCurrentUser();
+        Users currentUser = getCurrentUser();
 
-        // Find Invoice
-        Invoice invoice
-                = invoiceRepository
-                        .findById(invoiceId)
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "Invoice not found"));
-
-        // Organization Validation
-        if (!invoice.getOrganization()
-                .getOrganizationId()
-                .equals(
-                        currentUser
-                                .getOrganization()
-                                .getOrganizationId())) {
-
-            throw new RuntimeException(
-                    "Access Denied");
-        }
-
-        // Already Completed Validation
-        if (invoice.getStatus() == InvoiceStatus.APPROVED) {
-
-            throw new RuntimeException(
-                    "Invoice already approved");
-        }
-
-        if (invoice.getStatus() == InvoiceStatus.REJECTED) {
-
-            throw new RuntimeException(
-                    "Invoice already rejected");
-        }
-
-        // Find Current Pending Approval
-        InvoiceApproval currentApproval
-                = invoiceApprovalRepository
-                        .findByInvoiceAndApproverAndStatus(
-                                invoice,
-                                currentUser,
-                                ApprovalStatus.PENDING
-                        )
-                        .orElseThrow(()
-                                -> new RuntimeException(
-                                "Pending approval not found"));
-
-        // Reject Current Approval
-        currentApproval.setStatus(
-                ApprovalStatus.REJECTED);
-
-        currentApproval.setComments(
-                request.getComments());
-
-        // Optional (if you added actionAt)
-        // currentApproval.setActionAt(LocalDateTime.now());
-        invoiceApprovalRepository.save(
-                currentApproval);
-
-        // Reject Invoice
-        invoice.setStatus(
-                InvoiceStatus.REJECTED);
-
-        invoiceRepository.save(
-                invoice);
-
-        return mapToResponse(invoice);
+        return invoiceRepository
+                .findByVendorAndStatusAndDeletedFalse(
+                        currentUser,
+                        InvoiceStatus.DRAFT
+                )
+                .stream()
+                .map(this::mapToListResponse)
+                .toList();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<InvoiceListResponse> getMySubmittedInvoices() {
+
+        Users currentUser = getCurrentUser();
+
+        return invoiceRepository
+                .findByVendorAndStatusAndDeletedFalse(
+                        currentUser,
+                        InvoiceStatus.IN_REVIEW
+                )
+                .stream()
+                .map(this::mapToListResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<InvoiceListResponse> getApprovedInvoices() {
+
+        Organization organization = getCurrentOrganization();
+
+        return invoiceRepository
+                .findByOrganizationAndStatusAndDeletedFalse(
+                        organization,
+                        InvoiceStatus.APPROVED
+                )
+                .stream()
+                .map(this::mapToListResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<InvoiceListResponse> getRejectedInvoices() {
+
+        Organization organization = getCurrentOrganization();
+
+        return invoiceRepository
+                .findByOrganizationAndStatusAndDeletedFalse(
+                        organization,
+                        InvoiceStatus.REJECTED
+                )
+                .stream()
+                .map(this::mapToListResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<InvoiceListResponse> getPaidInvoices() {
+
+        Organization organization = getCurrentOrganization();
+
+        return invoiceRepository
+                .findByOrganizationAndStatusAndDeletedFalse(
+                        organization,
+                        InvoiceStatus.PAID
+                )
+                .stream()
+                .map(this::mapToListResponse)
+                .toList();
+    }
+
 }
