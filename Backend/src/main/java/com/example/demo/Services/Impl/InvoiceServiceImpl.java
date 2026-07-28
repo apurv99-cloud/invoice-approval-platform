@@ -1,23 +1,46 @@
 package com.example.demo.Services.Impl;
 
-import com.example.demo.DTO.Invoice.*;
-import com.example.demo.Entity.*;
-import com.example.demo.Repository.*;
-import com.example.demo.Services.InvoiceService;
-import jakarta.transaction.Transactional;
-import jdk.jfr.Registered;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.DTO.Invoice.ApproveInvoiceRequest;
+import com.example.demo.DTO.Invoice.CreateInvoiceRequest;
+import com.example.demo.DTO.Invoice.InvoiceListResponse;
+import com.example.demo.DTO.Invoice.InvoiceResponse;
+import com.example.demo.DTO.Invoice.RejectInvoiceRequest;
+import com.example.demo.DTO.Invoice.UpdateInvoiceRequest;
+import com.example.demo.Entity.ApprovalStatus;
+import com.example.demo.Entity.Invoice;
+import com.example.demo.Entity.InvoiceApproval;
+import com.example.demo.Entity.InvoiceStatus;
+import com.example.demo.Entity.Organization;
+import com.example.demo.Entity.Role;
+import com.example.demo.Entity.Users;
+import com.example.demo.Entity.WorkflowMaster;
+import com.example.demo.Entity.WorkflowRule;
+import com.example.demo.Entity.WorkflowStep;
+import com.example.demo.Repository.InvoiceApprovalRepository;
+import com.example.demo.Repository.InvoiceRepository;
+import com.example.demo.Repository.OrganizationRepository;
+import com.example.demo.Repository.UserRepository;
+import com.example.demo.Repository.UserRoleRepository;
+import com.example.demo.Repository.WorkflowMasterRepository;
+import com.example.demo.Repository.WorkflowRuleRepository;
+import com.example.demo.Repository.WorkflowStepRepository;
+import com.example.demo.Services.InvoiceService;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class InvoiceServiceImpl
         implements InvoiceService {
+
     private final InvoiceRepository invoiceRepository;
 
     private final InvoiceApprovalRepository invoiceApprovalRepository;
@@ -36,38 +59,37 @@ public class InvoiceServiceImpl
 
     private Users getCurrentUser() {
 
-        String email =
-                SecurityContextHolder
+        String email
+                = SecurityContextHolder
                         .getContext()
                         .getAuthentication()
                         .getName();
 
         return userRepository
                 .findByEmail(email)
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "User not found"));
+                .orElseThrow(()
+                        -> new RuntimeException(
+                        "User not found"));
     }
 
     private Organization getCurrentOrganization() {
 
-        Users currentUser =
-                getCurrentUser();
+        Users currentUser
+                = getCurrentUser();
 
         return currentUser.getOrganization();
     }
 
     private String generateInvoiceNumber() {
 
-        long count =
-                invoiceRepository.count() + 1;
+        long count
+                = invoiceRepository.count() + 1;
 
         return String.format(
                 "INV-%06d",
                 count
         );
     }
-
 
     private InvoiceResponse mapToResponse(
             Invoice invoice
@@ -76,7 +98,7 @@ public class InvoiceServiceImpl
         return InvoiceResponse.builder()
                 .invoiceId(invoice.getInvoiceId())
                 .invoiceNumber(invoice.getInvoiceNumber())
-//                .invoiceTitle(invoice.getInvoiceTitle())
+                //                .invoiceTitle(invoice.getInvoiceTitle())
                 .description(invoice.getDescription())
                 .amount(invoice.getAmount())
                 .invoiceDate(invoice.getInvoiceDate())
@@ -93,17 +115,17 @@ public class InvoiceServiceImpl
             Invoice invoice
     ) {
 
-        InvoiceApproval currentApproval =
-                invoiceApprovalRepository
+        InvoiceApproval currentApproval
+                = invoiceApprovalRepository
                         .findByApproverAndStatus(
                                 getCurrentUser(),
                                 ApprovalStatus.PENDING
                         )
                         .stream()
-                        .filter(a ->
-                                a.getInvoice()
-                                        .getInvoiceId()
-                                        .equals(invoice.getInvoiceId()))
+                        .filter(a
+                                -> a.getInvoice()
+                                .getInvoiceId()
+                                .equals(invoice.getInvoiceId()))
                         .findFirst()
                         .orElse(null);
 
@@ -117,8 +139,8 @@ public class InvoiceServiceImpl
                 .currentApprover(
                         currentApproval != null
                                 ? currentApproval
-                                .getApprover()
-                                .getFullName()
+                                        .getApprover()
+                                        .getFullName()
                                 : null)
                 .createdAt(invoice.getCreatedAt())
                 .build();
@@ -129,13 +151,13 @@ public class InvoiceServiceImpl
     public InvoiceResponse createInvoice(
             CreateInvoiceRequest request
     ) {
- 
+
         // Current User
         Users vendor = getCurrentUser();
- 
+
         // Organization
-        Organization organization =
-                vendor.getOrganization();
+        Organization organization
+                = vendor.getOrganization();
 
         // Due Date Validation
         if (request.getDueDate()
@@ -146,8 +168,8 @@ public class InvoiceServiceImpl
         }
 
         // Create Draft Invoice
-        Invoice invoice =
-                Invoice.builder()
+        Invoice invoice
+                = Invoice.builder()
                         .invoiceNumber(
                                 generateInvoiceNumber())
                         .invoiceTitle(
@@ -170,8 +192,8 @@ public class InvoiceServiceImpl
                         .deleted(false)
                         .build();
 
-        Invoice savedInvoice =
-                invoiceRepository.save(invoice);
+        Invoice savedInvoice
+                = invoiceRepository.save(invoice);
 
         return mapToResponse(savedInvoice);
     }
@@ -183,16 +205,16 @@ public class InvoiceServiceImpl
     ) {
 
         // Current Vendor
-        Users vendor =
-                getCurrentUser();
+        Users vendor
+                = getCurrentUser();
 
         // Find Invoice
-        Invoice invoice =
-                invoiceRepository
+        Invoice invoice
+                = invoiceRepository
                         .findById(invoiceId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Invoice not found"));
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "Invoice not found"));
 
         // Only owner can submit
         if (!invoice.getVendor()
@@ -230,19 +252,20 @@ public class InvoiceServiceImpl
         }
 
         // Find Workflow Rule
-        WorkflowRule workflowRule =
-                workflowRuleRepository
-                        .findByMinAmountLessThanEqualAndMaxAmountGreaterThanEqual(
+        WorkflowRule workflowRule
+                = workflowRuleRepository
+                        .findByWorkflow_OrganizationAndMinAmountLessThanEqualAndMaxAmountGreaterThanEqual(
+                                vendor.getOrganization(),
                                 invoice.getAmount(),
                                 invoice.getAmount()
                         )
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "No Workflow Rule Found"));
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "No Workflow Rule Found"));
 
         // Get Workflow
-        WorkflowMaster workflow =
-                workflowRule.getWorkflow();
+        WorkflowMaster workflow
+                = workflowRule.getWorkflow();
 
         if (!Boolean.TRUE.equals(
                 workflow.getActive())) {
@@ -252,30 +275,30 @@ public class InvoiceServiceImpl
         }
 
         // First Workflow Step
-        WorkflowStep firstStep =
-                workflowStepRepository
+        WorkflowStep firstStep
+                = workflowStepRepository
                         .findByWorkflowAndStepOrder(
                                 workflow,
                                 1
                         )
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "First Workflow Step not found"));
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "First Workflow Step not found"));
 
         // First Approver Role
-        Role approverRole =
-                firstStep.getRole();
+        Role approverRole
+                = firstStep.getRole();
 
         // Find Approver
-        Users approver =
-                userRoleRepository
+        Users approver
+                = userRoleRepository
                         .findFirstByRoleAndUsers_Organization(
                                 approverRole,
                                 vendor.getOrganization()
                         )
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Approver not found"))
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "Approver not found"))
                         .getUsers();
 
         // Assign Workflow
@@ -288,8 +311,8 @@ public class InvoiceServiceImpl
         invoiceRepository.save(invoice);
 
         // Create First Approval
-        InvoiceApproval approval =
-                InvoiceApproval.builder()
+        InvoiceApproval approval
+                = InvoiceApproval.builder()
                         .invoice(invoice)
                         .workflowStep(firstStep)
                         .approver(approver)
@@ -302,8 +325,8 @@ public class InvoiceServiceImpl
         // Ensure approval persisted before returning (flush to DB)
         invoiceApprovalRepository.flush();
 
-        Invoice updatedInvoice =
-                invoiceRepository.save(invoice);
+        Invoice updatedInvoice
+                = invoiceRepository.save(invoice);
 
         return mapToResponse(updatedInvoice);
     }
@@ -315,15 +338,15 @@ public class InvoiceServiceImpl
             UpdateInvoiceRequest request
     ) {
 
-        Users currentUser =
-                getCurrentUser();
+        Users currentUser
+                = getCurrentUser();
 
-        Invoice invoice =
-                invoiceRepository
+        Invoice invoice
+                = invoiceRepository
                         .findById(invoiceId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Invoice not found"));
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "Invoice not found"));
 
         // Organization Validation
         if (!invoice.getOrganization()
@@ -367,8 +390,8 @@ public class InvoiceServiceImpl
         invoice.setDueDate(
                 request.getDueDate());
 
-        Invoice updatedInvoice =
-                invoiceRepository.save(invoice);
+        Invoice updatedInvoice
+                = invoiceRepository.save(invoice);
 
         return mapToResponse(updatedInvoice);
     }
@@ -381,12 +404,12 @@ public class InvoiceServiceImpl
 
         Users currentUser = getCurrentUser();
 
-        Invoice invoice =
-                invoiceRepository
+        Invoice invoice
+                = invoiceRepository
                         .findById(invoiceId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Invoice not found"));
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "Invoice not found"));
 
         // Organization Validation
         if (!invoice.getOrganization()
@@ -407,8 +430,8 @@ public class InvoiceServiceImpl
     @Transactional()
     public List<InvoiceListResponse> getOrganizationInvoices() {
 
-        Organization organization =
-                getCurrentOrganization();
+        Organization organization
+                = getCurrentOrganization();
 
         return invoiceRepository
                 .findByOrganizationAndDeletedFalse(
@@ -423,11 +446,11 @@ public class InvoiceServiceImpl
     @Transactional()
     public List<InvoiceListResponse> getMyPendingInvoices() {
 
-        Users currentUser =
-                getCurrentUser();
+        Users currentUser
+                = getCurrentUser();
 
-        List<InvoiceApproval> approvals =
-                invoiceApprovalRepository
+        List<InvoiceApproval> approvals
+                = invoiceApprovalRepository
                         .findByApproverIdAndStatus(
                                 currentUser.getUserId(),
                                 ApprovalStatus.PENDING);
@@ -449,14 +472,13 @@ public class InvoiceServiceImpl
         // Current User
         Users currentUser = getCurrentUser();
 
-
         // Invoice
-        Invoice invoice =
-                invoiceRepository
+        Invoice invoice
+                = invoiceRepository
                         .findById(invoiceId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Invoice not found"));
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "Invoice not found"));
         if (invoice.getStatus() == InvoiceStatus.APPROVED) {
             throw new RuntimeException("Invoice already approved");
         }
@@ -477,16 +499,16 @@ public class InvoiceServiceImpl
         }
 
         // Current Pending Approval
-        InvoiceApproval currentApproval =
-                invoiceApprovalRepository
+        InvoiceApproval currentApproval
+                = invoiceApprovalRepository
                         .findByInvoiceAndApproverAndStatus(
                                 invoice,
                                 currentUser,
                                 ApprovalStatus.PENDING
                         )
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Approval not found"));
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "Approval not found"));
 
         // Mark Approved
         currentApproval.setStatus(
@@ -500,49 +522,49 @@ public class InvoiceServiceImpl
                 currentApproval);
 
         // Current Step
-        WorkflowStep currentStep =
-                currentApproval.getWorkflowStep();
+        WorkflowStep currentStep
+                = currentApproval.getWorkflowStep();
 
-        Integer nextOrder =
-                currentStep.getStepOrder() + 1;
+        Integer nextOrder
+                = currentStep.getStepOrder() + 1;
 
         // Next Workflow Step
-        Optional<WorkflowStep> nextStepOptional =
-                workflowStepRepository
+        Optional<WorkflowStep> nextStepOptional
+                = workflowStepRepository
                         .findByWorkflowAndStepOrder(
                                 invoice.getWorkflow(),
                                 nextOrder);
 
         // Last Step
         if (nextStepOptional.isEmpty()) {
- 
+
             invoice.setStatus(
                     InvoiceStatus.APPROVED);
- 
+
             invoiceRepository.save(invoice);
- 
+
             return mapToResponse(invoice);
         }
- 
-        WorkflowStep nextStep =
-                nextStepOptional.get();
 
-        Role nextRole =
-                nextStep.getRole();
+        WorkflowStep nextStep
+                = nextStepOptional.get();
 
-        Users nextApprover =
-                userRoleRepository
+        Role nextRole
+                = nextStep.getRole();
+
+        Users nextApprover
+                = userRoleRepository
                         .findFirstByRoleAndUsers_Organization(
                                 nextRole,
                                 invoice.getOrganization()
                         )
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Next Approver not found"))
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "Next Approver not found"))
                         .getUsers();
 
-        InvoiceApproval nextApproval =
-                InvoiceApproval.builder()
+        InvoiceApproval nextApproval
+                = InvoiceApproval.builder()
                         .invoice(invoice)
                         .workflowStep(nextStep)
                         .approver(nextApprover)
@@ -569,16 +591,16 @@ public class InvoiceServiceImpl
     ) {
 
         // Current User
-        Users currentUser =
-                getCurrentUser();
+        Users currentUser
+                = getCurrentUser();
 
         // Find Invoice
-        Invoice invoice =
-                invoiceRepository
+        Invoice invoice
+                = invoiceRepository
                         .findById(invoiceId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Invoice not found"));
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "Invoice not found"));
 
         // Organization Validation
         if (!invoice.getOrganization()
@@ -606,16 +628,16 @@ public class InvoiceServiceImpl
         }
 
         // Find Current Pending Approval
-        InvoiceApproval currentApproval =
-                invoiceApprovalRepository
+        InvoiceApproval currentApproval
+                = invoiceApprovalRepository
                         .findByInvoiceAndApproverAndStatus(
                                 invoice,
                                 currentUser,
                                 ApprovalStatus.PENDING
                         )
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Pending approval not found"));
+                        .orElseThrow(()
+                                -> new RuntimeException(
+                                "Pending approval not found"));
 
         // Reject Current Approval
         currentApproval.setStatus(
@@ -626,7 +648,6 @@ public class InvoiceServiceImpl
 
         // Optional (if you added actionAt)
         // currentApproval.setActionAt(LocalDateTime.now());
-
         invoiceApprovalRepository.save(
                 currentApproval);
 
