@@ -1,7 +1,17 @@
 package com.example.demo.Entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "escalation_rules")
@@ -22,7 +32,8 @@ public class Escalation {
     @JoinColumn(name = "workflow_step_id")
     private WorkflowStep workflowStep;
 
-    @ManyToOne
+    @ManyToOne  
+    
     @JoinColumn(name = "escalate_to_role")
     private Role escalateToRole;
 }
