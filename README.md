@@ -1,4 +1,4 @@
-# Enterprise Invoice Approval System
+# Enterprise Invoice Approval System.
 
 ![Java](https://img.shields.io/badge/Java-21-red)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-green)
@@ -28,7 +28,7 @@ The application follows enterprise software architecture principles, making it s
 |----------|-----|
 |   Frontend | https://invoice-approval-platform.vercel.app |
 |   Backend API | https://invoice-approval-platform-1.onrender.com |
-|   Swagger API | Coming Soon |
+|   Brevo Mail API | Valid |
 
 ---
 
@@ -346,10 +346,9 @@ SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/TF
 SPRING_DATASOURCE_USERNAME=postgres
 SPRING_DATASOURCE_PASSWORD=your_password
 
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_USERNAME=your_email@gmail.com
-MAIL_PASSWORD=your_app_password
+BREVO_API_KEY=your_secret_key
+BREVO_FROM_EMAIL=
+BREVO_FROM_NAME=
 
 JWT_SECRET=your_secret_key
 
@@ -576,7 +575,7 @@ This project provided hands-on experience in building an enterprise-grade full-s
 - Exception Handling
 - DTO-Based Communication
 - Bean Validation
-- Email Integration
+- Brevo API Email Integration
 
 ---
 
