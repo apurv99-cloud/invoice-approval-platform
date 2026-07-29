@@ -210,9 +210,9 @@ const InvoiceFormModal = ({
         <form
           id="invoice-form"
           onSubmit={handleSubmit}
-          className="flex flex-1 flex-col"
+          className="flex min-h-0 flex-1 flex-col"
         >
-          <div className="flex-1 space-y-8 overflow-y-auto p-8">
+          <div className="min-h-0 flex-1 space-y-8 overflow-y-auto p-8">
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-slate-800">
