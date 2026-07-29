@@ -13,7 +13,7 @@ import userService from "../../Services/userService";
 import StatsGrid from "../../Components/dashboard/StatsGrid";
 import UserTable from "../../Components/user/UserTable";
 import UserFormModal from "../../Components/user/UserFormModal";
-import ConfirmationModal from "../../Components/common/ConfirmationModal";
+import ConfirmationModal from "../../Components/Common/ConfirmationModal";
 
 const Users = () => {
   const [users, setUsers] = useState([]);

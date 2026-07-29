@@ -6,7 +6,7 @@ import organizationService from "../../Services/organizationService";
 
 import OrganizationTable from "../../Components/organization/OrganizationTable";
 import OrganizationFormModal from "../../Components/organization/OrganizationFormModal";
-import ConfirmationModal from "../../Components/common/ConfirmationModal";
+import ConfirmationModal from "../../Components/Common/ConfirmationModal";
 
 const Organizations = () => {
   const [organizations, setOrganizations] = useState([]);
