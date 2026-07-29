@@ -9,9 +9,24 @@ const createEmptyLineItem = () => ({
 
 const initialFormData = {
   invoiceTitle: "",
+  invoiceNumber: "",
+  purchaseOrderNumber: "",
+  contractNumber: "",
+  goodsReceiptNumber: "",
+
   description: "",
+
   invoiceDate: "",
   dueDate: "",
+  deliveryDate: "",
+
+  currency: "INR",
+
+  discountAmount: "",
+  taxAmount: "",
+  shippingCharges: "",
+  handlingCharges: "",
+
   lineItems: [createEmptyLineItem()],
 };
 
@@ -30,9 +45,24 @@ const InvoiceFormModal = ({
     if (initialData) {
       setFormData({
         invoiceTitle: initialData.invoiceTitle || "",
+        invoiceNumber: initialData.invoiceNumber || "",
+        purchaseOrderNumber: initialData.purchaseOrderNumber || "",
+        contractNumber: initialData.contractNumber || "",
+        goodsReceiptNumber: initialData.goodsReceiptNumber || "",
+
         description: initialData.description || "",
+
         invoiceDate: initialData.invoiceDate || "",
         dueDate: initialData.dueDate || "",
+        deliveryDate: initialData.deliveryDate || "",
+
+        currency: initialData.currency || "INR",
+
+        discountAmount: initialData.discountAmount ?? "",
+        taxAmount: initialData.taxAmount ?? "",
+        shippingCharges: initialData.shippingCharges ?? "",
+        handlingCharges: initialData.handlingCharges ?? "",
+
         lineItems:
           initialData.lineItems?.length > 0
             ? initialData.lineItems.map((item) => ({
@@ -55,8 +85,7 @@ const InvoiceFormModal = ({
       [name]: value,
     }));
   };
-
-  const handleLineItemChange = (index, field, value) => {
+    const handleLineItemChange = (index, field, value) => {
     setFormData((prev) => ({
       ...prev,
       lineItems: prev.lineItems.map((item, i) =>
@@ -86,7 +115,7 @@ const InvoiceFormModal = ({
     }));
   };
 
-  const grandTotal = useMemo(() => {
+  const subtotal = useMemo(() => {
     return formData.lineItems.reduce((sum, item) => {
       const qty = Number(item.quantity) || 0;
       const price = Number(item.unitPrice) || 0;
@@ -95,14 +124,49 @@ const InvoiceFormModal = ({
     }, 0);
   }, [formData.lineItems]);
 
+  const discountAmount = Number(formData.discountAmount) || 0;
+  const taxAmount = Number(formData.taxAmount) || 0;
+  const shippingCharges = Number(formData.shippingCharges) || 0;
+  const handlingCharges = Number(formData.handlingCharges) || 0;
+
+  const grandTotal = useMemo(() => {
+    return (
+      subtotal -
+      discountAmount +
+      taxAmount +
+      shippingCharges +
+      handlingCharges
+    );
+  }, [
+    subtotal,
+    discountAmount,
+    taxAmount,
+    shippingCharges,
+    handlingCharges,
+  ]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     onSubmit({
       invoiceTitle: formData.invoiceTitle.trim(),
+      invoiceNumber: formData.invoiceNumber.trim(),
+      purchaseOrderNumber: formData.purchaseOrderNumber.trim(),
+      contractNumber: formData.contractNumber.trim(),
+      goodsReceiptNumber: formData.goodsReceiptNumber.trim(),
+
       description: formData.description.trim(),
+
       invoiceDate: formData.invoiceDate,
       dueDate: formData.dueDate,
+      deliveryDate: formData.deliveryDate,
+
+      currency: formData.currency,
+
+      discountAmount,
+      taxAmount,
+      shippingCharges,
+      handlingCharges,
 
       lineItems: formData.lineItems.map((item) => ({
         description: item.description.trim(),
@@ -120,61 +184,50 @@ const InvoiceFormModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-5 backdrop-blur-sm">
-      <div
-        className={`flex h-[90vh] w-full flex-col overflow-hidden rounded-2xl bg-white shadow-2xl ${
-          compact ? "max-w-6xl" : "max-w-5xl"
-        }`}
-      >
-        {/* ================= HEADER ================= */}
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6 backdrop-blur-sm">
+      <div className="flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
         <div className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-white px-8 py-5">
           <div>
             <h2 className="text-2xl font-bold text-slate-800">
               {initialData ? "Edit Invoice" : "Create Invoice"}
             </h2>
-
-            <p className="mt-1 text-slate-500">
+            <p className="mt-1 text-sm text-slate-500">
               {initialData
-                ? "Update invoice details and line items."
-                : "Create a new invoice with multiple line items."}
+                ? "Update invoice details and save your changes."
+                : "Fill in the details below to create a new invoice."}
             </p>
           </div>
 
           <button
+            type="button"
             onClick={handleClose}
             className="rounded-lg p-2 transition hover:bg-slate-100"
           >
-            <X size={20} />
+            <X size={22} />
           </button>
         </div>
 
         <form
           id="invoice-form"
           onSubmit={handleSubmit}
-          className="flex h-full flex-col"
+          className="flex flex-1 flex-col"
         >
           <div className="flex-1 space-y-8 overflow-y-auto p-8">
-            {/* ================= BASIC INFORMATION ================= */}
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-slate-800">
                   Invoice Information
                 </h3>
-
                 <p className="mt-1 text-sm text-slate-500">
                   Enter the primary details for this invoice.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {/* Invoice Title */}
-
                 <div className="md:col-span-2">
                   <label className="mb-2 block text-sm font-medium text-slate-700">
                     Invoice Title <span className="text-red-500">*</span>
                   </label>
-
                   <input
                     required
                     name="invoiceTitle"
@@ -185,13 +238,120 @@ const InvoiceFormModal = ({
                   />
                 </div>
 
-                {/* Description */}
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                    Invoice Number
+                  </label>
+                  <input
+                    name="invoiceNumber"
+                    value={formData.invoiceNumber}
+                    onChange={handleChange}
+                    placeholder="INV-2026-001"
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                    Currency
+                  </label>
+                  <select
+                    name="currency"
+                    value={formData.currency}
+                    onChange={handleChange}
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                  >
+                    <option value="INR">INR</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                    Purchase Order Number
+                  </label>
+                  <input
+                    name="purchaseOrderNumber"
+                    value={formData.purchaseOrderNumber}
+                    onChange={handleChange}
+                    placeholder="PO-10025"
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                    Contract Number
+                  </label>
+                  <input
+                    name="contractNumber"
+                    value={formData.contractNumber}
+                    onChange={handleChange}
+                    placeholder="CN-78521"
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                    Goods Receipt Number
+                  </label>
+                  <input
+                    name="goodsReceiptNumber"
+                    value={formData.goodsReceiptNumber}
+                    onChange={handleChange}
+                    placeholder="GRN-4587"
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                    Delivery Date
+                  </label>
+                  <input
+                    type="date"
+                    name="deliveryDate"
+                    value={formData.deliveryDate}
+                    onChange={handleChange}
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                    Invoice Date <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    required
+                    type="date"
+                    name="invoiceDate"
+                    value={formData.invoiceDate}
+                    onChange={handleChange}
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-2 block text-sm font-medium text-slate-700">
+                    Due Date <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    required
+                    type="date"
+                    name="dueDate"
+                    value={formData.dueDate}
+                    onChange={handleChange}
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                  />
+                </div>
 
                 <div className="md:col-span-2">
                   <label className="mb-2 block text-sm font-medium text-slate-700">
                     Description <span className="text-red-500">*</span>
                   </label>
-
                   <textarea
                     required
                     rows={5}
@@ -202,178 +362,105 @@ const InvoiceFormModal = ({
                     className="w-full resize-none rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                   />
                 </div>
-
-                {/* Invoice Date */}
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
-                    Invoice Date <span className="text-red-500">*</span>
-                  </label>
-
-                  <input
-                    required
-                    type="date"
-                    name="invoiceDate"
-                    value={formData.invoiceDate}
-                    onChange={handleChange}
-                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
-                  />
-                </div>
-
-                {/* Due Date */}
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-slate-700">
-                    Due Date <span className="text-red-500">*</span>
-                  </label>
-
-                  <input
-                    required
-                    type="date"
-                    name="dueDate"
-                    value={formData.dueDate}
-                    onChange={handleChange}
-                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
-                  />
-                </div>
               </div>
             </div>
 
-            {/* ================= LINE ITEMS ================= */}
-            <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-              {/* Header */}
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
+              <div className="ml-auto grid w-full max-w-xl gap-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                      Discount Amount
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      name="discountAmount"
+                      value={formData.discountAmount}
+                      onChange={handleChange}
+                      className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                    />
+                  </div>
 
-              <div className="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-6 py-5">
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-800">
-                    Invoice Line Items
-                  </h3>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                      Tax Amount
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      name="taxAmount"
+                      value={formData.taxAmount}
+                      onChange={handleChange}
+                      className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                    />
+                  </div>
 
-                  <p className="mt-1 text-sm text-slate-500">
-                    Add all products or services included in this invoice.
-                  </p>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                      Shipping Charges
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      name="shippingCharges"
+                      value={formData.shippingCharges}
+                      onChange={handleChange}
+                      className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                      Handling Charges
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      name="handlingCharges"
+                      value={formData.handlingCharges}
+                      onChange={handleChange}
+                      className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                    />
+                  </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={addLineItem}
-                  className="flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700"
-                >
-                  <Plus size={16} />
-                  Add Item
-                </button>
-              </div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <div className="mb-3 flex items-center justify-between text-slate-600">
+                    <span>Subtotal</span>
+                    <span>₹ {subtotal.toLocaleString()}</span>
+                  </div>
 
-              {/* Table */}
+                  <div className="mb-3 flex items-center justify-between text-slate-600">
+                    <span>Discount</span>
+                    <span>- ₹ {discountAmount.toLocaleString()}</span>
+                  </div>
 
-              <div className="overflow-x-auto">
-                <table className="min-w-full border-collapse">
-                  <thead className="sticky top-0 bg-slate-100">
-                    <tr className="text-left text-sm font-semibold text-slate-700">
-                      <th className="px-6 py-4">Description</th>
-                      <th className="w-28 px-4 py-4 text-center">Qty</th>
-                      <th className="w-44 px-4 py-4">Unit Price</th>
-                      <th className="w-44 px-4 py-4">Line Total</th>
-                      <th className="w-20 px-4 py-4 text-center">Action</th>
-                    </tr>
-                  </thead>
+                  <div className="mb-3 flex items-center justify-between text-slate-600">
+                    <span>Tax</span>
+                    <span>₹ {taxAmount.toLocaleString()}</span>
+                  </div>
 
-                  <tbody className="divide-y divide-slate-200">
-                    {formData.lineItems.map((item, index) => {
-                      const qty = Number(item.quantity) || 0;
-                      const price = Number(item.unitPrice) || 0;
-                      const total = qty * price;
+                  <div className="mb-3 flex items-center justify-between text-slate-600">
+                    <span>Shipping</span>
+                    <span>₹ {shippingCharges.toLocaleString()}</span>
+                  </div>
 
-                      return (
-                        <tr
-                          key={index}
-                          className="transition hover:bg-slate-50"
-                        >
-                          <td className="px-6 py-4 align-top">
-                            <input
-                              required
-                              value={item.description}
-                              placeholder="Dell Monitor"
-                              onChange={(e) =>
-                                handleLineItemChange(
-                                  index,
-                                  "description",
-                                  e.target.value,
-                                )
-                              }
-                              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
-                            />
-                          </td>
+                  <div className="mb-4 flex items-center justify-between text-slate-600">
+                    <span>Handling</span>
+                    <span>₹ {handlingCharges.toLocaleString()}</span>
+                  </div>
 
-                          <td className="px-4 py-4 align-top">
-                            <input
-                              required
-                              min="1"
-                              type="number"
-                              value={item.quantity}
-                              onChange={(e) =>
-                                handleLineItemChange(
-                                  index,
-                                  "quantity",
-                                  e.target.value,
-                                )
-                              }
-                              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-center outline-none transition duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
-                            />
-                          </td>
-
-                          <td className="px-4 py-4 align-top">
-                            <input
-                              required
-                              min="0"
-                              step="0.01"
-                              type="number"
-                              value={item.unitPrice}
-                              onChange={(e) =>
-                                handleLineItemChange(
-                                  index,
-                                  "unitPrice",
-                                  e.target.value,
-                                )
-                              }
-                              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition duration-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
-                            />
-                          </td>
-
-                          <td className="px-4 py-4 align-top">
-                            <div className="rounded-xl bg-slate-100 px-4 py-3 text-right font-semibold text-slate-700">
-                              ₹ {total.toLocaleString()}
-                            </div>
-                          </td>
-
-                          <td className="px-4 py-4 text-center align-top">
-                            <button
-                              type="button"
-                              disabled={formData.lineItems.length === 1}
-                              onClick={() => removeLineItem(index)}
-                              className="rounded-lg p-2 text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-40"
-                            >
-                              <Trash2 size={18} />
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Grand Total */}
-
-              <div className="border-t border-slate-200 bg-slate-50 px-6 py-6">
-                <div className="flex justify-end">
-                  <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <div className="border-t border-slate-200 pt-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-semibold text-slate-700">
+                      <span className="text-lg font-semibold text-slate-800">
                         Grand Total
                       </span>
-
-                      <span className="text-2xl font-bold text-indigo-600">
+                      <span className="text-3xl font-bold text-indigo-600">
                         ₹ {grandTotal.toLocaleString()}
                       </span>
                     </div>
@@ -381,37 +468,13 @@ const InvoiceFormModal = ({
                 </div>
               </div>
             </div>
-
-            {/* ================= ACTIONS ================= */}
           </div>
 
-          {/* ================= FOOTER ================= */}
-
-          <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 bg-white px-8 py-5 shadow-[0_-1px_6px_rgba(0,0,0,0.05)]">
+          <div className="sticky bottom-0 flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 bg-white px-8 py-5 shadow-[0_-2px_10px_rgba(0,0,0,0.06)]">
             <button
               type="button"
               onClick={handleClose}
-              className="rounded-xl border border-slate-300 bg-white px-6 py-3 font-medium text-slate-700 transition duration-200 hover:bg-slate-100"
-            >
-              Cancel
-            </button>
-
-            <button
-              type="submit"
-              form="invoice-form"
-              className="rounded-xl bg-indigo-600 px-6 py-3 font-medium text-white transition duration-200 hover:bg-indigo-700"
-            >
-              {initialData ? "Save Changes" : "Create Invoice"}
-            </button>
-          </div>
-
-          {/* ================= FOOTER ================= */}
-
-          <div className="sticky bottom-0 flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 bg-white px-8 py-5">
-            <button
-              type="button"
-              onClick={handleClose}
-              className="rounded-xl border border-slate-300 px-6 py-3 font-medium text-slate-700 transition hover:bg-slate-100"
+              className="rounded-xl border border-slate-300 bg-white px-6 py-3 font-medium text-slate-700 transition hover:bg-slate-100"
             >
               Cancel
             </button>
