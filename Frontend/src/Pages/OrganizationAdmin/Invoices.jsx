@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import InvoiceTable from "../../components/OrganizationAdmin/Invoice/InvoiceTable";
 import InvoiceFormModal from "../../components/OrganizationAdmin/Invoice/InvoiceFormModal";
 
-import invoiceService from "../../services/invoiceService";
+import invoiceService from "../../Services/invoiceService";
 
 const Invoices = () => {
   const [invoices, setInvoices] = useState([]);
