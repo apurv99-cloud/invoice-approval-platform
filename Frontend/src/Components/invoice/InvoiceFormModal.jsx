@@ -8,10 +8,17 @@ const createEmptyLineItem = () => ({
   unitOfMeasure: "EA",
   quantity: 1,
   unitPrice: "",
+  taxRate: 0,
 });
 
 const calculateLineTotal = (item) =>
   (Number(item.quantity) || 0) * (Number(item.unitPrice) || 0);
+
+const calculateLineTax = (item) =>
+  (calculateLineTotal(item) * (Number(item.taxRate) || 0)) / 100;
+
+const calculateItemTotal = (item) =>
+  calculateLineTotal(item) + calculateLineTax(item);
 
 const initialFormData = {
   invoiceTitle: "",
@@ -29,7 +36,6 @@ const initialFormData = {
   currency: "INR",
 
   discountAmount: "",
-  taxAmount: "",
   shippingCharges: "",
   handlingCharges: "",
 
@@ -65,7 +71,6 @@ const InvoiceFormModal = ({
         currency: initialData.currency || "INR",
 
         discountAmount: initialData.discountAmount ?? "",
-        taxAmount: initialData.taxAmount ?? "",
         shippingCharges: initialData.shippingCharges ?? "",
         handlingCharges: initialData.handlingCharges ?? "",
 
@@ -78,6 +83,7 @@ const InvoiceFormModal = ({
                 unitOfMeasure: item.unitOfMeasure || "EA",
                 quantity: item.quantity ?? 1,
                 unitPrice: item.unitPrice ?? "",
+                taxRate: item.taxRate ?? 0,
               }))
             : [createEmptyLineItem()],
       });
@@ -131,6 +137,15 @@ const InvoiceFormModal = ({
     );
   }, [formData.lineItems]);
 
+  const taxAmount = useMemo(
+    () =>
+      formData.lineItems.reduce(
+        (sum, item) => sum + calculateLineTax(item),
+        0,
+      ),
+    [formData.lineItems],
+  );
+
   const currencyFormatter = useMemo(
     () =>
       new Intl.NumberFormat("en-IN", {
@@ -142,7 +157,6 @@ const InvoiceFormModal = ({
   );
 
   const discountAmount = Number(formData.discountAmount) || 0;
-  const taxAmount = Number(formData.taxAmount) || 0;
   const shippingCharges = Number(formData.shippingCharges) || 0;
   const handlingCharges = Number(formData.handlingCharges) || 0;
 
@@ -192,6 +206,8 @@ const InvoiceFormModal = ({
         unitOfMeasure: item.unitOfMeasure.trim(),
         quantity: Number(item.quantity),
         unitPrice: Number(item.unitPrice),
+        taxRate: Number(item.taxRate) || 0,
+        taxAmount: calculateLineTax(item),
         lineTotal: calculateLineTotal(item),
       })),
     });
@@ -410,6 +426,8 @@ const InvoiceFormModal = ({
               <div className="space-y-4">
                 {formData.lineItems.map((item, index) => {
                   const lineTotal = calculateLineTotal(item);
+                  const lineTax = calculateLineTax(item);
+                  const itemTotal = calculateItemTotal(item);
 
                   return (
                     <div
@@ -516,11 +534,47 @@ const InvoiceFormModal = ({
                         </div>
 
                         <div>
+                          <label className="mb-2 block text-sm font-medium text-slate-700">
+                            GST Rate (%)
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value={item.taxRate}
+                            onChange={(e) =>
+                              handleLineItemChange(index, "taxRate", e.target.value)
+                            }
+                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <div>
                           <span className="mb-2 block text-sm font-medium text-slate-700">
-                            Line Total
+                            Line Subtotal
                           </span>
                           <output className="flex w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-800">
                             {currencyFormatter.format(lineTotal)}
+                          </output>
+                        </div>
+
+                        <div>
+                          <span className="mb-2 block text-sm font-medium text-slate-700">
+                            GST Amount
+                          </span>
+                          <output className="flex w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-800">
+                            {currencyFormatter.format(lineTax)}
+                          </output>
+                        </div>
+
+                        <div>
+                          <span className="mb-2 block text-sm font-medium text-slate-700">
+                            Item Total (incl. GST)
+                          </span>
+                          <output className="flex w-full rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 font-semibold text-indigo-700">
+                            {currencyFormatter.format(itemTotal)}
                           </output>
                         </div>
                       </div>
@@ -546,7 +600,7 @@ const InvoiceFormModal = ({
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
               <div className="ml-auto grid w-full max-w-xl gap-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700">
                       Discount Amount
@@ -557,21 +611,6 @@ const InvoiceFormModal = ({
                       step="0.01"
                       name="discountAmount"
                       value={formData.discountAmount}
-                      onChange={handleChange}
-                      className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
-                      Tax Amount
-                    </label>
-                    <input
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      name="taxAmount"
-                      value={formData.taxAmount}
                       onChange={handleChange}
                       className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                     />
@@ -620,7 +659,7 @@ const InvoiceFormModal = ({
                   </div>
 
                   <div className="mb-3 flex items-center justify-between text-slate-600">
-                    <span>Tax</span>
+                    <span>GST (line items)</span>
                     <span>{currencyFormatter.format(taxAmount)}</span>
                   </div>
 
