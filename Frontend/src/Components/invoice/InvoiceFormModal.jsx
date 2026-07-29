@@ -2,10 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import { Plus, Trash2, X } from "lucide-react";
 
 const createEmptyLineItem = () => ({
+  itemCode: "",
+  itemName: "",
   description: "",
+  unitOfMeasure: "EA",
   quantity: 1,
   unitPrice: "",
 });
+
+const calculateLineTotal = (item) =>
+  (Number(item.quantity) || 0) * (Number(item.unitPrice) || 0);
 
 const initialFormData = {
   invoiceTitle: "",
@@ -66,9 +72,12 @@ const InvoiceFormModal = ({
         lineItems:
           initialData.lineItems?.length > 0
             ? initialData.lineItems.map((item) => ({
+                itemCode: item.itemCode || "",
+                itemName: item.itemName || "",
                 description: item.description || "",
-                quantity: item.quantity || 1,
-                unitPrice: item.unitPrice || "",
+                unitOfMeasure: item.unitOfMeasure || "EA",
+                quantity: item.quantity ?? 1,
+                unitPrice: item.unitPrice ?? "",
               }))
             : [createEmptyLineItem()],
       });
@@ -85,7 +94,7 @@ const InvoiceFormModal = ({
       [name]: value,
     }));
   };
-    const handleLineItemChange = (index, field, value) => {
+  const handleLineItemChange = (index, field, value) => {
     setFormData((prev) => ({
       ...prev,
       lineItems: prev.lineItems.map((item, i) =>
@@ -116,13 +125,21 @@ const InvoiceFormModal = ({
   };
 
   const subtotal = useMemo(() => {
-    return formData.lineItems.reduce((sum, item) => {
-      const qty = Number(item.quantity) || 0;
-      const price = Number(item.unitPrice) || 0;
-
-      return sum + qty * price;
-    }, 0);
+    return formData.lineItems.reduce(
+      (sum, item) => sum + calculateLineTotal(item),
+      0,
+    );
   }, [formData.lineItems]);
+
+  const currencyFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: formData.currency,
+        maximumFractionDigits: 2,
+      }),
+    [formData.currency],
+  );
 
   const discountAmount = Number(formData.discountAmount) || 0;
   const taxAmount = Number(formData.taxAmount) || 0;
@@ -169,9 +186,13 @@ const InvoiceFormModal = ({
       handlingCharges,
 
       lineItems: formData.lineItems.map((item) => ({
+        itemCode: item.itemCode.trim(),
+        itemName: item.itemName.trim(),
         description: item.description.trim(),
+        unitOfMeasure: item.unitOfMeasure.trim(),
         quantity: Number(item.quantity),
         unitPrice: Number(item.unitPrice),
+        lineTotal: calculateLineTotal(item),
       })),
     });
   };
@@ -365,6 +386,164 @@ const InvoiceFormModal = ({
               </div>
             </div>
 
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-800">
+                    Line Items
+                  </h3>
+                  <p className="mt-1 text-sm text-slate-500">
+                    Add each item and its amount. Line totals and the invoice subtotal update automatically.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addLineItem}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700"
+                >
+                  <Plus size={18} />
+                  Add Item
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {formData.lineItems.map((item, index) => {
+                  const lineTotal = calculateLineTotal(item);
+
+                  return (
+                    <div
+                      key={index}
+                      className="rounded-xl border border-slate-200 bg-slate-50 p-5"
+                    >
+                      <div className="mb-4 flex items-center justify-between">
+                        <h4 className="font-semibold text-slate-700">
+                          Item {index + 1}
+                        </h4>
+
+                        {formData.lineItems.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removeLineItem(index)}
+                            aria-label={`Remove item ${index + 1}`}
+                            className="rounded-lg p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-600"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                        <div>
+                          <label className="mb-2 block text-sm font-medium text-slate-700">
+                            Item Code <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            required
+                            value={item.itemCode}
+                            onChange={(e) =>
+                              handleLineItemChange(index, "itemCode", e.target.value)
+                            }
+                            placeholder="ITEM-001"
+                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="mb-2 block text-sm font-medium text-slate-700">
+                            Item Name <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            required
+                            value={item.itemName}
+                            onChange={(e) =>
+                              handleLineItemChange(index, "itemName", e.target.value)
+                            }
+                            placeholder="Office Chair"
+                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        <div>
+                          <label className="mb-2 block text-sm font-medium text-slate-700">
+                            Quantity <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            required
+                            type="number"
+                            min="0.01"
+                            step="0.01"
+                            value={item.quantity}
+                            onChange={(e) =>
+                              handleLineItemChange(index, "quantity", e.target.value)
+                            }
+                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="mb-2 block text-sm font-medium text-slate-700">
+                            Unit <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            required
+                            value={item.unitOfMeasure}
+                            onChange={(e) =>
+                              handleLineItemChange(index, "unitOfMeasure", e.target.value)
+                            }
+                            placeholder="EA"
+                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="mb-2 block text-sm font-medium text-slate-700">
+                            Unit Price <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            required
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value={item.unitPrice}
+                            onChange={(e) =>
+                              handleLineItemChange(index, "unitPrice", e.target.value)
+                            }
+                            className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                          />
+                        </div>
+
+                        <div>
+                          <span className="mb-2 block text-sm font-medium text-slate-700">
+                            Line Total
+                          </span>
+                          <output className="flex w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-semibold text-slate-800">
+                            {currencyFormatter.format(lineTotal)}
+                          </output>
+                        </div>
+                      </div>
+
+                      <div className="mt-4">
+                        <label className="mb-2 block text-sm font-medium text-slate-700">
+                          Item Description
+                        </label>
+                        <input
+                          value={item.description}
+                          onChange={(e) =>
+                            handleLineItemChange(index, "description", e.target.value)
+                          }
+                          placeholder="Optional details about this item"
+                          className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
               <div className="ml-auto grid w-full max-w-xl gap-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -432,27 +611,27 @@ const InvoiceFormModal = ({
                 <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                   <div className="mb-3 flex items-center justify-between text-slate-600">
                     <span>Subtotal</span>
-                    <span>₹ {subtotal.toLocaleString()}</span>
+                    <span>{currencyFormatter.format(subtotal)}</span>
                   </div>
 
                   <div className="mb-3 flex items-center justify-between text-slate-600">
                     <span>Discount</span>
-                    <span>- ₹ {discountAmount.toLocaleString()}</span>
+                    <span>- {currencyFormatter.format(discountAmount)}</span>
                   </div>
 
                   <div className="mb-3 flex items-center justify-between text-slate-600">
                     <span>Tax</span>
-                    <span>₹ {taxAmount.toLocaleString()}</span>
+                    <span>{currencyFormatter.format(taxAmount)}</span>
                   </div>
 
                   <div className="mb-3 flex items-center justify-between text-slate-600">
                     <span>Shipping</span>
-                    <span>₹ {shippingCharges.toLocaleString()}</span>
+                    <span>{currencyFormatter.format(shippingCharges)}</span>
                   </div>
 
                   <div className="mb-4 flex items-center justify-between text-slate-600">
                     <span>Handling</span>
-                    <span>₹ {handlingCharges.toLocaleString()}</span>
+                    <span>{currencyFormatter.format(handlingCharges)}</span>
                   </div>
 
                   <div className="border-t border-slate-200 pt-4">
@@ -461,7 +640,7 @@ const InvoiceFormModal = ({
                         Grand Total
                       </span>
                       <span className="text-3xl font-bold text-indigo-600">
-                        ₹ {grandTotal.toLocaleString()}
+                        {currencyFormatter.format(grandTotal)}
                       </span>
                     </div>
                   </div>
