@@ -404,6 +404,26 @@ const InvoiceFormModal = ({
               {initialData ? "Save Changes" : "Create Invoice"}
             </button>
           </div>
+
+          {/* ================= FOOTER ================= */}
+
+          <div className="sticky bottom-0 flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 bg-white px-8 py-5">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="rounded-xl border border-slate-300 px-6 py-3 font-medium text-slate-700 transition hover:bg-slate-100"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              form="invoice-form"
+              className="rounded-xl bg-indigo-600 px-6 py-3 font-medium text-white transition hover:bg-indigo-700"
+            >
+              {initialData ? "Save Changes" : "Create Invoice"}
+            </button>
+          </div>
         </form>
       </div>
     </div>
