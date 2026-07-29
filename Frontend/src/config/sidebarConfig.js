@@ -34,6 +34,11 @@ const sidebarConfig = {
       icon: LayoutDashboard,
     },
     {
+      label: "Invoices",
+      path: "/organization/invoices",
+      icon: FileText,
+    },
+    {
       label: "Users",
       path: "/organization/users",
       icon: Users,

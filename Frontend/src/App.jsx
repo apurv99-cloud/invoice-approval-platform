@@ -16,6 +16,7 @@ import OrganizationOnboarding from "./Pages/Auth/OrganizationOnboarding";
 import OrganizationAdminDashboard from "./Pages/OrganizationAdmin/Dashboard";
 import OrganizationAdminUsers from "./Pages/OrganizationAdmin/Users";
 import OrganizationAdminProfile from "./Pages/OrganizationAdmin/Profile";
+import OrganizationAdminInvoices from "./Pages/OrganizationAdmin/Invoices";
 
 import VendorDashboard from "./Pages/Vendor/Dashboard";
 import VendorMyInvoices from "./Pages/Vendor/MyInvoices";
@@ -84,6 +85,7 @@ function App() {
         }
       >
         <Route path="dashboard" element={<OrganizationAdminDashboard />} />
+        <Route path="invoices" element={<OrganizationAdminInvoices />} />
         <Route path="users" element={<OrganizationAdminUsers />} />
         <Route path="profile" element={<OrganizationAdminProfile />} />
       </Route>
@@ -101,7 +103,10 @@ function App() {
       >
         <Route path="dashboard" element={<ReviewerDashboard />} />
         <Route path="pending" element={<ReviewerPendingInvoices />} />
-        <Route path="invoices/:invoiceId" element={<ReviewerInvoiceDetails />} />
+        <Route
+          path="invoices/:invoiceId"
+          element={<ReviewerInvoiceDetails />}
+        />
         <Route path="history" element={<ReviewerApprovalHistory />} />
         <Route path="profile" element={<ReviewerProfile />} />
       </Route>
