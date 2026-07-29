@@ -99,15 +99,37 @@ const OrganizationFormModal = ({
 
         <div className="flex shrink-0 items-center justify-between border-b bg-white px-8 py-5">
           <div>
-            <h2 className="text-2xl font-bold text-slate-800">
+            <h2
+              className={`text-2xl font-bold transition-colors duration-200 ${
+                initialData ? "text-amber-700" : "text-slate-800"
+              }`}
+            >
               {initialData ? "Edit Organization" : "Create Organization"}
             </h2>
 
-            <p className="mt-1 text-slate-500">
+            <p
+              className={`mt-1 transition-colors duration-200 ${
+                initialData ? "text-amber-600" : "text-slate-500"
+              }`}
+            >
               {initialData
-                ? "Update organization details."
+                ? "Update organization details and save the latest information."
                 : "Fill the details below to onboard a new organization."}
             </p>
+            {/* Badge */}
+            <div className="mt-3">
+              <span
+                className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
+                  initialData
+                    ? "bg-amber-100 text-amber-700"
+                    : "bg-indigo-100 text-indigo-700"
+                }`}
+              >
+                {initialData
+                  ? "Editing Existing Organization"
+                  : "Creating New Organization"}
+              </span>
+            </div>
           </div>
 
           <button
@@ -427,7 +449,11 @@ const OrganizationFormModal = ({
             <button
               type="submit"
               form="organization-form"
-              className="rounded-xl bg-indigo-600 px-6 py-3 font-medium text-white transition hover:bg-indigo-700"
+              className={`rounded-xl px-6 py-3 font-medium text-white transition duration-200 ${
+                initialData
+                  ? "bg-amber-600 hover:bg-amber-700 focus:ring-2 focus:ring-amber-500"
+                  : "bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500"
+              }`}
             >
               {initialData ? "Update Organization" : "Create Organization"}
             </button>
