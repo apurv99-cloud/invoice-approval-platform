@@ -1,16 +1,26 @@
 import api from "./api";
 
+const extractData = (response) => response.data.data;
+
+const handleError = (error) => {
+  throw error.response?.data || error;
+};
+
 const invoiceService = {
+  // =========================
+  // CRUD Operations
+  // =========================
+
   /**
    * Create Invoice
    * POST /invoices
    */
-  createInvoice: async (invoiceData) => {
+  async createInvoice(invoiceData) {
     try {
       const response = await api.post("/invoices", invoiceData);
-      return response.data.data;
+      return extractData(response);
     } catch (error) {
-      throw error.response?.data || error;
+      handleError(error);
     }
   },
 
@@ -18,38 +28,38 @@ const invoiceService = {
    * Update Invoice
    * PUT /invoices/{invoiceId}
    */
-  updateInvoice: async (invoiceId, invoiceData) => {
+  async updateInvoice(invoiceId, invoiceData) {
     try {
       const response = await api.put(`/invoices/${invoiceId}`, invoiceData);
-      return response.data.data;
+      return extractData(response);
     } catch (error) {
-      throw error.response?.data || error;
+      handleError(error);
     }
   },
 
   /**
-   * Submit Invoice
-   * POST /invoices/{invoiceId}/submit
+   * Delete Invoice (Soft Delete)
+   * DELETE /invoices/{invoiceId}
    */
-  submitInvoice: async (invoiceId) => {
+  async deleteInvoice(invoiceId) {
     try {
-      const response = await api.post(`/invoices/${invoiceId}/submit`);
-      return response.data.data;
+      const response = await api.delete(`/invoices/${invoiceId}`);
+      return extractData(response);
     } catch (error) {
-      throw error.response?.data || error;
+      handleError(error);
     }
   },
 
   /**
-   * Get Invoice By ID
+   * Get Invoice By Id
    * GET /invoices/{invoiceId}
    */
-  getInvoice: async (invoiceId) => {
+  async getInvoice(invoiceId) {
     try {
       const response = await api.get(`/invoices/${invoiceId}`);
-      return response.data.data;
+      return extractData(response);
     } catch (error) {
-      throw error.response?.data || error;
+      handleError(error);
     }
   },
 
@@ -57,25 +67,29 @@ const invoiceService = {
    * Get All Organization Invoices
    * GET /invoices
    */
-  getOrganizationInvoices: async () => {
+  async getOrganizationInvoices() {
     try {
       const response = await api.get("/invoices");
-      return response.data.data;
+      return extractData(response);
     } catch (error) {
-      throw error.response?.data || error;
+      handleError(error);
     }
   },
 
+  // =========================
+  // Workflow Operations
+  // =========================
+
   /**
-   * Get Pending Invoices Assigned To Logged-in User
-   * GET /invoices/pending
+   * Submit Invoice
+   * POST /invoices/{invoiceId}/submit
    */
-  getMyPendingInvoices: async () => {
+  async submitInvoice(invoiceId) {
     try {
-      const response = await api.get("/invoices/pending");
-      return response.data.data;
+      const response = await api.post(`/invoices/${invoiceId}/submit`);
+      return extractData(response);
     } catch (error) {
-      throw error.response?.data || error;
+      handleError(error);
     }
   },
 
@@ -83,15 +97,15 @@ const invoiceService = {
    * Approve Invoice
    * PATCH /invoices/{invoiceId}/approve
    */
-  approveInvoice: async (invoiceId, approvalData) => {
+  async approveInvoice(invoiceId, approvalData) {
     try {
       const response = await api.patch(
         `/invoices/${invoiceId}/approve`,
         approvalData,
       );
-      return response.data.data;
+      return extractData(response);
     } catch (error) {
-      throw error.response?.data || error;
+      handleError(error);
     }
   },
 
@@ -99,15 +113,110 @@ const invoiceService = {
    * Reject Invoice
    * PATCH /invoices/{invoiceId}/reject
    */
-  rejectInvoice: async (invoiceId, rejectionData) => {
+  async rejectInvoice(invoiceId, rejectionData) {
     try {
       const response = await api.patch(
         `/invoices/${invoiceId}/reject`,
         rejectionData,
       );
-      return response.data.data;
+      return extractData(response);
     } catch (error) {
-      throw error.response?.data || error;
+      handleError(error);
+    }
+  },
+
+  /**
+   * Mark Invoice As Paid
+   * PATCH /invoices/{invoiceId}/mark-paid
+   */
+  async markAsPaid(invoiceId) {
+    try {
+      const response = await api.patch(`/invoices/${invoiceId}/mark-paid`);
+      return extractData(response);
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  // =========================
+  // Query Operations
+  // =========================
+
+  /**
+   * Pending Invoices Assigned To Logged-in User
+   * GET /invoices/pending
+   */
+  async getMyPendingInvoices() {
+    try {
+      const response = await api.get("/invoices/pending");
+      return extractData(response);
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  /**
+   * Draft Invoices
+   * GET /invoices/drafts
+   */
+  async getDraftInvoices() {
+    try {
+      const response = await api.get("/invoices/drafts");
+      return extractData(response);
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  /**
+   * Submitted Invoices
+   * GET /invoices/submitted
+   */
+  async getSubmittedInvoices() {
+    try {
+      const response = await api.get("/invoices/submitted");
+      return extractData(response);
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  /**
+   * Approved Invoices
+   * GET /invoices/approved
+   */
+  async getApprovedInvoices() {
+    try {
+      const response = await api.get("/invoices/approved");
+      return extractData(response);
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  /**
+   * Rejected Invoices
+   * GET /invoices/rejected
+   */
+  async getRejectedInvoices() {
+    try {
+      const response = await api.get("/invoices/rejected");
+      return extractData(response);
+    } catch (error) {
+      handleError(error);
+    }
+  },
+
+  /**
+   * Paid Invoices
+   * GET /invoices/paid
+   */
+  async getPaidInvoices() {
+    try {
+      const response = await api.get("/invoices/paid");
+      return extractData(response);
+    } catch (error) {
+      handleError(error);
     }
   },
 };
