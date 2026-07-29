@@ -51,9 +51,9 @@ const Topbar = ({ collapsed, setCollapsed, setMobileOpen }) => {
         </button>
 
         <div>
-          <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">
+          {/* <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">
             Dashboard
-          </h1>
+          </h1> */}
 
           <p className="hidden text-sm text-slate-500 sm:block">
             Welcome back, {user?.fullName}
