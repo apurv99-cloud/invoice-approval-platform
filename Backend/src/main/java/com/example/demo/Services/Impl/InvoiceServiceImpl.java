@@ -1,5 +1,6 @@
 package com.example.demo.Services.Impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,12 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.DTO.Invoice.CreateInvoiceRequest;
+import com.example.demo.DTO.Invoice.InvoiceLineItemResponse;
 import com.example.demo.DTO.Invoice.InvoiceListResponse;
 import com.example.demo.DTO.Invoice.InvoiceResponse;
 import com.example.demo.DTO.Invoice.UpdateInvoiceRequest;
 import com.example.demo.Entity.ApprovalStatus;
 import com.example.demo.Entity.Invoice;
 import com.example.demo.Entity.InvoiceApproval;
+import com.example.demo.Entity.InvoiceLineItem;
 import com.example.demo.Entity.InvoiceStatus;
 import com.example.demo.Entity.Organization;
 import com.example.demo.Entity.Users;
@@ -74,6 +77,17 @@ public class InvoiceServiceImpl implements InvoiceService {
     // ==========================================================
     // DTO Mappers
     // ==========================================================
+    private InvoiceLineItemResponse mapToLineItemResponse(InvoiceLineItem lineItem) {
+
+        return InvoiceLineItemResponse.builder()
+                .lineItemId(lineItem.getLineItemId())
+                .description(lineItem.getDescription())
+                .quantity(lineItem.getQuantity())
+                .unitPrice(lineItem.getUnitPrice())
+                .lineTotal(lineItem.getLineTotal())
+                .build();
+    }
+
     private InvoiceResponse mapToResponse(Invoice invoice) {
 
         return InvoiceResponse.builder()
@@ -81,9 +95,20 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .invoiceNumber(invoice.getInvoiceNumber())
                 .invoiceTitle(invoice.getInvoiceTitle())
                 .description(invoice.getDescription())
-                .amount(invoice.getAmount())
+                .purchaseOrderNumber(invoice.getPurchaseOrderNumber())
+                .contractNumber(invoice.getContractNumber())
+                .goodsReceiptNumber(invoice.getGoodsReceiptNumber())
                 .invoiceDate(invoice.getInvoiceDate())
                 .dueDate(invoice.getDueDate())
+                .deliveryDate(invoice.getDeliveryDate())
+                .currency(invoice.getCurrency())
+                .subtotal(invoice.getSubtotal())
+                .discountAmount(invoice.getDiscountAmount())
+                .taxableAmount(invoice.getTaxableAmount())
+                .taxAmount(invoice.getTaxAmount())
+                .shippingCharges(invoice.getShippingCharges())
+                .handlingCharges(invoice.getHandlingCharges())
+                .amount(invoice.getAmount())
                 .status(invoice.getStatus())
                 .vendorName(invoice.getVendor().getFullName())
                 .organizationName(invoice.getOrganization().getOrganizationName())
@@ -92,7 +117,14 @@ public class InvoiceServiceImpl implements InvoiceService {
                                 .map(WorkflowMaster::getWorkflowName)
                                 .orElse(null)
                 )
+                .lineItems(
+                        invoice.getLineItems()
+                                .stream()
+                                .map(this::mapToLineItemResponse)
+                                .toList()
+                )
                 .createdAt(invoice.getCreatedAt())
+                .updatedAt(invoice.getUpdatedAt())
                 .build();
     }
 
@@ -113,10 +145,13 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .invoiceId(invoice.getInvoiceId())
                 .invoiceNumber(invoice.getInvoiceNumber())
                 .invoiceTitle(invoice.getInvoiceTitle())
+                .currency(invoice.getCurrency())
                 .amount(invoice.getAmount())
                 .status(invoice.getStatus())
                 .vendorName(invoice.getVendor().getFullName())
                 .currentApprover(currentApprover)
+                .invoiceDate(invoice.getInvoiceDate())
+                .dueDate(invoice.getDueDate())
                 .createdAt(invoice.getCreatedAt())
                 .build();
     }
@@ -128,9 +163,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         Users currentUser = getCurrentUser();
         Organization organization = currentUser.getOrganization();
 
-        // ==========================
+        // ==========================================================
         // Validations
-        // ==========================
+        // ==========================================================
         if (request.getInvoiceDate() == null || request.getDueDate() == null) {
             throw new IllegalArgumentException(
                     "Invoice date and due date are required."
@@ -143,28 +178,97 @@ public class InvoiceServiceImpl implements InvoiceService {
             );
         }
 
-        if (request.getAmount() == null || request.getAmount().signum() <= 0) {
+        if (request.getLineItems() == null || request.getLineItems().isEmpty()) {
             throw new IllegalArgumentException(
-                    "Invoice amount must be greater than zero."
+                    "Invoice must contain at least one line item."
             );
         }
 
-        // ==========================
-        // Create Draft Invoice
-        // ==========================
+        // ==========================================================
+        // Calculate Financials
+        // ==========================================================
+        BigDecimal subtotal = request.getLineItems()
+                .stream()
+                .map(item
+                        -> item.getUnitPrice().multiply(
+                        item.getQuantity()
+                )
+                )
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal discount = Optional.ofNullable(request.getDiscountAmount())
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal tax = Optional.ofNullable(request.getTaxAmount())
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal shipping = Optional.ofNullable(request.getShippingCharges())
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal handling = Optional.ofNullable(request.getHandlingCharges())
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal taxableAmount = subtotal.subtract(discount);
+
+        if (taxableAmount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException(
+                    "Discount cannot exceed subtotal."
+            );
+        }
+
+        BigDecimal amount = taxableAmount
+                .add(tax)
+                .add(shipping)
+                .add(handling);
+
+        // ==========================================================
+        // Create Invoice
+        // ==========================================================
         Invoice invoice = Invoice.builder()
                 .invoiceNumber(generateInvoiceNumber())
                 .invoiceTitle(request.getInvoiceTitle())
                 .description(request.getDescription())
-                .amount(request.getAmount())
+                .purchaseOrderNumber(request.getPurchaseOrderNumber())
+                .contractNumber(request.getContractNumber())
+                .goodsReceiptNumber(request.getGoodsReceiptNumber())
                 .invoiceDate(request.getInvoiceDate())
                 .dueDate(request.getDueDate())
+                .deliveryDate(request.getDeliveryDate())
+                .currency(request.getCurrency())
+                .subtotal(subtotal)
+                .discountAmount(discount)
+                .taxableAmount(taxableAmount)
+                .taxAmount(tax)
+                .shippingCharges(shipping)
+                .handlingCharges(handling)
+                .amount(amount)
                 .status(InvoiceStatus.DRAFT)
                 .vendor(currentUser)
                 .organization(organization)
                 .workflow(null)
                 .deleted(false)
+                .active(true)
                 .build();
+
+        // ==========================================================
+        // Line Items
+        // ==========================================================
+        request.getLineItems().forEach(itemRequest -> {
+
+            InvoiceLineItem lineItem = InvoiceLineItem.builder()
+                    .description(itemRequest.getDescription())
+                    .quantity(itemRequest.getQuantity())
+                    .unitPrice(itemRequest.getUnitPrice())
+                    .lineTotal(
+                            itemRequest.getUnitPrice().multiply(
+                                    itemRequest.getQuantity()
+                            )
+                    )
+                    .invoice(invoice)
+                    .build();
+
+            invoice.getLineItems().add(lineItem);
+        });
 
         invoiceRepository.save(invoice);
 
@@ -231,21 +335,92 @@ public class InvoiceServiceImpl implements InvoiceService {
             );
         }
 
-        if (request.getAmount() == null || request.getAmount().signum() <= 0) {
+        if (request.getLineItems() == null || request.getLineItems().isEmpty()) {
 
             throw new IllegalArgumentException(
-                    "Invoice amount must be greater than zero."
+                    "Invoice must contain at least one line item."
             );
         }
+
+        // ==========================================================
+        // Calculate Financials
+        // ==========================================================
+        BigDecimal subtotal = request.getLineItems()
+                .stream()
+                .map(item
+                        -> item.getUnitPrice().multiply(item.getQuantity())
+                )
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal discount = Optional.ofNullable(request.getDiscountAmount())
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal tax = Optional.ofNullable(request.getTaxAmount())
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal shipping = Optional.ofNullable(request.getShippingCharges())
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal handling = Optional.ofNullable(request.getHandlingCharges())
+                .orElse(BigDecimal.ZERO);
+
+        BigDecimal taxableAmount = subtotal.subtract(discount);
+
+        if (taxableAmount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException(
+                    "Discount cannot exceed subtotal."
+            );
+        }
+
+        BigDecimal amount = taxableAmount
+                .add(tax)
+                .add(shipping)
+                .add(handling);
 
         // ==========================================================
         // Update Invoice
         // ==========================================================
         invoice.setInvoiceTitle(request.getInvoiceTitle());
         invoice.setDescription(request.getDescription());
-        invoice.setAmount(request.getAmount());
+
+        invoice.setPurchaseOrderNumber(request.getPurchaseOrderNumber());
+        invoice.setContractNumber(request.getContractNumber());
+        invoice.setGoodsReceiptNumber(request.getGoodsReceiptNumber());
+
         invoice.setInvoiceDate(request.getInvoiceDate());
         invoice.setDueDate(request.getDueDate());
+        invoice.setDeliveryDate(request.getDeliveryDate());
+
+        invoice.setCurrency(request.getCurrency());
+
+        invoice.setSubtotal(subtotal);
+        invoice.setDiscountAmount(discount);
+        invoice.setTaxableAmount(taxableAmount);
+        invoice.setTaxAmount(tax);
+        invoice.setShippingCharges(shipping);
+        invoice.setHandlingCharges(handling);
+        invoice.setAmount(amount);
+
+        // ==========================================================
+        // Replace Line Items
+        // ==========================================================
+        invoice.getLineItems().clear();
+
+        request.getLineItems().forEach(itemRequest -> {
+
+            InvoiceLineItem lineItem = InvoiceLineItem.builder()
+                    .description(itemRequest.getDescription())
+                    .quantity(itemRequest.getQuantity())
+                    .unitPrice(itemRequest.getUnitPrice())
+                    .lineTotal(
+                            itemRequest.getUnitPrice()
+                                    .multiply(itemRequest.getQuantity())
+                    )
+                    .invoice(invoice)
+                    .build();
+
+            invoice.getLineItems().add(lineItem);
+        });
 
         invoiceRepository.save(invoice);
 
@@ -348,7 +523,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                         -> new EntityNotFoundException("Invoice not found."));
 
         // ==========================================================
-        // Validations
+        // Organization Validation
         // ==========================================================
         if (!invoice.getOrganization().getOrganizationId()
                 .equals(organization.getOrganizationId())) {
@@ -358,11 +533,24 @@ public class InvoiceServiceImpl implements InvoiceService {
             );
         }
 
+        // ==========================================================
+        // Owner Validation
+        // ==========================================================
         if (!invoice.getVendor().getUserId()
                 .equals(currentUser.getUserId())) {
 
             throw new IllegalStateException(
                     "Only the invoice owner can delete this invoice."
+            );
+        }
+
+        // ==========================================================
+        // Business Validations
+        // ==========================================================
+        if (Boolean.TRUE.equals(invoice.getDeleted())) {
+
+            throw new IllegalStateException(
+                    "Invoice has already been deleted."
             );
         }
 
@@ -373,17 +561,11 @@ public class InvoiceServiceImpl implements InvoiceService {
             );
         }
 
-        if (Boolean.TRUE.equals(invoice.getDeleted())) {
-
-            throw new IllegalStateException(
-                    "Invoice has already been deleted."
-            );
-        }
-
         // ==========================================================
         // Soft Delete
         // ==========================================================
         invoice.setDeleted(true);
+        invoice.setActive(false);
 
         invoiceRepository.save(invoice);
     }
