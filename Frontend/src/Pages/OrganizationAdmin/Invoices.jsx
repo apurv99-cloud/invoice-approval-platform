@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Plus } from "lucide-react";
 
-import InvoiceTable from "../../components/OrganizationAdmin/Invoice/InvoiceTable";
-import InvoiceFormModal from "../../components/OrganizationAdmin/Invoice/InvoiceFormModal";
+import InvoiceTable from "../../Components/invoice/InvoiceTable";
+import InvoiceFormModal from "../../Components/invoice/InvoiceFormModal";
 
 import invoiceService from "../../Services/invoiceService";
 
