@@ -758,9 +758,9 @@ const InvoiceFormModal = ({
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">
                   Notes & remarks
                 </p>
-                <h3 className="mt-1 text-lg font-semibold text-slate-900">
+                {/* <h3 className="mt-1 text-lg font-semibold text-slate-900">
                   Invoice description
-                </h3>
+                </h3> */}
                 <p className="mt-1 text-sm text-slate-500">
                   Add the context your approvers need to review this invoice.
                 </p>
