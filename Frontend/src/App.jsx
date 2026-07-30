@@ -142,7 +142,7 @@ function App() {
         }
       >
         <Route path="dashboard" element={<VendorDashboard />} />
-        <Route path="create-invoice" element={<VendorCreateInvoice />} />
+        <Route path="invoices/create" element={<VendorCreateInvoice />} />
         <Route path="invoices" element={<VendorMyInvoices />} />
         <Route path="invoices/:invoiceId" element={<VendorInvoiceDetails />} />
         <Route path="profile" element={<VendorProfile />} />

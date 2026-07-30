@@ -127,7 +127,7 @@ const sidebarConfig = {
     },
     {
       label: "Create Invoice",
-      path: "/vendor/create-invoice",
+      path: "/vendor/invoices/create",
       icon: FileText,
     },
     {

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Plus, FileText, Search } from "lucide-react";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import invoiceService from "../../Services/invoiceService";
 import InvoiceTable from "../../Components/invoice/InvoiceTable";
 import InvoiceFormModal from "../../Components/invoice/InvoiceFormModal";
 
 const MyInvoices = () => {
+  const navigate = useNavigate();
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -87,10 +88,7 @@ const MyInvoices = () => {
           </div>
 
           <button
-            onClick={() => {
-              setSelectedInvoice(null);
-              setOpenModal(true);
-            }}
+            onClick={() => navigate("/vendor/invoices/create")}
             className="flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 font-medium text-white transition hover:bg-indigo-700"
           >
             <Plus size={18} />
