@@ -218,7 +218,7 @@ const InvoiceFormModal = ({
       <div
         className={
           compact
-            ? "mx-auto flex min-h-full w-full max-w-7xl flex-col overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-sm"
+            ? "mx-auto flex min-h-full w-full max-w-[1700px] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-sm"
             : "flex h-[94vh] w-full max-w-7xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-2xl shadow-slate-950/20"
         }
       >
@@ -258,7 +258,7 @@ const InvoiceFormModal = ({
           onSubmit={handleSubmit}
           className="flex min-h-0 flex-1 flex-col"
         >
-          <div className="min-h-0 flex-1 space-y-8 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <div className="min-h-0 flex-1 space-y-8 overflow-y-auto p-4 sm:px-5 sm:py-6 lg:px-6 lg:py-8">
             <div className="space-y-8">
               <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <div className="mb-6 flex items-start justify-between gap-4">
