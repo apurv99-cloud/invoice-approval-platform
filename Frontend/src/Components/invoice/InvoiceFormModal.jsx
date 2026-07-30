@@ -379,7 +379,7 @@ const InvoiceFormModal = ({
                       name="currency"
                       value={formData.currency}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                     >
                       <option value="INR">INR</option>
                       <option value="USD">USD</option>
@@ -398,7 +398,7 @@ const InvoiceFormModal = ({
                       name="invoiceDate"
                       value={formData.invoiceDate}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                     />
                   </div>
 
@@ -412,7 +412,7 @@ const InvoiceFormModal = ({
                       name="dueDate"
                       value={formData.dueDate}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                     />
                   </div>
 
@@ -658,16 +658,19 @@ const InvoiceFormModal = ({
             </section>
 
             <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-              <div className="ml-auto grid w-full max-w-xl gap-4">
+              <div className="space-y-6">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-600">
                     Summary
                   </p>
                   <h3 className="mt-1 text-lg font-semibold text-slate-900">
-                    Invoice total
+                    Invoice Summary
                   </h3>
+                  <p className="mt-1 text-sm text-slate-500">
+                    Apply invoice-level adjustments and review the calculated total.
+                  </p>
                 </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700">
                       Discount Amount
@@ -679,7 +682,7 @@ const InvoiceFormModal = ({
                       name="discountAmount"
                       value={formData.discountAmount}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                     />
                   </div>
 
@@ -694,7 +697,7 @@ const InvoiceFormModal = ({
                       name="shippingCharges"
                       value={formData.shippingCharges}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                     />
                   </div>
 
@@ -709,46 +712,31 @@ const InvoiceFormModal = ({
                       name="handlingCharges"
                       value={formData.handlingCharges}
                       onChange={handleChange}
-                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                     />
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-indigo-100 bg-slate-50 p-5 sm:p-6">
-                  <div className="mb-3 flex items-center justify-between text-slate-600">
+                <div className="border-t border-slate-200 pt-6">
+                  <div className="flex items-center justify-between py-3 text-slate-600">
                     <span>Subtotal</span>
-                    <span>{currencyFormatter.format(subtotal)}</span>
+                    <span className="font-medium text-slate-900">
+                      {currencyFormatter.format(subtotal)}
+                    </span>
                   </div>
 
-                  <div className="mb-3 flex items-center justify-between text-slate-600">
-                    <span>Discount</span>
-                    <span>- {currencyFormatter.format(discountAmount)}</span>
-                  </div>
-
-                  <div className="mb-3 flex items-center justify-between text-slate-600">
+                  <div className="flex items-center justify-between border-t border-slate-100 py-3 text-slate-600">
                     <span>GST (line items)</span>
-                    <span>{currencyFormatter.format(taxAmount)}</span>
+                    <span className="font-medium text-slate-900">
+                      {currencyFormatter.format(taxAmount)}
+                    </span>
                   </div>
 
-                  <div className="mb-3 flex items-center justify-between text-slate-600">
-                    <span>Shipping</span>
-                    <span>{currencyFormatter.format(shippingCharges)}</span>
-                  </div>
-
-                  <div className="mb-4 flex items-center justify-between text-slate-600">
-                    <span>Handling</span>
-                    <span>{currencyFormatter.format(handlingCharges)}</span>
-                  </div>
-
-                  <div className="border-t border-indigo-100 pt-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-semibold text-slate-800">
-                        Grand Total
-                      </span>
-                      <span className="text-3xl font-bold tracking-tight text-indigo-700">
-                        {currencyFormatter.format(grandTotal)}
-                      </span>
-                    </div>
+                  <div className="mt-3 flex items-center justify-between rounded-2xl bg-indigo-600 px-5 py-4 text-white sm:px-6">
+                    <span className="text-lg font-semibold">Grand Total</span>
+                    <span className="text-3xl font-bold tracking-tight">
+                      {currencyFormatter.format(grandTotal)}
+                    </span>
                   </div>
                 </div>
               </div>
