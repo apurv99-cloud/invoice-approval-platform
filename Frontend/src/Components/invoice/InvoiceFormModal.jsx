@@ -239,15 +239,27 @@ const InvoiceFormModal = ({
 
           {compact ? (
             <div className="flex items-center gap-3">
-              <button type="button" onClick={handleClose} className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-indigo-100">
+              <button
+                type="button"
+                onClick={handleClose}
+                className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-indigo-100"
+              >
                 Cancel
               </button>
-              <button type="submit" form="invoice-form" className="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 hover:shadow focus:outline-none focus:ring-4 focus:ring-indigo-100">
+              <button
+                type="submit"
+                form="invoice-form"
+                className="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 hover:shadow focus:outline-none focus:ring-4 focus:ring-indigo-100"
+              >
                 {initialData ? "Save Changes" : "Create Invoice"}
               </button>
             </div>
           ) : (
-            <button type="button" onClick={handleClose} className="rounded-xl p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-indigo-100">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="rounded-xl p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-indigo-100"
+            >
               <X size={22} />
             </button>
           )}
@@ -331,9 +343,8 @@ const InvoiceFormModal = ({
                     />
                   </div>
                 </div>
-             
 
-              {/* <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"> */}
+                {/* <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"> */}
                 {/* <div className="mb-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-600">
                     Invoice details
@@ -381,45 +392,46 @@ const InvoiceFormModal = ({
                     <label className="mb-2 block text-sm font-medium text-slate-700">
                       Invoice Date <span className="text-red-500">*</span>
                     </label>
-                    <input required type="date" name="invoiceDate" value={formData.invoiceDate} onChange={handleChange} className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100" />
+                    <input
+                      required
+                      type="date"
+                      name="invoiceDate"
+                      value={formData.invoiceDate}
+                      onChange={handleChange}
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    />
                   </div>
 
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-700">
                       Due Date <span className="text-red-500">*</span>
                     </label>
-                    <input required type="date" name="dueDate" value={formData.dueDate} onChange={handleChange} className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100" />
+                    <input
+                      required
+                      type="date"
+                      name="dueDate"
+                      value={formData.dueDate}
+                      onChange={handleChange}
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    />
                   </div>
 
                   <div className="sm:col-span-2">
                     <label className="mb-2 block text-sm font-medium text-slate-700">
                       Delivery Date
                     </label>
-                    <input type="date" name="deliveryDate" value={formData.deliveryDate} onChange={handleChange} className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100" />
+                    <input
+                      type="date"
+                      name="deliveryDate"
+                      value={formData.deliveryDate}
+                      onChange={handleChange}
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                    />
                   </div>
                 </div>
-              {/* </section> */}
-               </section>
+                {/* </section> */}
+              </section>
             </div>
-
-            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-              <div className="mb-6">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">
-                  Notes & remarks
-                </p>
-                <h3 className="mt-1 text-lg font-semibold text-slate-900">
-                  Invoice description
-                </h3>
-                <p className="mt-1 text-sm text-slate-500">
-                  Add the context your approvers need to review this invoice.
-                </p>
-              </div>
-
-              <label className="mb-2 block text-sm font-medium text-slate-700">
-                Description <span className="text-red-500">*</span>
-              </label>
-              <textarea required rows={5} name="description" value={formData.description} onChange={handleChange} placeholder="Describe the purpose of this invoice..." className="w-full resize-none rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100" />
-            </section>
 
             <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
               <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -450,17 +462,39 @@ const InvoiceFormModal = ({
                 <table className="w-full min-w-[1320px] border-separate border-spacing-0 text-left text-sm">
                   <thead className="sticky top-0 z-10 bg-slate-100 text-xs font-semibold uppercase tracking-wide text-slate-600">
                     <tr>
-                      <th className="border-b border-slate-200 px-3 py-3">Item Code</th>
-                      <th className="border-b border-slate-200 px-3 py-3">Item Name</th>
-                      <th className="border-b border-slate-200 px-3 py-3">Description</th>
-                      <th className="border-b border-slate-200 px-3 py-3">Unit</th>
-                      <th className="border-b border-slate-200 px-3 py-3">Qty</th>
-                      <th className="border-b border-slate-200 px-3 py-3">Unit Price</th>
-                      <th className="border-b border-slate-200 px-3 py-3">GST %</th>
-                      <th className="border-b border-slate-200 px-3 py-3 text-right">Subtotal</th>
-                      <th className="border-b border-slate-200 px-3 py-3 text-right">GST</th>
-                      <th className="border-b border-slate-200 px-3 py-3 text-right">Total</th>
-                      <th className="border-b border-slate-200 px-3 py-3"><span className="sr-only">Delete</span></th>
+                      <th className="border-b border-slate-200 px-3 py-3">
+                        Item Code
+                      </th>
+                      <th className="border-b border-slate-200 px-3 py-3">
+                        Item Name
+                      </th>
+                      <th className="border-b border-slate-200 px-3 py-3">
+                        Description
+                      </th>
+                      <th className="border-b border-slate-200 px-3 py-3">
+                        Unit
+                      </th>
+                      <th className="border-b border-slate-200 px-3 py-3">
+                        Qty
+                      </th>
+                      <th className="border-b border-slate-200 px-3 py-3">
+                        Unit Price
+                      </th>
+                      <th className="border-b border-slate-200 px-3 py-3">
+                        GST %
+                      </th>
+                      <th className="border-b border-slate-200 px-3 py-3 text-right">
+                        Subtotal
+                      </th>
+                      <th className="border-b border-slate-200 px-3 py-3 text-right">
+                        GST
+                      </th>
+                      <th className="border-b border-slate-200 px-3 py-3 text-right">
+                        Total
+                      </th>
+                      <th className="border-b border-slate-200 px-3 py-3">
+                        <span className="sr-only">Delete</span>
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white">
@@ -470,20 +504,149 @@ const InvoiceFormModal = ({
                       const itemTotal = calculateItemTotal(item);
 
                       return (
-                        <tr key={index} className="group transition-colors hover:bg-indigo-50/40">
-                          <td className="border-b border-slate-100 p-2"><input required aria-label={`Item ${index + 1} code`} value={item.itemCode} onChange={(e) => handleLineItemChange(index, "itemCode", e.target.value)} placeholder="ITEM-001" className="w-28 rounded-lg border border-slate-300 bg-white px-3 py-2 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" /></td>
-                          <td className="border-b border-slate-100 p-2"><input required aria-label={`Item ${index + 1} name`} value={item.itemName} onChange={(e) => handleLineItemChange(index, "itemName", e.target.value)} placeholder="Office Chair" className="w-40 rounded-lg border border-slate-300 bg-white px-3 py-2 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" /></td>
-                          <td className="border-b border-slate-100 p-2"><input aria-label={`Item ${index + 1} description`} value={item.description} onChange={(e) => handleLineItemChange(index, "description", e.target.value)} placeholder="Optional details" className="w-48 rounded-lg border border-slate-300 bg-white px-3 py-2 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" /></td>
-                          <td className="border-b border-slate-100 p-2"><input required aria-label={`Item ${index + 1} unit`} value={item.unitOfMeasure} onChange={(e) => handleLineItemChange(index, "unitOfMeasure", e.target.value)} placeholder="EA" className="w-20 rounded-lg border border-slate-300 bg-white px-3 py-2 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" /></td>
-                          <td className="border-b border-slate-100 p-2"><input required aria-label={`Item ${index + 1} quantity`} type="number" min="0.01" step="0.01" value={item.quantity} onChange={(e) => handleLineItemChange(index, "quantity", e.target.value)} className="w-20 rounded-lg border border-slate-300 bg-white px-3 py-2 text-right outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" /></td>
-                          <td className="border-b border-slate-100 p-2"><input required aria-label={`Item ${index + 1} unit price`} type="number" min="0" step="0.01" value={item.unitPrice} onChange={(e) => handleLineItemChange(index, "unitPrice", e.target.value)} className="w-28 rounded-lg border border-slate-300 bg-white px-3 py-2 text-right outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" /></td>
-                          <td className="border-b border-slate-100 p-2"><input aria-label={`Item ${index + 1} GST rate`} type="number" min="0" step="0.01" value={item.taxRate} onChange={(e) => handleLineItemChange(index, "taxRate", e.target.value)} className="w-20 rounded-lg border border-slate-300 bg-white px-3 py-2 text-right outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" /></td>
-                          <td className="border-b border-slate-100 px-3 py-2 text-right font-medium text-slate-700"><output>{currencyFormatter.format(lineTotal)}</output></td>
-                          <td className="border-b border-slate-100 px-3 py-2 text-right font-medium text-slate-700"><output>{currencyFormatter.format(lineTax)}</output></td>
-                          <td className="border-b border-slate-100 px-3 py-2 text-right font-semibold text-indigo-700"><output>{currencyFormatter.format(itemTotal)}</output></td>
+                        <tr
+                          key={index}
+                          className="group transition-colors hover:bg-indigo-50/40"
+                        >
+                          <td className="border-b border-slate-100 p-2">
+                            <input
+                              required
+                              aria-label={`Item ${index + 1} code`}
+                              value={item.itemCode}
+                              onChange={(e) =>
+                                handleLineItemChange(
+                                  index,
+                                  "itemCode",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="ITEM-001"
+                              className="w-28 rounded-lg border border-slate-300 bg-white px-3 py-2 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                            />
+                          </td>
+                          <td className="border-b border-slate-100 p-2">
+                            <input
+                              required
+                              aria-label={`Item ${index + 1} name`}
+                              value={item.itemName}
+                              onChange={(e) =>
+                                handleLineItemChange(
+                                  index,
+                                  "itemName",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Office Chair"
+                              className="w-40 rounded-lg border border-slate-300 bg-white px-3 py-2 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                            />
+                          </td>
+                          <td className="border-b border-slate-100 p-2">
+                            <input
+                              aria-label={`Item ${index + 1} description`}
+                              value={item.description}
+                              onChange={(e) =>
+                                handleLineItemChange(
+                                  index,
+                                  "description",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Optional details"
+                              className="w-48 rounded-lg border border-slate-300 bg-white px-3 py-2 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                            />
+                          </td>
+                          <td className="border-b border-slate-100 p-2">
+                            <input
+                              required
+                              aria-label={`Item ${index + 1} unit`}
+                              value={item.unitOfMeasure}
+                              onChange={(e) =>
+                                handleLineItemChange(
+                                  index,
+                                  "unitOfMeasure",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="EA"
+                              className="w-20 rounded-lg border border-slate-300 bg-white px-3 py-2 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                            />
+                          </td>
+                          <td className="border-b border-slate-100 p-2">
+                            <input
+                              required
+                              aria-label={`Item ${index + 1} quantity`}
+                              type="number"
+                              min="0.01"
+                              step="0.01"
+                              value={item.quantity}
+                              onChange={(e) =>
+                                handleLineItemChange(
+                                  index,
+                                  "quantity",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-20 rounded-lg border border-slate-300 bg-white px-3 py-2 text-right outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                            />
+                          </td>
+                          <td className="border-b border-slate-100 p-2">
+                            <input
+                              required
+                              aria-label={`Item ${index + 1} unit price`}
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              value={item.unitPrice}
+                              onChange={(e) =>
+                                handleLineItemChange(
+                                  index,
+                                  "unitPrice",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-28 rounded-lg border border-slate-300 bg-white px-3 py-2 text-right outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                            />
+                          </td>
+                          <td className="border-b border-slate-100 p-2">
+                            <input
+                              aria-label={`Item ${index + 1} GST rate`}
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              value={item.taxRate}
+                              onChange={(e) =>
+                                handleLineItemChange(
+                                  index,
+                                  "taxRate",
+                                  e.target.value,
+                                )
+                              }
+                              className="w-20 rounded-lg border border-slate-300 bg-white px-3 py-2 text-right outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                            />
+                          </td>
+                          <td className="border-b border-slate-100 px-3 py-2 text-right font-medium text-slate-700">
+                            <output>
+                              {currencyFormatter.format(lineTotal)}
+                            </output>
+                          </td>
+                          <td className="border-b border-slate-100 px-3 py-2 text-right font-medium text-slate-700">
+                            <output>{currencyFormatter.format(lineTax)}</output>
+                          </td>
+                          <td className="border-b border-slate-100 px-3 py-2 text-right font-semibold text-indigo-700">
+                            <output>
+                              {currencyFormatter.format(itemTotal)}
+                            </output>
+                          </td>
                           <td className="border-b border-slate-100 px-2 py-2 text-center">
                             {formData.lineItems.length > 1 && (
-                              <button type="button" onClick={() => removeLineItem(index)} aria-label={`Remove item ${index + 1}`} className="rounded-lg p-2 text-slate-400 transition hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-100"><Trash2 size={17} /></button>
+                              <button
+                                type="button"
+                                onClick={() => removeLineItem(index)}
+                                aria-label={`Remove item ${index + 1}`}
+                                className="rounded-lg p-2 text-slate-400 transition hover:bg-red-50 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-100"
+                              >
+                                <Trash2 size={17} />
+                              </button>
                             )}
                           </td>
                         </tr>
@@ -497,8 +660,12 @@ const InvoiceFormModal = ({
             <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
               <div className="ml-auto grid w-full max-w-xl gap-4">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-600">Summary</p>
-                  <h3 className="mt-1 text-lg font-semibold text-slate-900">Invoice total</h3>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-600">
+                    Summary
+                  </p>
+                  <h3 className="mt-1 text-lg font-semibold text-slate-900">
+                    Invoice total
+                  </h3>
                 </div>
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div>
@@ -585,6 +752,32 @@ const InvoiceFormModal = ({
                   </div>
                 </div>
               </div>
+            </section>
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+              <div className="mb-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-blue-600">
+                  Notes & remarks
+                </p>
+                <h3 className="mt-1 text-lg font-semibold text-slate-900">
+                  Invoice description
+                </h3>
+                <p className="mt-1 text-sm text-slate-500">
+                  Add the context your approvers need to review this invoice.
+                </p>
+              </div>
+
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Description <span className="text-red-500">*</span>
+              </label>
+              <textarea
+                required
+                rows={5}
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Describe the purpose of this invoice..."
+                className="w-full resize-none rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+              />
             </section>
           </div>
 
