@@ -50,6 +50,7 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
               <NavLink
                 key={menu.path}
                 to={menu.path}
+                end
                 title={collapsed ? menu.label : ""}
                 className={({ isActive }) =>
                   `group flex items-center rounded-xl transition-all duration-200 ${
@@ -136,6 +137,7 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
               <NavLink
                 key={menu.path}
                 to={menu.path}
+                end
                 onClick={() => setMobileOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
