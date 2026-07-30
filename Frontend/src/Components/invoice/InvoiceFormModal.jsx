@@ -266,9 +266,9 @@ const InvoiceFormModal = ({
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-600">
                       Invoice profile
                     </p>
-                    <h3 className="mt-1 text-lg font-semibold text-slate-900">
+                    {/* <h3 className="mt-1 text-lg font-semibold text-slate-900">
                       Invoice overview
-                    </h3>
+                    </h3> */}
                     <p className="mt-1 text-sm text-slate-500">
                       Describe the invoice and link it to source documents.
                     </p>
@@ -331,10 +331,10 @@ const InvoiceFormModal = ({
                     />
                   </div>
                 </div>
-              </section>
+             
 
-              <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                <div className="mb-6">
+              {/* <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"> */}
+                {/* <div className="mb-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-600">
                     Invoice details
                   </p>
@@ -344,7 +344,7 @@ const InvoiceFormModal = ({
                   <p className="mt-1 text-sm text-slate-500">
                     Set the invoice reference, accounting currency, and key dates.
                   </p>
-                </div>
+                </div> */}
 
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   <div>
@@ -398,7 +398,8 @@ const InvoiceFormModal = ({
                     <input type="date" name="deliveryDate" value={formData.deliveryDate} onChange={handleChange} className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100" />
                   </div>
                 </div>
-              </section>
+              {/* </section> */}
+               </section>
             </div>
 
             <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
