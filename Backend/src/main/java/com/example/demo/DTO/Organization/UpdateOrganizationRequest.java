@@ -22,7 +22,6 @@ public class UpdateOrganizationRequest {
 //    public void setOrganizationName(String organizationName) {
 //        this.organizationName = organizationName;
 //    }
-
     private String legalBusinessName;
     private String businessType;
     private String industryType;

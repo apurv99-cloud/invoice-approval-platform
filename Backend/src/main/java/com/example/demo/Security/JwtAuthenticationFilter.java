@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter
     private final JwtService jwtService;
     private final CustomUserDetailsService userDetailsService;
 
-    @Override
+    @Override // the one and only thing 
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,

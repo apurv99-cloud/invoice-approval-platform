@@ -101,7 +101,7 @@ public class Invoice {
     @Builder.Default
     private BigDecimal shippingCharges = BigDecimal.ZERO;
 
-    @Column(precision = 19, scale = 2)
+    @Column(precision = 19, scale = 2)  // Domain in Database
     @Builder.Default
     private BigDecimal handlingCharges = BigDecimal.ZERO;
 

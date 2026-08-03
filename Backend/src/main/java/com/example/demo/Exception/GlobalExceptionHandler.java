@@ -11,6 +11,7 @@ import com.example.demo.DTO.ApiResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    //
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleException(Exception ex) {
@@ -20,7 +21,7 @@ public class GlobalExceptionHandler {
                 .message(ex.getMessage())
                 .data(null)
                 .timestamp(LocalDateTime.now())
-                .build();
+                .build(); // 
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(resp);
     }

@@ -39,4 +39,11 @@ public interface InvoiceService {
     List<InvoiceListResponse> getRejectedInvoices();
 
     List<InvoiceListResponse> getPaidInvoices();
+
+    // New Endpoints
+    // List<InvoiceListResponse> getInvoiceDocuments();
+
+    // List<InvoiceListResponse> getInvoicePayment();
+
+    // List<InvoiceListResponse> getInvoiceRefrence();
 }
