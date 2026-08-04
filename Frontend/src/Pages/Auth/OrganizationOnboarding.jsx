@@ -67,8 +67,8 @@ const OrganizationOnboarding = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6 dark:bg-slate-950">
+      <div className="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 shadow-xl dark:border-slate-800 dark:bg-slate-900">
         {/* Header */}
 
         <div className="text-center">
@@ -76,11 +76,11 @@ const OrganizationOnboarding = () => {
             <CheckCircle size={60} className="text-indigo-600" />
           </div>
 
-          <h1 className="text-3xl font-bold text-slate-800">
+          <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">
             Complete Onboarding
           </h1>
 
-          <p className="text-slate-500 mt-2">
+          <p className="mt-2 text-slate-500 dark:text-slate-400">
             Create your password to activate your organization account.
           </p>
         </div>

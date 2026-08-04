@@ -5,13 +5,17 @@ import {
   LogOut,
   UserCircle2,
   Building2,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import { useTheme } from "../../context/ThemeContext";
 
 const Topbar = ({ collapsed, setCollapsed, setMobileOpen }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { isDark, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     logout();
@@ -24,7 +28,7 @@ const Topbar = ({ collapsed, setCollapsed, setMobileOpen }) => {
     user?.organization?.name;
 
   return (
-    <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-slate-200 bg-white/95 px-4 shadow-sm backdrop-blur-md sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-slate-200 bg-white/95 px-4 shadow-sm backdrop-blur-md transition-colors duration-300 sm:px-6 lg:px-8 dark:border-slate-800 dark:bg-slate-950/95">
       {/* Left */}
 
       <div className="flex items-center gap-3">
@@ -32,7 +36,7 @@ const Topbar = ({ collapsed, setCollapsed, setMobileOpen }) => {
 
         <button
           onClick={() => setMobileOpen(true)}
-          className="rounded-lg p-2 text-slate-600 transition hover:bg-slate-100 lg:hidden"
+          className="rounded-lg p-2 text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 lg:hidden"
         >
           <Menu size={22} />
         </button>
@@ -41,7 +45,7 @@ const Topbar = ({ collapsed, setCollapsed, setMobileOpen }) => {
 
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="hidden rounded-lg p-2 text-slate-600 transition hover:bg-slate-100 lg:flex"
+          className="hidden rounded-lg p-2 text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 lg:flex"
         >
           {collapsed ? (
             <PanelLeftOpen size={22} />
@@ -55,7 +59,7 @@ const Topbar = ({ collapsed, setCollapsed, setMobileOpen }) => {
             Dashboard
           </h1> */}
 
-          <p className="hidden text-sm text-slate-500 sm:block">
+          <p className="hidden text-sm text-slate-500 sm:block dark:text-slate-400">
             Welcome back, {user?.fullName}
           </p>
         </div>
@@ -66,16 +70,26 @@ const Topbar = ({ collapsed, setCollapsed, setMobileOpen }) => {
       <div className="flex items-center gap-3 sm:gap-6">
         {/* Profile */}
 
-        <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+          aria-label="Toggle theme"
+        >
+          {isDark ? <Sun size={16} /> : <Moon size={16} />}
+          <span>{isDark ? "Light" : "Dark"}</span>
+        </button>
+
+        <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm dark:border-slate-700 dark:bg-slate-900">
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-indigo-100">
             <UserCircle2 size={28} className="text-indigo-600" />
           </div>
 
           <div className="hidden lg:block">
-            <h3 className="font-semibold text-slate-800">{user?.fullName}</h3>
+            <h3 className="font-semibold text-slate-800 dark:text-slate-100">{user?.fullName}</h3>
 
             {organizationName && (
-              <div className="flex items-center gap-1 text-xs text-slate-500">
+              <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
                 <Building2 size={12} />
                 <span>{organizationName}</span>
               </div>
@@ -91,7 +105,7 @@ const Topbar = ({ collapsed, setCollapsed, setMobileOpen }) => {
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2 font-medium text-red-600 transition-all duration-200 hover:bg-red-100 hover:shadow-md"
+          className="flex items-center gap-2 rounded-xl bg-red-50 px-3 py-2 font-medium text-red-600 transition-all duration-200 hover:bg-red-100 hover:shadow-md dark:bg-red-500/10 dark:text-red-300 dark:hover:bg-red-500/20"
         >
           <LogOut size={18} />
           <span className="hidden sm:block">Logout</span>

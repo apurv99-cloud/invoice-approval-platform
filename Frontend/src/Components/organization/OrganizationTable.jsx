@@ -10,7 +10,7 @@ const OrganizationTable = ({
 }) => {
   if (loading) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100">
         Loading organizations...
       </div>
     );
@@ -18,22 +18,22 @@ const OrganizationTable = ({
 
   if (organizations.length === 0) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
         No organizations found.
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
       {/* ===========================
             Desktop & Tablet Table
          =========================== */}
 
       <div className="hidden overflow-x-auto md:block">
         <table className="min-w-[1100px] w-full">
-          <thead className="sticky top-0 bg-slate-100">
-            <tr className="text-left text-sm font-semibold text-slate-700">
+          <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800">
+            <tr className="text-left text-sm font-semibold text-slate-700 dark:text-slate-200">
               <th className="px-6 py-4">Organization</th>
               <th className="px-6 py-4">Contact Person</th>
               <th className="px-6 py-4">Email</th>
@@ -47,16 +47,16 @@ const OrganizationTable = ({
             {organizations.map((organization) => (
               <tr
                 key={organization.organizationId}
-                className="border-t border-slate-200 transition-all duration-200 hover:bg-indigo-50/40"
+                className="border-t border-slate-200 transition-all duration-200 hover:bg-indigo-50/40 dark:border-slate-800 dark:hover:bg-slate-800/70"
               >
                 {/* Organization */}
 
                 <td className="px-6 py-5">
-                  <h3 className="font-semibold text-slate-800">
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-100">
                     {organization.organizationName}
                   </h3>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                     {organization.businessType || "-"}
                   </p>
                 </td>
@@ -120,7 +120,7 @@ const OrganizationTable = ({
                     <button
                       title="Edit"
                       onClick={() => onEdit?.(organization)}
-                      className="rounded-lg p-2 text-blue-600 transition hover:bg-blue-50"
+                      className="rounded-lg p-2 text-blue-600 transition hover:bg-blue-50 dark:hover:bg-slate-800"
                     >
                       <Pencil size={18} />
                     </button>
@@ -133,7 +133,7 @@ const OrganizationTable = ({
                         onClick={() =>
                           onSendOnboarding(organization.organizationId)
                         }
-                        className="rounded-lg p-2 text-indigo-600 transition hover:bg-indigo-50"
+                        className="rounded-lg p-2 text-indigo-600 transition hover:bg-indigo-50 dark:hover:bg-slate-800"
                       >
                         <Send size={18} />
                       </button>
@@ -147,7 +147,7 @@ const OrganizationTable = ({
                         onClick={() =>
                           onDeactivate(organization.organizationId)
                         }
-                        className="rounded-lg p-2 text-red-600 transition hover:bg-red-50"
+                        className="rounded-lg p-2 text-red-600 transition hover:bg-red-50 dark:hover:bg-slate-800"
                       >
                         <PowerOff size={18} />
                       </button>
@@ -155,7 +155,7 @@ const OrganizationTable = ({
                       <button
                         title="Activate"
                         onClick={() => onActivate(organization.organizationId)}
-                        className="rounded-lg p-2 text-green-600 transition hover:bg-green-50"
+                        className="rounded-lg p-2 text-green-600 transition hover:bg-green-50 dark:hover:bg-slate-800"
                       >
                         <Power size={18} />
                       </button>
@@ -175,17 +175,17 @@ const OrganizationTable = ({
         {organizations.map((organization) => (
           <div
             key={organization.organizationId}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md"
+            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
           >
             {/* Header */}
 
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h3 className="truncate text-lg font-semibold text-slate-800">
+                <h3 className="truncate text-lg font-semibold text-slate-800 dark:text-slate-100">
                   {organization.organizationName}
                 </h3>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   {organization.businessType || "-"}
                 </p>
               </div>
@@ -204,14 +204,14 @@ const OrganizationTable = ({
             {/* Details */}
 
             <div className="mt-5 space-y-3">
-              <div className="flex items-center gap-3 text-sm text-slate-700">
-                <User size={16} className="text-slate-500" />
+              <div className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-300">
+                <User size={16} className="text-slate-500 dark:text-slate-400" />
 
                 <span>{organization.contactPersonName || "-"}</span>
               </div>
 
-              <div className="flex items-start gap-3 text-sm text-slate-700">
-                <Mail size={16} className="mt-0.5 shrink-0 text-slate-500" />
+              <div className="flex items-start gap-3 text-sm text-slate-700 dark:text-slate-300">
+                <Mail size={16} className="mt-0.5 shrink-0 text-slate-500 dark:text-slate-400" />
 
                 <span className="break-all">
                   {organization.contactPersonEmail || "-"}
@@ -235,7 +235,7 @@ const OrganizationTable = ({
 
             {/* Actions */}
 
-            <div className="mt-6 flex items-center justify-end gap-2 border-t border-slate-200 pt-4">
+            <div className="mt-6 flex items-center justify-end gap-2 border-t border-slate-200 pt-4 dark:border-slate-800">
               <button
                 title="Edit"
                 onClick={() => onEdit?.(organization)}

@@ -1,4 +1,6 @@
 import Login from "./Login";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 import {
   Building2,
   ShieldCheck,
@@ -40,15 +42,57 @@ const features = [
 ];
 
 export default function LandingPage() {
+  const { isDark, toggleTheme } = useTheme();
+
+  const smoothScrollTo = (targetY, duration = 2200) => {
+    const startY = window.scrollY;
+    const distance = targetY - startY;
+    const startTime = performance.now();
+
+    const easeInOutQuad = (t) => {
+      return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    };
+
+    const step = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeInOutQuad(progress);
+
+      window.scrollTo(0, startY + distance * easedProgress);
+
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      }
+    };
+
+    requestAnimationFrame(step);
+  };
+
   const scrollToFeatures = () => {
-    document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
+    const featuresSection = document.getElementById("features");
+    if (featuresSection) {
+      const targetY = featuresSection.getBoundingClientRect().top + window.scrollY - 24;
+      smoothScrollTo(targetY, 1800);
+    }
+  };
+
+  const scrollToBottom = () => {
+    const targetY = Math.max(document.documentElement.scrollHeight - window.innerHeight, 0);
+    smoothScrollTo(targetY, 2400);
+  };
+
+  const scrollToHero = () => {
+    const heroSection = document.getElementById("hero");
+    if (heroSection) {
+      smoothScrollTo(heroSection.offsetTop, 1400);
+    }
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-50">
+    <div className="relative min-h-screen overflow-hidden bg-white text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
       {/* ================= Background ================= */}
 
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f01a_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f01a_1px,transparent_1px)] bg-[size:70px_70px]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:70px_70px] dark:bg-[linear-gradient(to_right,#e2e8f01a_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f01a_1px,transparent_1px)]" />
 
       <div className="absolute -top-40 -left-20 h-[430px] w-[430px] rounded-full bg-indigo-300/40 blur-3xl" />
 
@@ -56,21 +100,33 @@ export default function LandingPage() {
 
       {/* ================= Hero ================= */}
 
-      <section className="relative mx-auto flex min-h-screen max-w-7xl items-center px-5 py-10 sm:px-8 lg:px-10">
+      <div className="relative z-10 mx-auto flex max-w-7xl items-center justify-end px-5 pt-6 sm:px-8 lg:px-10">
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm backdrop-blur transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900/90 dark:text-slate-200 dark:hover:bg-slate-800"
+          aria-label="Toggle theme"
+        >
+          {isDark ? <Sun size={16} /> : <Moon size={16} />}
+          <span>{isDark ? "Light" : "Dark"}</span>
+        </button>
+      </div>
+
+      <section id="hero" className="relative mx-auto flex min-h-screen max-w-7xl items-center px-5 py-4 sm:px-8 lg:px-10">
         <div className="grid w-full gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24">
           {/* LEFT */}
 
           <div className="order-2 lg:order-1 flex flex-col justify-center">
             {/* Badge */}
 
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-indigo-200 bg-white px-5 py-2 text-sm font-semibold text-indigo-700 shadow-sm">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-indigo-200 bg-white px-5 py-2 text-sm font-semibold text-indigo-700 shadow-sm dark:border-indigo-400/30 dark:bg-slate-900 dark:text-indigo-300">
               <Sparkles size={16} />
               Trusted Enterprise Invoice Platform
             </div>
 
             {/* Heading */}
 
-            <h1 className="mt-8 text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+            <h1 className="mt-8 text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-6xl dark:text-slate-100">
               Welcome to
               <span className="mt-2 block bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 bg-clip-text text-transparent">
                 InvoiceFlow
@@ -79,11 +135,11 @@ export default function LandingPage() {
 
             {/* Description */}
 
-            <p className="mt-8 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+            <p className="mt-8 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg dark:text-slate-300">
               InvoiceFlow is an enterprise-grade invoice approval platform
               designed to simplify financial operations with configurable
               approval workflows, secure role-based access control, payment
-              tracking and organization management—all from a single dashboard.
+              tracking and organization management-all from a single dashboard.
             </p>
 
             {/* Buttons */}
@@ -94,8 +150,8 @@ export default function LandingPage() {
               </button>
 
               <button
-                onClick={scrollToFeatures}
-                className="flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-7 py-3 font-semibold text-slate-700 transition hover:border-indigo-500 hover:text-indigo-600"
+                onClick={scrollToBottom}
+                className="flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-7 py-3 font-semibold text-slate-700 transition hover:border-indigo-500 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-indigo-400 dark:hover:text-indigo-300"
               >
                 Learn More
                 <ArrowRight size={18} />
@@ -106,21 +162,21 @@ export default function LandingPage() {
 
             <div className="mt-14 grid grid-cols-3 gap-5">
               <div>
-                <h2 className="text-3xl font-bold text-slate-900">Multi</h2>
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Multi</h2>
 
-                <p className="mt-1 text-sm text-slate-500">Organizations</p>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Organizations</p>
               </div>
 
               <div>
-                <h2 className="text-3xl font-bold text-slate-900">RBAC</h2>
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100">RBAC</h2>
 
-                <p className="mt-1 text-sm text-slate-500">Authorization</p>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Authorization</p>
               </div>
 
               <div>
-                <h2 className="text-3xl font-bold text-slate-900">24×7</h2>
+                <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100">24×7</h2>
 
-                <p className="mt-1 text-sm text-slate-500">Availability</p>
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Availability</p>
               </div>
             </div>
 
@@ -133,7 +189,7 @@ export default function LandingPage() {
                 return (
                   <div
                     key={feature.title}
-                    className="group flex items-start gap-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-xl"
+                    className="group flex items-start gap-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-300 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900"
                   >
                     <div className="rounded-xl bg-indigo-100 p-3 transition group-hover:bg-indigo-600">
                       <Icon
@@ -143,11 +199,11 @@ export default function LandingPage() {
                     </div>
 
                     <div>
-                      <h3 className="text-lg font-semibold text-slate-800">
+                      <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
                         {feature.title}
                       </h3>
 
-                      <p className="mt-2 text-sm leading-6 text-slate-500">
+                      <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
                         {feature.description}
                       </p>
                     </div>
@@ -160,7 +216,7 @@ export default function LandingPage() {
           {/* RIGHT */}
 
           <div className="order-1 flex items-center justify-center lg:order-2 lg:justify-end">
-            <div className="w-full max-w-md rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_35px_80px_rgba(99,102,241,0.15)] sm:max-w-lg sm:p-8 lg:max-w-xl lg:p-10">
+            <div className="w-full max-w-md rounded-[32px] border border-slate-200 bg-white p-6 shadow-[0_35px_80px_rgba(99,102,241,0.15)] sm:max-w-lg sm:p-8 lg:max-w-xl lg:p-10 dark:border-slate-800 dark:bg-slate-900">
               <Login />
             </div>
           </div>
@@ -182,11 +238,11 @@ export default function LandingPage() {
               WHY CHOOSE INVOICEFLOW
             </span> */}
 
-            <h2 className="mt-6 text-3xl font-bold text-slate-900 sm:text-5xl">
+            <h2 className="mt-6 text-3xl font-bold text-slate-900 sm:text-5xl dark:text-slate-100">
               Built for Modern Finance Teams
             </h2>
 
-            <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+            <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
               InvoiceFlow simplifies invoice approvals through secure workflows,
               automation and enterprise-grade access control—all from one
               platform.
@@ -199,7 +255,7 @@ export default function LandingPage() {
             {/* ================= Left Dashboard ================= */}
 
             <div className="lg:col-span-7">
-              <div className="group relative overflow-hidden rounded-[36px] border border-indigo-200 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-8 text-white shadow-[0_30px_80px_rgba(79,70,229,0.18)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_40px_90px_rgba(79,70,229,0.28)]">
+              <div className="group relative overflow-hidden rounded-[36px] border border-indigo-200 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-8 text-white shadow-[0_30px_80px_rgba(79,70,229,0.18)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_40px_90px_rgba(79,70,229,0.28)] dark:border-indigo-400/30">
                 {/* Glow */}
 
                 <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-cyan-500/20 blur-[120px]" />
@@ -437,7 +493,7 @@ export default function LandingPage() {
                 return (
                   <div
                     key={feature.title}
-                    className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-3 hover:border-indigo-300 hover:shadow-2xl"
+                    className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-3 hover:border-indigo-300 hover:shadow-2xl dark:border-slate-800 dark:bg-slate-900"
                   >
                     {/* Glow */}
 
@@ -459,11 +515,11 @@ export default function LandingPage() {
 
                     {/* Content */}
 
-                    <h3 className="mt-6 text-xl font-bold text-slate-900 transition-colors duration-300 group-hover:text-indigo-600">
+                    <h3 className="mt-6 text-xl font-bold text-slate-900 transition-colors duration-300 group-hover:text-indigo-600 dark:text-slate-100">
                       {feature.title}
                     </h3>
 
-                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                    <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
                       {feature.desc}
                     </p>
 
@@ -495,7 +551,7 @@ export default function LandingPage() {
 
       {/* ================= Platform Highlights ================= */}
 
-      <section className="relative overflow-hidden bg-slate-950 py-20">
+      <section className="relative overflow-hidden border-t border-slate-200 bg-white py-20">
         {/* Low Density Grid Background */}
 
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff15_1px,transparent_1px),linear-gradient(to_bottom,#ffffff15_1px,transparent_1px)] bg-[size:80px_80px]" />
@@ -512,11 +568,11 @@ export default function LandingPage() {
               PLATFORM HIGHLIGHTS
             </span> */}
 
-            <h2 className="mt-6 text-3xl font-bold text-white sm:text-4xl">
+            <h2 className="mt-6 text-3xl font-bold text-slate-900 sm:text-4xl">
               Built for Enterprise Scale
             </h2>
 
-            <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-400">
+            <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-600">
               Secure, scalable and optimized for organizations managing complex
               invoice approval workflows.
             </p>
@@ -556,7 +612,7 @@ export default function LandingPage() {
               return (
                 <div
                   key={item.title}
-                  className="group rounded-3xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-md transition-all duration-500 hover:-translate-y-2 hover:border-indigo-400/40 hover:bg-white/[0.07] hover:shadow-[0_20px_60px_rgba(99,102,241,0.25)]"
+                  className="group rounded-3xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-indigo-300 hover:shadow-xl"
                 >
                   <div
                     className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-r ${item.bg}`}
@@ -564,11 +620,11 @@ export default function LandingPage() {
                     <Icon size={28} className="text-white" />
                   </div>
 
-                  <h3 className="mt-6 text-3xl font-bold text-white">
+                  <h3 className="mt-6 text-3xl font-bold text-slate-900">
                     {item.title}
                   </h3>
 
-                  <p className="mt-2 text-sm text-slate-400">{item.subtitle}</p>
+                  <p className="mt-2 text-sm text-slate-600">{item.subtitle}</p>
                 </div>
               );
             })}
@@ -585,11 +641,11 @@ export default function LandingPage() {
             WORKFLOW
           </span> */}
 
-          <h2 className="mt-6 text-3xl font-bold text-slate-900 sm:text-4xl">
+          <h2 className="mt-6 text-3xl font-bold text-slate-900 sm:text-4xl dark:text-slate-100">
             Invoice Approval Workflow
           </h2>
 
-          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-600">
+          <p className="mx-auto mt-5 max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
             Every invoice follows a secure approval journey before payment,
             ensuring transparency, compliance and complete auditability.
           </p>
@@ -677,6 +733,8 @@ export default function LandingPage() {
             hover:shadow-2xl
             hover:scale-[1.03]
             lg:min-w-0
+            dark:border-slate-800
+            dark:bg-slate-900
           "
               >
                 {/* Desktop Arrow */}
@@ -704,13 +762,13 @@ export default function LandingPage() {
 
                 {/* Title */}
 
-                <h3 className="mt-6 text-xl font-bold text-slate-900">
+                <h3 className="mt-6 text-xl font-bold text-slate-900 dark:text-slate-100">
                   {step.title}
                 </h3>
 
                 {/* Description */}
 
-                <p className="mt-3 text-sm leading-7 text-slate-500">
+                <p className="mt-3 text-sm leading-7 text-slate-500 dark:text-slate-400">
                   {step.description}
                 </p>
 
@@ -730,8 +788,10 @@ export default function LandingPage() {
 
       {/* ================= CTA ================= */}
 
-      <section className="bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 py-24">
-        <div className="mx-auto max-w-5xl px-5 text-center">
+      <section className="relative overflow-hidden bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 py-24">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.12)_1px,transparent_1px)] bg-[size:50px_50px]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.16),transparent_45%)]" />
+        <div className="relative mx-auto max-w-5xl px-5 text-center">
           <h2 className="text-4xl font-bold text-white">
             Ready to Transform Invoice Approvals?
           </h2>
@@ -741,7 +801,10 @@ export default function LandingPage() {
             organizations with InvoiceFlow.
           </p>
 
-          <button className="mt-10 rounded-xl bg-white px-8 py-4 font-semibold text-indigo-700 transition hover:scale-105">
+          <button
+            onClick={scrollToHero}
+            className="mt-10 rounded-xl bg-white px-8 py-4 font-semibold text-indigo-700 transition hover:scale-105"
+          >
             Get Started
           </button>
         </div>
@@ -749,7 +812,7 @@ export default function LandingPage() {
 
       {/* ================= Footer ================= */}
 
-      <footer className="relative overflow-hidden bg-slate-950">
+      <footer className="relative overflow-hidden border-t border-slate-200 bg-white">
         {/* Grid Background */}
 
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:55px_55px]" />
@@ -763,9 +826,9 @@ export default function LandingPage() {
             {/* Brand */}
 
             <div className="sm:col-span-2 lg:col-span-1">
-              <h2 className="text-3xl font-bold text-white">InvoiceFlow</h2>
+              <h2 className="text-3xl font-bold text-slate-900">InvoiceFlow</h2>
 
-              <p className="mt-5 leading-8 text-slate-400">
+              <p className="mt-5 leading-8 text-slate-600">
                 Enterprise Invoice Approval Platform built using React, Spring
                 Boot, PostgreSQL, Spring Security and JWT Authentication.
               </p>
@@ -774,9 +837,9 @@ export default function LandingPage() {
             {/* Product */}
 
             <div>
-              <h3 className="mb-5 font-semibold text-white">Product</h3>
+              <h3 className="mb-5 font-semibold text-slate-900">Product</h3>
 
-              <ul className="space-y-3 text-slate-400">
+              <ul className="space-y-3 text-slate-600">
                 {["Features", "Workflow", "Security", "Organizations"].map(
                   (item) => (
                     <li
@@ -793,9 +856,9 @@ export default function LandingPage() {
             {/* Resources */}
 
             <div>
-              <h3 className="mb-5 font-semibold text-white">Resources</h3>
+              <h3 className="mb-5 font-semibold text-slate-900">Resources</h3>
 
-              <ul className="space-y-3 text-slate-400">
+              <ul className="space-y-3 text-slate-600">
                 {[
                   "Documentation",
                   "Support",
@@ -815,9 +878,9 @@ export default function LandingPage() {
             {/* Technology */}
 
             <div>
-              <h3 className="mb-5 font-semibold text-white">Technology</h3>
+              <h3 className="mb-5 font-semibold text-slate-900">Technology</h3>
 
-              <ul className="space-y-3 text-slate-400">
+              <ul className="space-y-3 text-slate-600">
                 {[
                   "React + Tailwind CSS",
                   "Spring Boot",
@@ -837,7 +900,7 @@ export default function LandingPage() {
 
           {/* Bottom */}
 
-          <div className="mt-14 flex flex-col items-center justify-between gap-5 border-t border-white/10 pt-8 text-sm text-slate-500 md:flex-row">
+          <div className="mt-14 flex flex-col items-center justify-between gap-5 border-t border-slate-200 pt-8 text-sm text-slate-500 md:flex-row">
             <p>© 2026 InvoiceFlow. All rights reserved.</p>
 
             <div className="flex gap-6">

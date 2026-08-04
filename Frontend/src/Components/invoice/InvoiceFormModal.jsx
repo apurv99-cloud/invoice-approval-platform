@@ -211,23 +211,23 @@ const InvoiceFormModal = ({
     <div
       className={
         compact
-          ? "min-h-full bg-slate-50"
+          ? "min-h-full bg-slate-50 dark:bg-slate-950"
           : "fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-3 backdrop-blur-sm sm:p-6"
       }
     >
       <div
         className={
           compact
-            ? "mx-auto flex min-h-full w-full max-w-[1700px] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-sm"
-            : "flex h-[94vh] w-full max-w-7xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-2xl shadow-slate-950/20"
+            ? "mx-auto flex min-h-full w-full max-w-[1700px] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+            : "flex h-[94vh] w-full max-w-7xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-2xl shadow-slate-950/20 dark:border-slate-800 dark:bg-slate-950"
         }
       >
-        <div className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-white px-5 py-4 sm:px-8 sm:py-5">
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-white px-5 py-4 sm:px-8 sm:py-5 dark:border-slate-800 dark:bg-slate-900">
           <div>
             <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em] text-indigo-600">
               Accounts payable
             </p>
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
               {initialData ? "Edit Invoice" : "Create Invoice"}
             </h2>
             <p className="mt-1 text-sm text-slate-500">
@@ -242,7 +242,7 @@ const InvoiceFormModal = ({
               <button
                 type="button"
                 onClick={handleClose}
-                className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-indigo-100"
+                className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-indigo-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
               >
                 Cancel
               </button>
@@ -258,7 +258,7 @@ const InvoiceFormModal = ({
             <button
               type="button"
               onClick={handleClose}
-              className="rounded-xl p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-indigo-100"
+              className="rounded-xl p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus:ring-4 focus:ring-indigo-100 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
             >
               <X size={22} />
             </button>
@@ -272,7 +272,7 @@ const InvoiceFormModal = ({
         >
           <div className="min-h-0 flex-1 space-y-8 overflow-y-auto p-4 sm:px-5 sm:py-6 lg:px-6 lg:py-8">
             <div className="space-y-8">
-              <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+              <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 dark:border-slate-800 dark:bg-slate-900">
                 <div className="mb-6 flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-indigo-600">
@@ -281,7 +281,7 @@ const InvoiceFormModal = ({
                     {/* <h3 className="mt-1 text-lg font-semibold text-slate-900">
                       Invoice overview
                     </h3> */}
-                    <p className="mt-1 text-sm text-slate-500">
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                       Describe the invoice and link it to source documents.
                     </p>
                   </div>
@@ -298,7 +298,7 @@ const InvoiceFormModal = ({
                       value={formData.invoiceTitle}
                       onChange={handleChange}
                       placeholder="Office Furniture Purchase"
-                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                      className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition duration-200 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500"
                     />
                   </div>
 

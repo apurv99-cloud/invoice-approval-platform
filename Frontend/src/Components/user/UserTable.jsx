@@ -20,22 +20,22 @@ const UserTable = ({
 
   if (users.length === 0) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
         No users found.
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
       {/* ===========================
             Desktop & Tablet Table
          =========================== */}
 
       <div className="hidden overflow-x-auto md:block">
         <table className="min-w-[1050px] w-full">
-          <thead className="sticky top-0 bg-slate-100">
-            <tr className="text-left text-sm font-semibold text-slate-700">
+          <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800">
+            <tr className="text-left text-sm font-semibold text-slate-700 dark:text-slate-200">
               <th className="px-6 py-4">User</th>
 
               <th className="px-6 py-4">Role</th>
@@ -52,22 +52,22 @@ const UserTable = ({
             {users.map((user) => (
               <tr
                 key={user.userId}
-                className="border-t border-slate-200 transition-all duration-200 hover:bg-indigo-50/40"
+                className="border-t border-slate-200 transition-all duration-200 hover:bg-indigo-50/40 dark:border-slate-800 dark:hover:bg-slate-800/70"
               >
                 {/* User */}
 
                 <td className="px-6 py-5">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
                       <User size={18} />
                     </div>
 
                     <div>
-                      <h3 className="font-semibold text-slate-800">
+                      <h3 className="font-semibold text-slate-800 dark:text-slate-100">
                         {user.fullName || "-"}
                       </h3>
 
-                      <p className="mt-1 text-sm text-slate-500 break-all">
+                      <p className="mt-1 break-all text-sm text-slate-500 dark:text-slate-400">
                         {user.email || "-"}
                       </p>
                     </div>
@@ -83,7 +83,7 @@ const UserTable = ({
                 {/* Contact */}
 
                 <td className="px-6 py-5">
-                  <div className="flex items-center gap-2 text-slate-700">
+                  <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
                     <Mail size={16} />
 
                     <span>{user.phoneNumber || "No phone"}</span>
@@ -103,7 +103,7 @@ const UserTable = ({
                     <button
                       title="Edit"
                       onClick={() => onEdit?.(user)}
-                      className="rounded-lg p-2 text-blue-600 transition hover:bg-blue-50"
+                      className="rounded-lg p-2 text-blue-600 transition hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-500/10"
                     >
                       <Pencil size={18} />
                     </button>
@@ -112,7 +112,7 @@ const UserTable = ({
                       <button
                         title="Deactivate"
                         onClick={() => onDeactivate?.(user.userId)}
-                        className="rounded-lg p-2 text-red-600 transition hover:bg-red-50"
+                        className="rounded-lg p-2 text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
                       >
                         <PowerOff size={18} />
                       </button>
@@ -120,7 +120,7 @@ const UserTable = ({
                       <button
                         title="Activate"
                         onClick={() => onActivate?.(user.userId)}
-                        className="rounded-lg p-2 text-green-600 transition hover:bg-green-50"
+                        className="rounded-lg p-2 text-green-600 transition hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-500/10"
                       >
                         <Power size={18} />
                       </button>
@@ -140,21 +140,21 @@ const UserTable = ({
         {users.map((user) => (
           <div
             key={user.userId}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md"
+            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
           >
             {/* Header */}
 
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
                 <User size={20} />
               </div>
 
               <div className="min-w-0 flex-1">
-                <h3 className="truncate text-lg font-semibold text-slate-800">
+                <h3 className="truncate text-lg font-semibold text-slate-800 dark:text-slate-100">
                   {user.fullName || "-"}
                 </h3>
 
-                <p className="mt-1 break-all text-sm text-slate-500">
+                <p className="mt-1 break-all text-sm text-slate-500 dark:text-slate-400">
                   {user.email || "-"}
                 </p>
               </div>
@@ -162,9 +162,9 @@ const UserTable = ({
 
             {/* Details */}
 
-            <div className="mt-5 space-y-4 border-t border-slate-200 pt-4">
+            <div className="mt-5 space-y-4 border-t border-slate-200 pt-4 dark:border-slate-800">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-slate-500">Role</span>
+                <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Role</span>
 
                 <RoleBadge roleName={user.roleName} />
               </div>
@@ -174,7 +174,7 @@ const UserTable = ({
                   Contact
                 </span>
 
-                <div className="flex items-center gap-2 text-sm text-slate-700">
+                <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
                   <Mail size={16} className="shrink-0" />
                   <span>{user.phoneNumber || "No phone"}</span>
                 </div>
@@ -191,11 +191,11 @@ const UserTable = ({
 
             {/* Actions */}
 
-            <div className="mt-6 flex items-center justify-end gap-2 border-t border-slate-200 pt-4">
+            <div className="mt-6 flex items-center justify-end gap-2 border-t border-slate-200 pt-4 dark:border-slate-800">
               <button
                 title="Edit"
                 onClick={() => onEdit?.(user)}
-                className="rounded-xl bg-blue-50 p-2.5 text-blue-600 transition-all hover:bg-blue-100"
+                className="rounded-xl bg-blue-50 p-2.5 text-blue-600 transition-all hover:bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20"
               >
                 <Pencil size={18} />
               </button>
@@ -204,7 +204,7 @@ const UserTable = ({
                 <button
                   title="Deactivate"
                   onClick={() => onDeactivate?.(user.userId)}
-                  className="rounded-xl bg-red-50 p-2.5 text-red-600 transition-all hover:bg-red-100"
+                  className="rounded-xl bg-red-50 p-2.5 text-red-600 transition-all hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20"
                 >
                   <PowerOff size={18} />
                 </button>
@@ -212,7 +212,7 @@ const UserTable = ({
                 <button
                   title="Activate"
                   onClick={() => onActivate?.(user.userId)}
-                  className="rounded-xl bg-green-50 p-2.5 text-green-600 transition-all hover:bg-green-100"
+                  className="rounded-xl bg-green-50 p-2.5 text-green-600 transition-all hover:bg-green-100 dark:bg-green-500/10 dark:text-green-400 dark:hover:bg-green-500/20"
                 >
                   <Power size={18} />
                 </button>

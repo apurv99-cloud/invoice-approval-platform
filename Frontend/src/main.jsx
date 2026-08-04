@@ -5,14 +5,25 @@ import { Toaster } from "react-hot-toast";
 
 import App from "./App";
 import { AuthProvider } from "./context/AuthContext";
+import { initializeTheme, ThemeProvider } from "./context/ThemeContext";
 
 import "./index.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+const rootElement = document.getElementById("root");
+const initialTheme = initializeTheme();
+
+if (rootElement) {
+  document.documentElement.classList.toggle("dark", initialTheme === "dark");
+  document.documentElement.style.colorScheme = initialTheme;
+}
+
+ReactDOM.createRoot(rootElement).render(
   <BrowserRouter>
-    <AuthProvider>
-      <Toaster position="top-right" />
-      <App />
-    </AuthProvider>
+    <ThemeProvider initialTheme={initialTheme}>
+      <AuthProvider>
+        <Toaster position="top-right" />
+        <App />
+      </AuthProvider>
+    </ThemeProvider>
   </BrowserRouter>
 );

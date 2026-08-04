@@ -16,12 +16,12 @@ const ConfirmationModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-xl bg-white shadow-2xl">
+      <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
         {/* Header */}
-        <div className="flex items-center justify-between border-b px-6 py-4">
-          <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
+        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4 dark:border-slate-800">
+          <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{title}</h2>
 
-          <button onClick={onCancel} className="rounded p-1 hover:bg-gray-100">
+          <button onClick={onCancel} className="rounded p-1 hover:bg-slate-100 dark:hover:bg-slate-800">
             <X size={20} />
           </button>
         </div>
@@ -29,16 +29,16 @@ const ConfirmationModal = ({
         {/* Body */}
 
         <div className="px-6 py-5">
-          <p className="text-gray-600 leading-7">{message}</p>
+          <p className="leading-7 text-slate-600 dark:text-slate-300">{message}</p>
         </div>
 
         {/* Footer */}
 
-        <div className="flex justify-end gap-3 border-t px-6 py-4">
+        <div className="flex justify-end gap-3 border-t border-slate-200 px-6 py-4 dark:border-slate-800">
           <button
             onClick={onCancel}
             disabled={loading}
-            className="rounded-lg border px-4 py-2 hover:bg-gray-100"
+            className="rounded-lg border border-slate-300 px-4 py-2 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
           >
             {cancelText}
           </button>

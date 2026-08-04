@@ -5,41 +5,41 @@ const Profile = () => {
 
   return (
     <div className="max-w-3xl">
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
-        <h1 className="text-3xl font-bold text-slate-800 mb-8">My Profile</h1>
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <h1 className="mb-8 text-3xl font-bold text-slate-800 dark:text-slate-100">My Profile</h1>
 
         <div className="grid grid-cols-2 gap-6">
           <div>
-            <p className="text-slate-500 text-sm">Full Name</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Full Name</p>
 
-            <h3 className="font-semibold text-lg">{user?.fullName}</h3>
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{user?.fullName}</h3>
           </div>
 
           <div>
-            <p className="text-slate-500 text-sm">Email</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Email</p>
 
-            <h3 className="font-semibold text-lg">{user?.email}</h3>
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{user?.email}</h3>
           </div>
 
           <div>
-            <p className="text-slate-500 text-sm">Role</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Role</p>
 
-            <h3 className="font-semibold text-lg">{user?.roleName}</h3>
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{user?.roleName}</h3>
           </div>
 
           <div>
-            <p className="text-slate-500 text-sm">Organization</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Organization</p>
 
-            <h3 className="font-semibold text-lg">
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
               {user?.organizationName || "N/A"}
             </h3>
           </div>
 
           <div>
-            <p className="text-slate-500 text-sm">Status</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Status</p>
 
             <h3
-              className={`font-semibold text-lg ${
+              className={`text-lg font-semibold ${
                 user?.active ? "text-green-600" : "text-red-600"
               }`}
             >
@@ -48,9 +48,9 @@ const Profile = () => {
           </div>
 
           <div>
-            <p className="text-slate-500 text-sm">User ID</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">User ID</p>
 
-            <h3 className="font-semibold text-lg">{user?.userId}</h3>
+            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{user?.userId}</h3>
           </div>
         </div>
       </div>

@@ -1,10 +1,10 @@
 const roleStyles = {
-  SUPER_ADMIN: "bg-purple-100 text-purple-700",
-  ORG_ADMIN: "bg-indigo-100 text-indigo-700",
-  REVIEWER: "bg-amber-100 text-amber-700",
-  FINANCE: "bg-emerald-100 text-emerald-700",
-  CFO: "bg-sky-100 text-sky-700",
-  VENDOR: "bg-pink-100 text-pink-700",
+  SUPER_ADMIN: "bg-purple-500/15 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300",
+  ORG_ADMIN: "bg-indigo-500/15 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300",
+  REVIEWER: "bg-amber-500/15 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300",
+  FINANCE: "bg-emerald-500/15 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300",
+  CFO: "bg-sky-500/15 text-sky-700 dark:bg-sky-500/20 dark:text-sky-300",
+  VENDOR: "bg-pink-500/15 text-pink-700 dark:bg-pink-500/20 dark:text-pink-300",
 };
 
 const roleLabels = {
@@ -18,7 +18,7 @@ const roleLabels = {
 };
 
 const RoleBadge = ({ roleName }) => {
-  const style = roleStyles[roleName] || "bg-slate-100 text-slate-700";
+  const style = roleStyles[roleName] || "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200";
   const label = roleLabels[roleName] || roleName || "Unknown";
 
   return (

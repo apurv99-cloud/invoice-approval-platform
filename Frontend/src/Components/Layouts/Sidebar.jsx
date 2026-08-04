@@ -18,18 +18,18 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
       {/* Desktop Sidebar */}
 
       <aside
-        className={`hidden lg:flex flex-col bg-slate-900 text-white transition-all duration-300 ${
+        className={`hidden lg:flex flex-col border-r border-slate-200 bg-white text-slate-900 transition-all duration-300 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 ${
           collapsed ? "w-20" : "w-72"
         }`}
       >
         {/* Logo */}
 
-        <div className="flex h-20 items-center justify-between border-b border-slate-800 px-5">
+        <div className="flex h-20 items-center justify-between border-b border-slate-200 px-5 dark:border-slate-800">
           {!collapsed && (
             <div>
               <h1 className="text-xl font-bold tracking-wide">InvoiceFlow</h1>
 
-              <p className="text-xs text-slate-400">Enterprise Suite</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Enterprise Suite</p>
             </div>
           )}
 
@@ -58,7 +58,7 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
                   } ${
                     isActive
                       ? "bg-indigo-600 text-white shadow-lg"
-                      : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
                   }`
                 }
               >
@@ -74,7 +74,7 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
 
         {/* Bottom User */}
 
-        <div className="border-t border-slate-800 p-4">
+        <div className="border-t border-slate-200 p-4 dark:border-slate-800">
           {collapsed ? (
             <div className="flex justify-center">
               <div className="rounded-full bg-indigo-100 p-2">
@@ -82,7 +82,7 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-3 rounded-xl bg-slate-800 p-3">
+            <div className="flex items-center gap-3 rounded-xl bg-slate-50 p-3 dark:bg-slate-900/80">
               <div className="rounded-full bg-indigo-100 p-2">
                 <UserCircle2 className="text-indigo-600" size={24} />
               </div>
@@ -91,12 +91,12 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
                 <p className="truncate font-semibold">{user?.fullName}</p>
 
                 {organizationName && (
-                  <p className="truncate text-xs text-slate-400">
+                  <p className="truncate text-xs text-slate-500 dark:text-slate-400">
                     {organizationName}
                   </p>
                 )}
 
-                <p className="text-xs text-indigo-300">{user?.roleName}</p>
+                <p className="text-xs text-indigo-600 dark:text-indigo-300">{user?.roleName}</p>
               </div>
             </div>
           )}
@@ -106,22 +106,22 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
       {/* Mobile Sidebar */}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col bg-slate-900 text-white shadow-2xl transition-transform duration-300 lg:hidden ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-slate-200 bg-white text-slate-900 shadow-2xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 lg:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Header */}
 
-        <div className="flex h-20 items-center justify-between border-b border-slate-800 px-6">
+        <div className="flex h-20 items-center justify-between border-b border-slate-200 px-6 dark:border-slate-800">
           <div>
             <h1 className="text-xl font-bold">InvoiceFlow</h1>
 
-            <p className="text-xs text-slate-400">Enterprise Suite</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Enterprise Suite</p>
           </div>
 
           <button
             onClick={() => setMobileOpen(false)}
-            className="rounded-lg p-2 hover:bg-slate-800"
+            className="rounded-lg p-2 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <X size={22} />
           </button>
@@ -143,7 +143,7 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
                   `flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
                     isActive
                       ? "bg-indigo-600 text-white"
-                      : "text-slate-300 hover:bg-slate-800"
+                      : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
                   }`
                 }
               >
@@ -157,8 +157,8 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
 
         {/* Bottom */}
 
-        <div className="border-t border-slate-800 p-4">
-          <div className="flex items-center gap-3 rounded-xl bg-slate-800 p-3">
+        <div className="border-t border-slate-200 p-4 dark:border-slate-800">
+          <div className="flex items-center gap-3 rounded-xl bg-slate-50 p-3 dark:bg-slate-800">
             <div className="rounded-full bg-indigo-100 p-2">
               <UserCircle2 className="text-indigo-600" size={24} />
             </div>
@@ -167,12 +167,12 @@ const Sidebar = ({ collapsed, mobileOpen, setMobileOpen }) => {
               <p className="truncate font-semibold">{user?.fullName}</p>
 
               {organizationName && (
-                <p className="truncate text-xs text-slate-400">
+                <p className="truncate text-xs text-slate-500 dark:text-slate-400">
                   {organizationName}
                 </p>
               )}
 
-              <p className="text-xs text-indigo-300">{user?.roleName}</p>
+              <p className="text-xs text-indigo-600 dark:text-indigo-600 dark:text-indigo-300">{user?.roleName}</p>
             </div>
           </div>
         </div>

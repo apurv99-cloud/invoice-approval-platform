@@ -94,14 +94,14 @@ const OrganizationFormModal = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6 backdrop-blur-sm">
       {/* Modal */}
 
-      <div className="flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+      <div className="flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-950">
         {/* Header */}
 
-        <div className="flex shrink-0 items-center justify-between border-b bg-white px-8 py-5">
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-200 bg-white px-8 py-5 dark:border-slate-800 dark:bg-slate-900">
           <div>
             <h2
               className={`text-2xl font-bold transition-colors duration-200 ${
-                initialData ? "text-amber-700" : "text-slate-800"
+                initialData ? "text-amber-700" : "text-slate-800 dark:text-slate-100"
               }`}
             >
               {initialData ? "Edit Organization" : "Create Organization"}
@@ -109,7 +109,7 @@ const OrganizationFormModal = ({
 
             <p
               className={`mt-1 transition-colors duration-200 ${
-                initialData ? "text-amber-600" : "text-slate-500"
+                initialData ? "text-amber-600" : "text-slate-500 dark:text-slate-400"
               }`}
             >
               {initialData
@@ -134,7 +134,7 @@ const OrganizationFormModal = ({
 
           <button
             onClick={handleClose}
-            className="rounded-lg p-2 transition hover:bg-slate-100"
+            className="rounded-lg p-2 transition hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <X size={22} />
           </button>

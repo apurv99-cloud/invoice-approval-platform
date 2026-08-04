@@ -41,7 +41,7 @@ const DashboardLayout = () => {
   }, [collapsed]);
 
   return (
-    <div className="flex h-screen bg-slate-100 overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-slate-100 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
       {/* Sidebar */}
       <Sidebar
         collapsed={collapsed}
@@ -58,7 +58,7 @@ const DashboardLayout = () => {
         />
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto bg-slate-100 p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto bg-slate-100 p-4 transition-colors duration-300 sm:p-6 lg:p-8 dark:bg-slate-950">
           <Outlet />
         </main>
       </div>

@@ -99,16 +99,16 @@ const Login = () => {
   return (
     <>
       <div className="mb-8 text-center">
-        <h2 className="text-3xl font-bold text-slate-900">Welcome Back</h2>
+        <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Welcome Back</h2>
 
-        <p className="mt-2 text-slate-500">Sign in to continue</p>
+        <p className="mt-2 text-slate-500 dark:text-slate-400">Sign in to continue</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Email */}
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
             Email
           </label>
 
@@ -124,7 +124,7 @@ const Login = () => {
               placeholder="Enter your email"
               value={credentials.email}
               onChange={handleChange}
-              className="w-full rounded-xl border border-slate-300 pl-11 pr-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
+              className="w-full rounded-xl border border-slate-300 bg-white/90 pl-11 pr-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
             />
           </div>
         </div>
@@ -132,7 +132,7 @@ const Login = () => {
         {/* Password */}
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">
+          <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
             Password
           </label>
 
@@ -148,7 +148,7 @@ const Login = () => {
               placeholder="Enter your password"
               value={credentials.password}
               onChange={handleChange}
-              className="w-full rounded-xl border border-slate-300 pl-11 pr-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
+              className="w-full rounded-xl border border-slate-300 bg-white/90 pl-11 pr-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder:text-slate-500"
             />
           </div>
         </div>
@@ -158,7 +158,7 @@ const Login = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white py-3 font-semibold transition disabled:opacity-60 disabled:cursor-not-allowed"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <LogIn size={18} />
 

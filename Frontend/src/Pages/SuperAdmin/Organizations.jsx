@@ -183,9 +183,9 @@ const Organizations = () => {
 
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-800">Organizations</h1>
+          <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">Organizations</h1>
 
-          <p className="mt-1 text-slate-500">
+          <p className="mt-1 text-slate-500 dark:text-slate-400">
             Manage all organizations from one place.
           </p>
         </div>
