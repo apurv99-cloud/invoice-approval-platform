@@ -5,6 +5,7 @@ import {
   User,
   Building2,
 } from "lucide-react";
+import { useTheme } from "../../context/ThemeContext";
 
 const RecentList = ({
   title,
@@ -15,6 +16,7 @@ const RecentList = ({
   statusField,
   dateField,
 }) => {
+  const { isDark } = useTheme();
   const safeItems = Array.isArray(items) ? items : [];
 
   const recentItems = [...safeItems]
@@ -52,45 +54,53 @@ const RecentList = ({
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div
+      className={`rounded-2xl border shadow-sm transition-colors duration-300 ${
+        isDark
+          ? "border-slate-800 bg-slate-900 text-slate-100"
+          : "border-slate-200 bg-white text-slate-900"
+      }`}
+    >
       {/* Header */}
 
-      <div className="border-b border-slate-200 px-6 py-5">
-        <h2 className="text-xl font-semibold text-slate-800">{title}</h2>
+      <div className={`border-b px-6 py-5 ${isDark ? "border-slate-800" : "border-slate-200"}`}>
+        <h2 className={`text-xl font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>{title}</h2>
 
-        <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
+        <p className={`mt-1 text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>{subtitle}</p>
       </div>
 
       {/* Empty */}
 
       {recentItems.length === 0 ? (
-        <div className="p-10 text-center text-slate-500">
+        <div className={`p-10 text-center ${isDark ? "text-slate-400" : "text-slate-500"}`}>
           No records available.
         </div>
       ) : (
-        <div className="divide-y divide-slate-200">
+        <div className={`divide-y ${isDark ? "divide-slate-800" : "divide-slate-200"}`}>
           {recentItems.map((item, index) => (
             <div
               key={index}
-              className="flex items-center justify-between px-6 py-5 hover:bg-slate-50 transition"
+              className={`flex items-center justify-between px-6 py-5 transition ${
+                isDark ? "hover:bg-slate-800/70" : "hover:bg-slate-50"
+              }`}
             >
               {/* Left */}
 
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100">
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${isDark ? "bg-indigo-500/20" : "bg-indigo-100"}`}>
                   {item.organizationName ? (
-                    <Building2 size={22} className="text-indigo-600" />
+                    <Building2 size={22} className={isDark ? "text-indigo-300" : "text-indigo-600"} />
                   ) : (
-                    <User size={22} className="text-indigo-600" />
+                    <User size={22} className={isDark ? "text-indigo-300" : "text-indigo-600"} />
                   )}
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-slate-800">
+                  <h3 className={`font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>
                     {item[primaryField] || "Unnamed"}
                   </h3>
 
-                  <p className="text-sm text-slate-500">
+                  <p className={`text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>
                     {item[secondaryField] || "No additional details"}
                   </p>
                 </div>
@@ -99,7 +109,7 @@ const RecentList = ({
               {/* Right */}
 
               <div className="flex items-center gap-8">
-                <div className="hidden items-center gap-2 text-sm text-slate-500 md:flex">
+                <div className={`hidden items-center gap-2 text-sm md:flex ${isDark ? "text-slate-400" : "text-slate-500"}`}>
                   <CalendarDays size={16} />
 
                   {new Date(item[dateField]).toLocaleDateString("en-IN")}

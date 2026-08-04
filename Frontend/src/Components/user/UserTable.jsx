@@ -1,5 +1,6 @@
 import { Mail, Pencil, Power, PowerOff, User } from "lucide-react";
 
+import { useTheme } from "../../context/ThemeContext";
 import RoleBadge from "./RoleBadge";
 import StatusBadge from "../Common/StatusBadge";
 
@@ -10,9 +11,11 @@ const UserTable = ({
   onActivate,
   onDeactivate,
 }) => {
+  const { isDark } = useTheme();
+
   if (loading) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm">
+      <div className={`rounded-2xl border p-8 text-center shadow-sm ${isDark ? "border-slate-800 bg-slate-900 text-slate-400" : "border-slate-200 bg-white text-slate-500"}`}>
         Loading users...
       </div>
     );
@@ -20,22 +23,22 @@ const UserTable = ({
 
   if (users.length === 0) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+      <div className={`rounded-2xl border p-8 text-center shadow-sm ${isDark ? "border-slate-800 bg-slate-900 text-slate-400" : "border-slate-200 bg-white text-slate-500"}`}>
         No users found.
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <div className={`overflow-hidden rounded-2xl border shadow-sm transition-colors duration-300 ${isDark ? "border-slate-800 bg-slate-900" : "border-slate-200 bg-white"}`}>
       {/* ===========================
             Desktop & Tablet Table
          =========================== */}
 
       <div className="hidden overflow-x-auto md:block">
         <table className="min-w-[1050px] w-full">
-          <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800">
-            <tr className="text-left text-sm font-semibold text-slate-700 dark:text-slate-200">
+          <thead className={`sticky top-0 ${isDark ? "bg-slate-800" : "bg-slate-100"}`}>
+            <tr className={`text-left text-sm font-semibold ${isDark ? "text-slate-200" : "text-slate-700"}`}>
               <th className="px-6 py-4">User</th>
 
               <th className="px-6 py-4">Role</th>
@@ -52,22 +55,22 @@ const UserTable = ({
             {users.map((user) => (
               <tr
                 key={user.userId}
-                className="border-t border-slate-200 transition-all duration-200 hover:bg-indigo-50/40 dark:border-slate-800 dark:hover:bg-slate-800/70"
+                className={`border-t transition-all duration-200 ${isDark ? "border-slate-800 hover:bg-slate-800/70" : "border-slate-200 hover:bg-indigo-50/40"}`}
               >
                 {/* User */}
 
                 <td className="px-6 py-5">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
+                    <div className={`flex h-11 w-11 items-center justify-center rounded-full ${isDark ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-600"}`}>
                       <User size={18} />
                     </div>
 
                     <div>
-                      <h3 className="font-semibold text-slate-800 dark:text-slate-100">
+                      <h3 className={`font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>
                         {user.fullName || "-"}
                       </h3>
 
-                      <p className="mt-1 break-all text-sm text-slate-500 dark:text-slate-400">
+                      <p className={`mt-1 break-all text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>
                         {user.email || "-"}
                       </p>
                     </div>
@@ -83,7 +86,7 @@ const UserTable = ({
                 {/* Contact */}
 
                 <td className="px-6 py-5">
-                  <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                  <div className={`flex items-center gap-2 ${isDark ? "text-slate-300" : "text-slate-700"}`}>
                     <Mail size={16} />
 
                     <span>{user.phoneNumber || "No phone"}</span>
@@ -140,21 +143,21 @@ const UserTable = ({
         {users.map((user) => (
           <div
             key={user.userId}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
+            className={`rounded-2xl border p-5 shadow-sm transition-all duration-200 hover:shadow-md ${isDark ? "border-slate-800 bg-slate-900" : "border-slate-200 bg-white"}`}
           >
             {/* Header */}
 
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
+              <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${isDark ? "bg-indigo-500/20 text-indigo-300" : "bg-indigo-100 text-indigo-600"}`}>
                 <User size={20} />
               </div>
 
               <div className="min-w-0 flex-1">
-                <h3 className="truncate text-lg font-semibold text-slate-800 dark:text-slate-100">
+                <h3 className={`truncate text-lg font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>
                   {user.fullName || "-"}
                 </h3>
 
-                <p className="mt-1 break-all text-sm text-slate-500 dark:text-slate-400">
+                <p className={`mt-1 break-all text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>
                   {user.email || "-"}
                 </p>
               </div>
@@ -162,26 +165,26 @@ const UserTable = ({
 
             {/* Details */}
 
-            <div className="mt-5 space-y-4 border-t border-slate-200 pt-4 dark:border-slate-800">
+            <div className={`mt-5 space-y-4 border-t pt-4 ${isDark ? "border-slate-800" : "border-slate-200"}`}>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-slate-500 dark:text-slate-400">Role</span>
+                <span className={`text-sm font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`}>Role</span>
 
                 <RoleBadge roleName={user.roleName} />
               </div>
 
               <div className="flex items-start justify-between gap-4">
-                <span className="text-sm font-medium text-slate-500">
+                <span className={`text-sm font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`}>
                   Contact
                 </span>
 
-                <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                <div className={`flex items-center gap-2 text-sm ${isDark ? "text-slate-300" : "text-slate-700"}`}>
                   <Mail size={16} className="shrink-0" />
                   <span>{user.phoneNumber || "No phone"}</span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-slate-500">
+                <span className={`text-sm font-medium ${isDark ? "text-slate-400" : "text-slate-500"}`}>
                   Status
                 </span>
 
@@ -191,7 +194,7 @@ const UserTable = ({
 
             {/* Actions */}
 
-            <div className="mt-6 flex items-center justify-end gap-2 border-t border-slate-200 pt-4 dark:border-slate-800">
+            <div className={`mt-6 flex items-center justify-end gap-2 border-t pt-4 ${isDark ? "border-slate-800" : "border-slate-200"}`}>
               <button
                 title="Edit"
                 onClick={() => onEdit?.(user)}
