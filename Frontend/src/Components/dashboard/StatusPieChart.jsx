@@ -91,6 +91,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useTheme } from "../../context/ThemeContext";
 
 const DEFAULT_COLORS = [
   "#16a34a",
@@ -107,24 +108,42 @@ const StatusPieChart = ({
   data = [],
   colors = DEFAULT_COLORS,
 }) => {
+  const { isDark } = useTheme();
   const chartData = (data || []).filter((item) => Number(item.value) > 0);
+  const textColor = isDark ? "#f8fafc" : "#0f172a";
+  const mutedText = isDark ? "#94a3b8" : "#64748b";
+  const tooltipStyle = {
+    backgroundColor: isDark ? "#0f172a" : "#ffffff",
+    borderColor: isDark ? "#334155" : "#e2e8f0",
+    color: textColor,
+  };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div
+      className={`rounded-2xl border p-6 shadow-sm transition-colors duration-300 ${
+        isDark
+          ? "border-slate-800 bg-slate-900 text-slate-100"
+          : "border-slate-200 bg-white text-slate-900"
+      }`}
+    >
       {/* Header */}
 
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-slate-800">{title}</h2>
+        <h2 className={`text-xl font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>
+          {title}
+        </h2>
 
         {description && (
-          <p className="mt-1 text-sm text-slate-500">{description}</p>
+          <p className={`mt-1 text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>
+            {description}
+          </p>
         )}
       </div>
 
       {/* Empty State */}
 
       {chartData.length === 0 ? (
-        <div className="flex h-[320px] items-center justify-center text-slate-500">
+        <div className={`flex h-[320px] items-center justify-center ${isDark ? "text-slate-400" : "text-slate-500"}`}>
           No data available.
         </div>
       ) : (
@@ -147,9 +166,9 @@ const StatusPieChart = ({
                 ))}
               </Pie>
 
-              <Tooltip />
+              <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: textColor }} />
 
-              <Legend verticalAlign="bottom" height={36} />
+              <Legend verticalAlign="bottom" height={36} wrapperStyle={{ color: mutedText }} />
             </PieChart>
           </ResponsiveContainer>
         </div>

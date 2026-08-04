@@ -1,42 +1,52 @@
 import useAuth from "../../hooks/useAuth";
+import { useTheme } from "../../context/ThemeContext";
 
 const Profile = () => {
   const { user } = useAuth();
+  const { isDark } = useTheme();
 
   return (
     <div className="max-w-3xl">
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <h1 className="mb-8 text-3xl font-bold text-slate-800 dark:text-slate-100">My Profile</h1>
+      <div
+        className={`rounded-2xl border p-8 shadow-sm transition-colors duration-300 ${
+          isDark
+            ? "border-slate-800 bg-slate-900 text-slate-100"
+            : "border-slate-200 bg-white text-slate-900"
+        }`}
+      >
+        <h1 className={`mb-8 text-3xl font-bold ${isDark ? "text-slate-100" : "text-slate-800"}`}>
+          My Profile
+        </h1>
 
         <div className="grid grid-cols-2 gap-6">
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Full Name</p>
+            <p className={`text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>Full Name</p>
 
-            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{user?.fullName}</h3>
+            <h3 className={`text-lg font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>{user?.fullName}</h3>
           </div>
 
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Email</p>
+            <p className={`text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>Email</p>
 
-            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{user?.email}</h3>
+            <h3 className={`text-lg font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>{user?.email}</h3>
           </div>
 
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Role</p>
+            <p className={`text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>Role</p>
 
-            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{user?.roleName}</h3>
+            <h3 className={`text-lg font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>{user?.roleName}</h3>
           </div>
 
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Organization</p>
+            <p className={`text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>Organization</p>
 
-            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">
+            <h3 className={`text-lg font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>
               {user?.organizationName || "N/A"}
             </h3>
           </div>
 
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Status</p>
+            <p className={`text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>Status</p>
 
             <h3
               className={`text-lg font-semibold ${
@@ -48,9 +58,9 @@ const Profile = () => {
           </div>
 
           <div>
-            <p className="text-sm text-slate-500 dark:text-slate-400">User ID</p>
+            <p className={`text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>User ID</p>
 
-            <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-100">{user?.userId}</h3>
+            <h3 className={`text-lg font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>{user?.userId}</h3>
           </div>
         </div>
       </div>

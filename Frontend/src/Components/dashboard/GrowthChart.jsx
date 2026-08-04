@@ -95,6 +95,7 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
+import { useTheme } from "../../context/ThemeContext";
 
 const GrowthChart = ({
   title = "Growth",
@@ -103,7 +104,15 @@ const GrowthChart = ({
   xKey = "createdAt",
   dataKey = "Items",
 }) => {
+  const { isDark } = useTheme();
   const safeData = Array.isArray(data) ? data : [];
+  const axisColor = isDark ? "#e2e8f0" : "#334155";
+  const gridColor = isDark ? "#334155" : "#cbd5e1";
+  const tooltipStyle = {
+    backgroundColor: isDark ? "#0f172a" : "#ffffff",
+    borderColor: isDark ? "#334155" : "#e2e8f0",
+    color: isDark ? "#f8fafc" : "#0f172a",
+  };
   /**
    * Group data by creation date
    */
@@ -133,21 +142,31 @@ const GrowthChart = ({
   }));
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+    <div
+      className={`rounded-2xl border p-6 shadow-sm transition-colors duration-300 ${
+        isDark
+          ? "border-slate-800 bg-slate-900 text-slate-100"
+          : "border-slate-200 bg-white text-slate-900"
+      }`}
+    >
       {/* Header */}
 
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-slate-800">{title}</h2>
+        <h2 className={`text-xl font-semibold ${isDark ? "text-slate-100" : "text-slate-800"}`}>
+          {title}
+        </h2>
 
         {description && (
-          <p className="mt-1 text-sm text-slate-500">{description}</p>
+          <p className={`mt-1 text-sm ${isDark ? "text-slate-400" : "text-slate-500"}`}>
+            {description}
+          </p>
         )}
       </div>
 
       {/* Empty State */}
 
       {chartData.length === 0 ? (
-        <div className="flex h-[320px] items-center justify-center text-slate-500">
+        <div className={`flex h-[320px] items-center justify-center ${isDark ? "text-slate-400" : "text-slate-500"}`}>
           No growth data available.
         </div>
       ) : (
@@ -162,13 +181,13 @@ const GrowthChart = ({
                 </linearGradient>
               </defs>
 
-              <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid stroke={gridColor} strokeDasharray="3 3" />
 
-              <XAxis dataKey="date" />
+              <XAxis dataKey="date" tick={{ fill: axisColor, fontSize: 12 }} axisLine={false} tickLine={false} />
 
-              <YAxis allowDecimals={false} />
+              <YAxis allowDecimals={false} tick={{ fill: axisColor, fontSize: 12 }} axisLine={false} tickLine={false} />
 
-              <Tooltip />
+              <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: isDark ? "#f8fafc" : "#0f172a" }} />
 
               <Area
                 type="monotone"
